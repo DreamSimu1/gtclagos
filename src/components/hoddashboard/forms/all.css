@@ -1,0 +1,27 @@
+.settings-sidebar {
+  overflow-y: auto;
+  max-height: 80vh;
+}
+
+@media (max-width: 768px) {
+  .settings-wrapper {
+    flex-direction: column;
+  }
+
+  .settings-sidebar {
+    width: 100%;
+    max-height: none;
+  }
+
+  .settings-page-wrap {
+    margin-top: 20px;
+  }
+}
+@media (max-width: 768px) {
+  .settings-sidebar {
+    display: block !important;
+    width: 100% !important;
+    overflow-y: auto;
+    max-height: 300px; /* or whatever you need */
+  }
+}

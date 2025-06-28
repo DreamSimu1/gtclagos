@@ -1,0 +1,44 @@
+/* @media only screen and (max-width: 600px) {
+  .mobile-order-first {
+    order: -1;
+  }
+} */
+
+.custom-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media only screen and (max-width: 600px) {
+  .custom-container {
+    flex-direction: column;
+  }
+  .text-column {
+    order: 2;
+  }
+  .image-column {
+    order: 1;
+  }
+}
+
+@media only screen and (min-width: 601px) {
+  .text-column {
+    order: 1;
+  }
+  .image-column {
+    order: 2;
+  }
+}
+/* Default styling for the image */
+.responsive-image {
+  height: 600px !important;
+  width: 1500px !important;
+}
+
+/* Styling for mobile devices */
+@media only screen and (max-width: 600px) {
+  .responsive-image {
+    height: auto !important; /* Maintain aspect ratio */
+    width: 100% !important; /* Make the image responsive */
+  }
+}

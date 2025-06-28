@@ -1,0 +1,15 @@
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 1rem 1rem;
+}
+.edit-icon {
+  color: #007bff; /* Edit icon color */
+  cursor: pointer;
+}
+
+.delete-icon {
+  color: #800080; /* Delete icon color */
+  cursor: pointer;
+}

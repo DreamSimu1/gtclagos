@@ -1,0 +1,576 @@
+/* .header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px; 
+} */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 120px);
+  background-color: #343541;
+  color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+html {
+  margin-bottom: 0 !important;
+  background-color: #212121 !important;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.message {
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.user-message {
+  align-self: flex-end;
+  background-color: #3b3e47;
+}
+
+.ai-message {
+  align-self: flex-start;
+  background-color: #444654;
+}
+
+.chat-input-area {
+  display: flex;
+  border-top: 1px solid #555;
+  padding: 10px 20px;
+  background-color: #343541;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #40414f;
+  color: white;
+  font-size: 15px;
+}
+
+.chat-input:focus {
+  outline: none;
+}
+
+.send-button {
+  margin-left: 10px;
+  background-color: #10a37f;
+  color: white;
+  border: none;
+  padding: 0 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.send-button:hover {
+  background-color: #0d8c6c;
+}
+
+.page-wrapper {
+  overflow: hidden !important; /* Prevent nested scrolling */
+}
+
+.columns-container {
+  overflow: visible !important;
+}
+
+.add-admin-btn {
+  background-color: #800080; /* Primary button color */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+
+  border-radius: 5px;
+}
+.edit-icon {
+  color: #0d3978; /* Edit icon color */
+  cursor: pointer;
+}
+
+.delete-icon {
+  color: #800080; /* Delete icon color */
+  cursor: pointer;
+}
+#sales_charts {
+  text-align: center;
+}
+
+.bar-chart {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 200px;
+  margin: 20px 0;
+}
+
+.bar {
+  width: 30px;
+  background-color: rgb(75, 192, 192);
+  margin: 0 10px;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.labels span {
+  width: 50px;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .add-admin-btn {
+    display: block; /* Ensure the button is visible */
+  }
+
+  /* Check modal styling */
+  .modal {
+    display: block; /* Ensure the modal is not hidden */
+  }
+}
+/* Force button styling for all devices */
+a.force-mobile-button {
+  display: block; /* Ensure it takes up full width */
+
+  padding: 10px 20px; /* Add padding for better clickability */
+  background-color: red !important; /* Override any other background color */
+  color: white !important; /* Ensure the text color is visible */
+  text-align: center; /* Center the text */
+  text-decoration: none; /* Remove underline from the link */
+  border-radius: 5px; /* Add rounded corners */
+  font-size: 16px; /* Adjust font size for readability */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  z-index: 999; /* Ensure it stays above other elements */
+  position: relative; /* Ensure correct positioning */
+}
+
+/* Ensure proper visibility on mobile */
+@media (max-width: 900px) {
+  a.force-mobile-button {
+    display: block; /* Ensure it’s visible on small screens */
+
+    padding: 15px; /* Increase padding for easier tapping */
+    font-size: 18px; /* Slightly larger text for mobile */
+    z-index: 999; /* Keep it above other elements */
+  }
+}
+
+/* Container for both boxes */
+.box-container {
+  display: flex; /* Enable flexbox */
+  gap: 20px; /* Add space between the boxes */
+  justify-content: center; /* Center the boxes horizontally */
+  margin-bottom: 30px; /* Add space from the top */
+  flex-wrap: wrap; /* Allow the boxes to wrap on smaller screens */
+}
+
+/* Shared styles for the boxes */
+.custom-box {
+  padding: 20px;
+  height: 220px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  flex: 1; /* Make the boxes take equal width */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* First box */
+.box-1 {
+  background-color: #0d3978; /* Light blue background */
+}
+
+.box-1 .box-title {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.box-1 .box-description {
+  margin-bottom: 20px;
+  color: #fff;
+  font-size: 20px;
+}
+
+.box-1 .btn-vision {
+  padding: 10px 20px;
+  background-color: #cc3d1a; /* Red button */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Second box */
+.box-2 {
+  background-color: #cc3d1a; /* Red background */
+}
+
+.box-2 .box-title {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.box-2 .box-description {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+}
+
+.box-2 .btn-template {
+  padding: 10px 20px;
+  background-color: #28a745; /* Green button */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .box-container {
+    flex-direction: column; /* Stack the boxes vertically on small screens */
+    align-items: center;
+  }
+
+  .custom-box {
+    width: 90%; /* Ensure the boxes take up most of the screen width on small devices */
+    margin-bottom: 20px; /* Add space between stacked boxes */
+  }
+}
+
+.card-img-top {
+  object-fit: cover;
+  width: 100%;
+  height: 250px; /* Default height */
+}
+
+@media (max-width: 768px) {
+  .card-img-top {
+    height: 200px; /* Smaller height on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .card-img-top {
+    height: 150px; /* Even smaller height on extra small screens */
+  }
+}
+
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+}
+
+.donation-card {
+  position: relative;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  padding: 20px;
+}
+
+.donation-card .box-thumb {
+  position: relative;
+}
+
+.donation-card .box-thumb img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.donation-card .donation-card-tag {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: #ff7f50;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.donation-card .donation-card-tag.bg-theme2 {
+  background-color: #2b6e6d;
+}
+
+.donation-card .donation-card-shape {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50%;
+  height: 50%;
+  background-image: url("https://res.cloudinary.com/dftygokow/image/upload/v1736781011/visions/1736781004112-global_oeccyj.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+.donation-card .box-content {
+  position: relative;
+  z-index: 2;
+  padding-top: 20px;
+}
+
+.donation-card .box-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.donation-card .box-title a {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.donation-card .box-title a:hover {
+  color: #ff7f50;
+}
+
+.donation-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.donation-card_progress-wrap {
+  margin-bottom: 20px;
+}
+
+.donation-card .progress {
+  height: 8px;
+  background-color: #f1f1f1;
+  border-radius: 4px;
+}
+
+.donation-card .progress-bar {
+  background-color: #ff7f50;
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.donation-card_progress-content {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #333;
+}
+
+.donation-card .donation-card_raise,
+.donation-card .donation-card_goal {
+  font-weight: bold;
+}
+
+.donation-card .donation-card_raise-number,
+.donation-card .donation-card_goal-number {
+  font-weight: normal;
+}
+
+.donation-card .th-btn.style6 {
+  display: inline-flex;
+  align-items: center;
+  background-color: #ff7f50;
+  color: white;
+  padding: 12px 25px;
+  font-size: 14px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.donation-card .th-btn.style6:hover {
+  background-color: #e66c3c;
+}
+
+.donation-card .th-btn.style6 i {
+  margin-left: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .donation-card {
+    margin-bottom: 20px;
+  }
+
+  .donation-card .box-thumb {
+    height: 180px;
+  }
+
+  .donation-card .box-content {
+    padding-top: 15px;
+  }
+
+  .donation-card .box-title {
+    font-size: 16px;
+  }
+
+  .donation-card .box-title a {
+    font-size: 14px;
+  }
+
+  .donation-card p {
+    font-size: 13px;
+  }
+
+  .donation-card_progress-wrap {
+    margin-bottom: 15px;
+  }
+
+  .donation-card_progress-content {
+    font-size: 13px;
+  }
+
+  .donation-card .th-btn.style6 {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .donation-card .box-thumb {
+    height: 150px;
+  }
+
+  .donation-card .box-title {
+    font-size: 14px;
+  }
+
+  .donation-card .box-title a {
+    font-size: 12px;
+  }
+
+  .donation-card p {
+    font-size: 12px;
+  }
+
+  .donation-card .th-btn.style6 {
+    padding: 8px 18px;
+    font-size: 12px;
+  }
+}
+
+.card:hover .card-icons {
+  display: flex !important; /* Show icons on hover */
+}
+
+.card-icons {
+  display: none; /* Hide icons by default */
+}
+
+.adad {
+  margin-bottom: 100px;
+  width: 80%;
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .adad {
+    margin-bottom: 100px;
+    width: 100% !important;
+    margin: auto;
+  }
+}
+@media (max-width: 360px) {
+  .adad {
+    margin-bottom: 100px;
+    width: 100% !important;
+    margin: auto;
+  }
+}
+
+/* @media print {
+  body * {
+    visibility: hidden;
+  }
+  #vision-board {
+    visibility: visible;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    page-break-inside: avoid; 
+  }
+} */
+
+/* @media print {
+
+  body {
+    display: block; 
+  }
+
+
+  .vision-board-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+  }
+
+
+  .vision-board-container > div {
+    margin: auto;
+    page-break-inside: avoid;
+  }
+
+
+  .vision-board-container div {
+    break-inside: avoid;
+  }
+} */
+
+@media print {
+  /* Resets the body */
+  body {
+    display: block;
+  }
+
+  /* Centers the Vision Board */
+  .vision-board-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 95vh; /* Prevents overflow */
+    overflow: hidden; /* Ensures no extra content spills */
+    page-break-after: avoid;
+  }
+
+  /* Ensures the board does not break into another page */
+  .vision-board-container > div {
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+    page-break-inside: avoid;
+  }
+
+  /* Prevents unnecessary page breaks */
+  .vision-board-container div {
+    break-inside: avoid;
+  }
+}

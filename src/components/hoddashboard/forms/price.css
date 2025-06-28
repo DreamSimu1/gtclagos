@@ -1,0 +1,144 @@
+:root {
+  /* --light-bg: #ffffff; */
+  /* --primary-color: #6c63ff; */
+  --secondary-color: #ff6b6b;
+  --bg-gradient: linear-gradient(135deg, #6c63ff, #3f3d56);
+  /* --text-dark: #212121;
+  --text-light: #ffffff; */
+  --border-radius: 1.5rem;
+}
+
+.pricing-wrap {
+  /* background: var(--light-bg); */
+  border-radius: var(--border-radius);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.pricing-wrap:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.12);
+}
+
+.pricing-wrap.active {
+  border: 2px solid var(--primary-color);
+}
+
+.price-head {
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+.price-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.price-icon img {
+  width: 60px;
+  height: 60px;
+}
+
+.price-info h5 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.price-dollar h3 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-top: 0.3rem;
+  color: var(--text-dark);
+}
+
+.price-body {
+  margin-top: 1.5rem;
+}
+
+.price-check {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.price-check li {
+  display: flex;
+  align-items: start;
+  margin-bottom: 1rem;
+  color: #555;
+  font-size: 0.95rem;
+  gap: 0.6rem;
+}
+
+.price-check i {
+  color: var(--primary-color);
+  font-size: 1rem;
+  margin-top: 0.2rem;
+}
+
+.btn.btn-secondary {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 0.95rem;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.3s ease;
+  margin-top: 1.5rem;
+}
+
+.btn.btn-secondary:hover {
+  background: var(--secondary-color);
+  color: #fff;
+  text-decoration: none;
+}
+
+.price-wrap-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--secondary-color);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 0 1rem;
+}
+
+@media (max-width: 768px) {
+  .pricing-wrap {
+    margin-bottom: 2rem;
+  }
+}
+
+.plan-button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.current-plan {
+  background-color: #ccc;
+  color: #333;
+  cursor: not-allowed;
+}
+
+.get-plus {
+  background-color: #007bff;
+  color: #fff;
+}

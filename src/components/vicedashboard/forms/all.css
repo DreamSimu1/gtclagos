@@ -1,0 +1,26 @@
+/* Force button styling for all devices */
+a.force-mobile-button {
+  display: block; /* Ensure it takes up full width */
+
+  padding: 10px 20px; /* Add padding for better clickability */
+  background-color: red !important; /* Override any other background color */
+  color: white !important; /* Ensure the text color is visible */
+  text-align: center; /* Center the text */
+  text-decoration: none; /* Remove underline from the link */
+  border-radius: 5px; /* Add rounded corners */
+  font-size: 16px; /* Adjust font size for readability */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  z-index: 999; /* Ensure it stays above other elements */
+  position: relative; /* Ensure correct positioning */
+}
+
+/* Ensure proper visibility on mobile */
+@media (max-width: 900px) {
+  a.force-mobile-button {
+    display: block; /* Ensure it’s visible on small screens */
+
+    padding: 15px; /* Increase padding for easier tapping */
+    font-size: 18px; /* Slightly larger text for mobile */
+    z-index: 999; /* Keep it above other elements */
+  }
+}

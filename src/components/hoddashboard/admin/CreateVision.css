@@ -1,0 +1,49 @@
+/* Modal backdrop for success/failure message */
+.modal-backdrop.show {
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040; /* Ensure it's above the main modal backdrop */
+}
+
+/* Success/Failure modal styling */
+.custom-modal .modal-dialog {
+  margin: 30px auto;
+  max-width: 90%;
+  z-index: 1050; /* Set this higher than the main modal */
+}
+
+.custom-modal .modal-content {
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 1050; /* Ensure it's above the content of the other modal */
+}
+
+.custom-modal .modal-header {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.custom-modal .modal-footer {
+  border-top: 1px solid #e5e5e5;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.custom-modal .btn-danger {
+  background-color: red;
+  color: white;
+}
+
+.custom-modal .btn-success {
+  background-color: green;
+  color: white;
+}
+
+/* Ensure success/failure modal's title and content are above the base modal */
+.custom-modal .modal-title {
+  font-size: 1.5rem;
+}
+
+.custom-modal .form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+}

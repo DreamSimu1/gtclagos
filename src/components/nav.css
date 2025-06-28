@@ -1,0 +1,18 @@
+/* Hide the login item on screens larger than 600px */
+@media screen and (min-width: 768px) {
+  .menu-item-login {
+    display: none !important;
+  }
+}
+
+/* Show the login item on screens 600px and smaller */
+@media screen and (max-width: 766px) {
+  .menu-item-login {
+    display: block !important; /* Adjust as needed to fit your layout */
+  }
+}
+
+/* Optional: Additional styling to ensure it fits the mobile menu layout */
+.menu-item-login a {
+  color: black; /* Ensure the link text color matches other menu items */
+}

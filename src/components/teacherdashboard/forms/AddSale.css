@@ -1,0 +1,25 @@
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 1rem 1rem;
+}
+
+.modal-body {
+  max-height: 600px; /* Adjust as needed */
+  overflow-y: auto;
+  z-index: 2000 !important;
+}
+
+.modal-backdrop {
+  z-index: 1040 !important; /* Ensure the backdrop is behind the modal */
+}
+
+.modal {
+  z-index: 1050 !important; /* Ensure the modal is above everything else */
+}
+
+a.force-mobile-button {
+  z-index: 999; /* The button should still be above most elements */
+  position: relative; /* Ensure correct positioning */
+}
