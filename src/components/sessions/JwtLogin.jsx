@@ -153,12 +153,13 @@ const JwtLogin = () => {
                     handleSubmit,
                   }) => (
                     <form onSubmit={handleSubmit}>
-                      <div class="login-userset"   style={{
-    paddingBottom: "40px", // Add extra bottom padding
-    minHeight: "100%", // Ensure content fits
-  
-  }}
->
+                      <div
+                        class="login-userset"
+                        style={{
+                          paddingBottom: "40px", // Add extra bottom padding
+                          minHeight: "100%", // Ensure content fits
+                        }}
+                      >
                         <div className="login-userheading">
                           <div
                             className="logo"
@@ -303,24 +304,6 @@ const JwtLogin = () => {
                             />
                             Continue with Google
                           </button>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "1rem",
-                          }}
-                        >
-                          <div class="text-end">
-                            <a class="forgot-link" href="/forgot-password">
-                              Dont have an account?
-                            </a>
-                          </div>
-                          <div class="text-end">
-                            <a class="forgot-link" href="/register">
-                              Create an account
-                            </a>
-                          </div>
                         </div>
                       </div>
                     </form>
