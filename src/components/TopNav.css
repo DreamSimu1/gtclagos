@@ -54,6 +54,17 @@ body {
   display: flex;
   justify-content: space-between;
 }
+/* Hide on mobile, show on desktop */
+.desktop-only {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
 .header {
   display: flex;
   align-items: center;

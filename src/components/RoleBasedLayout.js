@@ -8,6 +8,11 @@ import HodSidebar from "./HodSidebar";
 import ViceSidebar from "./ViceSidebar";
 import { jwtDecode } from "jwt-decode";
 import TopNav from "./TopNav";
+import PrincipalTopNav from "./PrincipalTopNav";
+import StudentTopNav from "./StudentTopNav";
+import TeacherTopNav from "./TeacherTopNav";
+import HodTopNav from "./HodTopNav";
+import ViceTopNav from "./ViceTopNav";
 
 // const RoleBasedLayout = () => {
 //   const [role, setRole] = useState("");
@@ -88,6 +93,23 @@ const RoleBasedLayout = () => {
   }, []);
   if (!role) return <div>Loading layout...</div>;
 
+  const getTopbarByRole = () => {
+    switch (role) {
+      case "student":
+        return <StudentTopNav />;
+      case "teacher":
+        return <TeacherTopNav />;
+      case "principal":
+        return <PrincipalTopNav />;
+      case "head_of_department":
+        return <HodTopNav />;
+      case "vice_principal":
+        return <ViceTopNav />;
+      default:
+        return <TopNav />; // fallback
+    }
+  };
+
   const getSidebarByRole = () => {
     switch (role) {
       case "student":
@@ -107,7 +129,7 @@ const RoleBasedLayout = () => {
 
   return (
     <div className="main-wrapper">
-      <TopNav />
+      {getTopbarByRole()}
       {/* Only show the sidebar on desktop */}
       {!isMobile && getSidebarByRole()}
 
