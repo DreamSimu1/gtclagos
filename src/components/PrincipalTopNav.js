@@ -313,6 +313,15 @@ const PrincipalTopNav = ({ setShowModal }) => {
             padding: "20px",
           }}
         >
+          <img
+            src={lagos}
+            alt="Logo 2"
+            style={{
+              height: "60px",
+              width: "auto",
+              objectFit: "contain",
+            }}
+          />
           <button
             onClick={handleSidebarToggle}
             style={{
