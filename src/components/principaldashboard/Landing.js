@@ -203,101 +203,105 @@ const Landing = () => {
   );
 
   // Fetch user counts
+
   const [userCounts, setUserCounts] = useState({
     students: 0,
     teachers: 0,
-    parents: 0,
-    admins: 0,
+    hods: 0,
+    vps: 0,
   });
 
+  useEffect(() => {
+    const fetchUserCount = async (role) => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/auth/users/${role}/${currentSession._id}`
+        );
+        return res.data.length;
+      } catch (error) {
+        console.error(`Failed to fetch ${role}:`, error);
+        return 0;
+      }
+    };
+
+    const fetchAllCounts = async () => {
+      const [students, teachers, hods, vps] = await Promise.all([
+        fetchUserCount("student"),
+        fetchUserCount("teacher"),
+        fetchUserCount("head_of_department"),
+        fetchUserCount("vice_principal"),
+      ]);
+
+      setUserCounts({ students, teachers, hods, vps });
+    };
+
+    if (currentSession) {
+      fetchAllCounts();
+    }
+  }, [currentSession]);
   return (
     <div class="page-wrapper">
       <div class="content">
         <h2>Principal Dashboard</h2>
-        <div class="row">
-          <div class="col-xl-3 col-sm-6 col-12 d-flex">
-            <div class="dash-widget w-100">
-              <div class="dash-widgetimg">
+
+        <div className="row">
+          <div className="col-xl-3 col-sm-6 col-12 d-flex">
+            <div className="dash-widget w-100">
+              <div className="dash-widgetimg">
                 <span>
                   <FaUserGraduate size={30} />
                 </span>
               </div>
-              <div class="dash-widgetcontent">
-                <h5>
-                  ₦
-                  <span className="counters" data-count={totalSales.toFixed(2)}>
-                    {totalSales.toLocaleString()}
-                  </span>
-                </h5>
+              <div className="dash-widgetcontent">
+                <h5>{userCounts.students}</h5>
                 <h6>Total Students</h6>
               </div>
             </div>
           </div>
 
-          <div class="col-xl-3 col-sm-6 col-12 d-flex">
-            <div class="dash-widget dash2 w-100">
-              <div class="dash-widgetimg">
+          <div className="col-xl-3 col-sm-6 col-12 d-flex">
+            <div className="dash-widget dash2 w-100">
+              <div className="dash-widgetimg">
                 <span>
                   <FaChalkboardTeacher size={30} />
                 </span>
               </div>
-              <div class="dash-widgetcontent">
-                <h5>
-                  <span
-                    className="counters"
-                    data-count={totalDailySales.toFixed(2)}
-                  >
-                    ₦ {totalDailySales.toLocaleString()}
-                  </span>
-                </h5>
-                {/*<h6>Outstanding Sales</h6>*/}
+              <div className="dash-widgetcontent">
+                <h5>{userCounts.teachers}</h5>
                 <h6>Total Staffs</h6>
               </div>
             </div>
           </div>
-          <div class="col-xl-3 col-sm-6 col-12 d-flex">
-            <div class="dash-widget dash3 w-100">
-              <div class="dash-widgetimg">
+
+          <div className="col-xl-3 col-sm-6 col-12 d-flex">
+            <div className="dash-widget dash3 w-100">
+              <div className="dash-widgetimg">
                 <span>
                   <FaChalkboardTeacher size={30} />
                 </span>
               </div>
-              <div class="dash-widgetcontent">
-                <h5>
-                  ₦
-                  <span
-                    className="counters"
-                    data-count={totalWeeklySales.toFixed(2)}
-                  >
-                    {totalWeeklySales.toLocaleString()}
-                  </span>
-                </h5>
+              <div className="dash-widgetcontent">
+                <h5>{userCounts.hods}</h5>
                 <h6>Total H.O.D</h6>
               </div>
             </div>
           </div>
-          <div class="col-xl-3 col-sm-6 col-12 d-flex">
-            <div class="dash-widget dash1 w-100">
-              <div class="dash-widgetimg">
+
+          <div className="col-xl-3 col-sm-6 col-12 d-flex">
+            <div className="dash-widget dash1 w-100">
+              <div className="dash-widgetimg">
                 <span>
                   <FaUserShield size={30} />
                 </span>
               </div>
-              <div class="dash-widgetcontent">
-                <h5>
-                  ₦
-                  <span
-                    className="counters"
-                    data-count={totalLast30DaysSales.toFixed(2)}
-                  >
-                    {totalLast30DaysSales.toLocaleString()}
-                  </span>
-                </h5>
+              <div className="dash-widgetcontent">
+                <h5>{userCounts.vps}</h5>
                 <h6>Total Vice Principal</h6>
-                {/*}  <h6>Total Expense</h6>*/}
               </div>
             </div>
           </div>
+        </div>
+        <div class="row">
           <div class="col-xl-3 col-sm-6 col-12 d-flex">
             <div class="dash-widget dash1 w-100">
               <div class="dash-widgetimg">
