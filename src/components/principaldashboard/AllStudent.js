@@ -131,10 +131,14 @@ const AllStudent = () => {
                               </a>
                             </div>
                             <button
-                              className="btn btn-sm btn-primary mt-2"
                               onClick={() => handleViewResult(student._id)}
                             >
-                              View Result
+                              <Link
+                                to={`/principal/dashboard/student_mark_sheet/${item._id}`}
+                              >
+                                {" "}
+                                View Result
+                              </Link>
                             </button>
                           </td>
                         </tr>
