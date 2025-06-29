@@ -426,7 +426,9 @@ const PrincipalTopNav = ({ setShowModal }) => {
                           }
                           style={{ marginRight: "8px" }}
                         />
-                        <span style={{ fontSize: "15px" }}>All Sections</span>
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          All Sections
+                        </span>
                       </a>
                     </li>
                     <li className="submenu">
@@ -451,7 +453,9 @@ const PrincipalTopNav = ({ setShowModal }) => {
                           }
                           style={{ marginRight: "8px" }}
                         />
-                        <span style={{ fontSize: "15px" }}>Vice Principal</span>
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          Vice Principal
+                        </span>
                       </a>
                     </li>
                     <li className="submenu">
@@ -476,7 +480,9 @@ const PrincipalTopNav = ({ setShowModal }) => {
                           }
                           style={{ marginRight: "8px" }}
                         />
-                        <span style={{ fontSize: "15px" }}>HOD</span>
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          HOD
+                        </span>
                       </a>
                     </li>
 
