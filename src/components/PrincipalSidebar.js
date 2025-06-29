@@ -6,6 +6,11 @@ import {
   FiLogOut,
   FiBook,
   FiChevronDown,
+  FiUsers,
+  FiActivity,
+  FiFileText,
+  FiEdit,
+  FiGrid,
   FiBarChart2,
 } from "react-icons/fi";
 import { MdPermMedia } from "react-icons/md";
@@ -91,7 +96,15 @@ const PrincipalSidebar = () => {
                   >
                     <FiHome
                       size={20}
-                      color="#e63e54"
+                      color={
+                        isActive("/principal/dashboard")
+                          ? darkMode
+                            ? "white"
+                            : "black" // active color: white in dark, black in light
+                          : darkMode
+                          ? "#fff"
+                          : "#000" // inactive color: lighter gray dark/light
+                      }
                       style={{ marginRight: "8px" }}
                     />
                     <span style={{ fontSize: "15px" }}>Dashboard</span>
@@ -106,9 +119,17 @@ const PrincipalSidebar = () => {
                       padding: "10px",
                     }}
                   >
-                    <FiBook
+                    <FiGrid
                       size={20}
-                      color="#e63e54"
+                      color={
+                        isActive("/principal/dashboard")
+                          ? darkMode
+                            ? "white"
+                            : "black" // active color: white in dark, black in light
+                          : darkMode
+                          ? "#fff"
+                          : "#000" // inactive color: lighter gray dark/light
+                      }
                       style={{ marginRight: "8px" }}
                     />
                     <span style={{ fontSize: "15px" }}>All Sections</span>
@@ -126,7 +147,15 @@ const PrincipalSidebar = () => {
                   >
                     <FiUser
                       size={20}
-                      color="#e63e54"
+                      color={
+                        isActive("/principal/dashboard")
+                          ? darkMode
+                            ? "white"
+                            : "black" // active color: white in dark, black in light
+                          : darkMode
+                          ? "#fff"
+                          : "#000" // inactive color: lighter gray dark/light
+                      }
                       style={{ marginRight: "8px" }}
                     />
                     <span style={{ fontSize: "15px" }}>Vice Principal</span>
@@ -143,7 +172,15 @@ const PrincipalSidebar = () => {
                   >
                     <FiUser
                       size={20}
-                      color="#e63e54"
+                      color={
+                        isActive("/principal/dashboard")
+                          ? darkMode
+                            ? "white"
+                            : "black" // active color: white in dark, black in light
+                          : darkMode
+                          ? "#fff"
+                          : "#000" // inactive color: lighter gray dark/light
+                      }
                       style={{ marginRight: "8px" }}
                     />
                     <span style={{ fontSize: "15px" }}>HOD</span>
@@ -182,7 +219,7 @@ const PrincipalSidebar = () => {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      <FiBook
+                      <FiUser
                         size={20}
                         style={{ marginRight: "8px" }}
                         color={
@@ -281,7 +318,7 @@ const PrincipalSidebar = () => {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      <FiBook
+                      <FiUsers
                         size={20}
                         style={{ marginRight: "8px" }}
                         color={
@@ -482,7 +519,7 @@ const PrincipalSidebar = () => {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      <FiBook
+                      <FiActivity
                         size={20}
                         style={{ marginRight: "8px" }}
                         color={
@@ -582,7 +619,7 @@ const PrincipalSidebar = () => {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      <FiBook
+                      <FiFileText
                         size={20}
                         style={{ marginRight: "8px" }}
                         color={
@@ -681,7 +718,7 @@ const PrincipalSidebar = () => {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      <FiBook
+                      <FiEdit
                         size={20}
                         style={{ marginRight: "8px" }}
                         color={
@@ -803,7 +840,7 @@ const PrincipalSidebar = () => {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      <FiBook
+                      <FiEdit
                         size={20}
                         style={{ marginRight: "8px" }}
                         color={
@@ -882,7 +919,15 @@ const PrincipalSidebar = () => {
                   >
                     <FiBarChart2
                       size={20}
-                      color="#e63e54"
+                      color={
+                        isActive("/principal/dashboard")
+                          ? darkMode
+                            ? "white"
+                            : "black" // active color: white in dark, black in light
+                          : darkMode
+                          ? "#fff"
+                          : "#000" // inactive color: lighter gray dark/light
+                      }
                       style={{ marginRight: "8px" }}
                     />
                     <span style={{ fontSize: "15px" }}>Accounting</span>
@@ -901,7 +946,15 @@ const PrincipalSidebar = () => {
                   >
                     <FiBook
                       size={20}
-                      color="#e63e54"
+                      color={
+                        isActive("/principal/dashboard")
+                          ? darkMode
+                            ? "white"
+                            : "black" // active color: white in dark, black in light
+                          : darkMode
+                          ? "#fff"
+                          : "#000" // inactive color: lighter gray dark/light
+                      }
                       style={{ marginRight: "8px" }}
                     />
                     <span style={{ fontSize: "15px" }}>Attendance</span>
@@ -920,7 +973,15 @@ const PrincipalSidebar = () => {
                   >
                     <MdPermMedia
                       size={20}
-                      color="#e63e54"
+                      color={
+                        isActive("/principal/dashboard")
+                          ? darkMode
+                            ? "white"
+                            : "black" // active color: white in dark, black in light
+                          : darkMode
+                          ? "#fff"
+                          : "#000" // inactive color: lighter gray dark/light
+                      }
                       style={{ marginRight: "8px" }}
                     />
                     <span style={{ fontSize: "15px" }}>Study Material</span>
@@ -939,7 +1000,15 @@ const PrincipalSidebar = () => {
                   >
                     <FiUser
                       size={20}
-                      color="#e63e54"
+                      color={
+                        isActive("/principal/dashboard")
+                          ? darkMode
+                            ? "white"
+                            : "black" // active color: white in dark, black in light
+                          : darkMode
+                          ? "#fff"
+                          : "#000" // inactive color: lighter gray dark/light
+                      }
                       style={{ marginRight: "8px" }}
                     />
                     <span style={{ fontSize: "15px" }}>General</span>

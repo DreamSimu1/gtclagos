@@ -20,6 +20,7 @@ import {
   FiMessageSquare,
   FiClock,
 } from "react-icons/fi";
+import { FiUsers, FiActivity, FiFileText, FiGrid } from "react-icons/fi";
 import { FiBook } from "react-icons/fi";
 import axios from "axios";
 import { DarkModeContext } from "../context/darkModeContext";
@@ -403,9 +404,17 @@ const PrincipalTopNav = ({ setShowModal }) => {
                           padding: "10px",
                         }}
                       >
-                        <FiBook
+                        <FiGrid
                           size={20}
-                          color="#e63e54"
+                          color={
+                            isActive("/principal/dashboard")
+                              ? darkMode
+                                ? "white"
+                                : "black" // active color: white in dark, black in light
+                              : darkMode
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
+                          }
                           style={{ marginRight: "8px" }}
                         />
                         <span style={{ fontSize: "15px" }}>All Sections</span>
@@ -422,7 +431,15 @@ const PrincipalTopNav = ({ setShowModal }) => {
                       >
                         <FiUser
                           size={20}
-                          color="#e63e54"
+                          color={
+                            isActive("/principal/dashboard")
+                              ? darkMode
+                                ? "white"
+                                : "black" // active color: white in dark, black in light
+                              : darkMode
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
+                          }
                           style={{ marginRight: "8px" }}
                         />
                         <span style={{ fontSize: "15px" }}>Vice Principal</span>
@@ -439,7 +456,15 @@ const PrincipalTopNav = ({ setShowModal }) => {
                       >
                         <FiUser
                           size={20}
-                          color="#e63e54"
+                          color={
+                            isActive("/principal/dashboard")
+                              ? darkMode
+                                ? "white"
+                                : "black" // active color: white in dark, black in light
+                              : darkMode
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
+                          }
                           style={{ marginRight: "8px" }}
                         />
                         <span style={{ fontSize: "15px" }}>HOD</span>
@@ -478,7 +503,7 @@ const PrincipalTopNav = ({ setShowModal }) => {
                         }}
                       >
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          <FiBook
+                          <FiUser
                             size={20}
                             style={{ marginRight: "8px" }}
                             color={
@@ -580,7 +605,7 @@ const PrincipalTopNav = ({ setShowModal }) => {
                         }}
                       >
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          <FiBook
+                          <FiUsers
                             size={20}
                             style={{ marginRight: "8px" }}
                             color={
@@ -785,7 +810,7 @@ const PrincipalTopNav = ({ setShowModal }) => {
                         }}
                       >
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          <FiBook
+                          <FiActivity
                             size={20}
                             style={{ marginRight: "8px" }}
                             color={
@@ -885,7 +910,7 @@ const PrincipalTopNav = ({ setShowModal }) => {
                         }}
                       >
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          <FiBook
+                          <FiFileText
                             size={20}
                             style={{ marginRight: "8px" }}
                             color={
@@ -984,7 +1009,7 @@ const PrincipalTopNav = ({ setShowModal }) => {
                         }}
                       >
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          <FiBook
+                          <FiEdit
                             size={20}
                             style={{ marginRight: "8px" }}
                             color={
@@ -1106,7 +1131,7 @@ const PrincipalTopNav = ({ setShowModal }) => {
                         }}
                       >
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          <FiBook
+                          <FiEdit
                             size={20}
                             style={{ marginRight: "8px" }}
                             color={
@@ -1185,7 +1210,15 @@ const PrincipalTopNav = ({ setShowModal }) => {
                       >
                         <FiBarChart2
                           size={20}
-                          color="#e63e54"
+                          color={
+                            isActive("/principal/dashboard")
+                              ? darkMode
+                                ? "white"
+                                : "black" // active color: white in dark, black in light
+                              : darkMode
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
+                          }
                           style={{ marginRight: "8px" }}
                         />
                         <span style={{ fontSize: "15px" }}>Accounting</span>
@@ -1204,7 +1237,15 @@ const PrincipalTopNav = ({ setShowModal }) => {
                       >
                         <FiBook
                           size={20}
-                          color="#e63e54"
+                          color={
+                            isActive("/principal/dashboard")
+                              ? darkMode
+                                ? "white"
+                                : "black" // active color: white in dark, black in light
+                              : darkMode
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
+                          }
                           style={{ marginRight: "8px" }}
                         />
                         <span style={{ fontSize: "15px" }}>Attendance</span>
@@ -1223,7 +1264,15 @@ const PrincipalTopNav = ({ setShowModal }) => {
                       >
                         <MdPermMedia
                           size={20}
-                          color="#e63e54"
+                          color={
+                            isActive("/principal/dashboard")
+                              ? darkMode
+                                ? "white"
+                                : "black" // active color: white in dark, black in light
+                              : darkMode
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
+                          }
                           style={{ marginRight: "8px" }}
                         />
                         <span style={{ fontSize: "15px" }}>Study Material</span>
@@ -1242,7 +1291,15 @@ const PrincipalTopNav = ({ setShowModal }) => {
                       >
                         <FiUser
                           size={20}
-                          color="#e63e54"
+                          color={
+                            isActive("/principal/dashboard")
+                              ? darkMode
+                                ? "white"
+                                : "black" // active color: white in dark, black in light
+                              : darkMode
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
+                          }
                           style={{ marginRight: "8px" }}
                         />
                         <span style={{ fontSize: "15px" }}>General</span>
