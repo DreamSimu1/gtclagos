@@ -91,7 +91,7 @@ const RoleBasedLayout = () => {
       navigate("/login");
     }
   }, []);
-  if (!role) return <div>Loading layout...</div>;
+  if (!role) return <div></div>;
 
   const getTopbarByRole = () => {
     switch (role) {

@@ -136,7 +136,7 @@ const AuthGuard = () => {
   const authorized = isAuthenticated && userHasPermission();
 
   if (!isInitialised) {
-    return <div>Loading authentication...</div>;
+    return <div></div>;
   }
 
   if (authorized) {
