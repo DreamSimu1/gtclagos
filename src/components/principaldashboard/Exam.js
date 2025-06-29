@@ -352,9 +352,9 @@ const Exam = () => {
                   </tbody>
                 </table>
                 <button
-                  className="btn btn-success"
+                  className="btn "
                   onClick={handleSubmit}
-                  style={{ backgroundColor: "#e63e54" }}
+                  style={{ backgroundColor: "#e63e54", color: "white" }}
                 >
                   Submit Marks
                 </button>
