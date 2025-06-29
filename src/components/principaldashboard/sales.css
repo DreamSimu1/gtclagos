@@ -53,15 +53,15 @@
 }
 
 .force-mobile-button {
-  display: inline-block; /* Button-like behavior */
-  padding: 10px 20px;
-  background-color: #e63e54 !important; /* Bootstrap-style red-pink */
+  display: inline-block;
+  padding: 8px 14px;
+  background-color: #e63e54 !important;
   color: #fff !important;
   text-align: center;
   text-decoration: none;
   border: none;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -74,14 +74,16 @@
   background-color: #c02158 !important;
 }
 
+/* Mobile adjustments */
 @media (max-width: 900px) {
   .force-mobile-button {
-    display: block;
-    width: 100%;
-    padding: 14px 20px;
-    font-size: 18px;
+    display: inline-block; /* Avoid block/full-width */
+
+    padding: 4px 6px;
+    font-size: 14px;
   }
 }
+
 .card-header {
   display: flex;
   justify-content: space-between;

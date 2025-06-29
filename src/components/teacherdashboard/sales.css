@@ -77,7 +77,7 @@
 @media (max-width: 900px) {
   .force-mobile-button {
     display: block;
-    width: 100%;
+
     padding: 14px 20px;
     font-size: 18px;
   }
