@@ -274,7 +274,7 @@ const JwtLogin = () => {
                             Log in
                           </button>
                         </div>
-                        <h5
+                        {/*}   <h5
                           style={{
                             textAlign: "center",
                             color: "black",
@@ -304,7 +304,7 @@ const JwtLogin = () => {
                             />
                             Continue with Google
                           </button>
-                        </div>
+                        </div>*/}
                       </div>
                     </form>
                   )}
