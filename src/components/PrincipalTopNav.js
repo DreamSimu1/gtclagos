@@ -1236,7 +1236,9 @@ const PrincipalTopNav = ({ setShowModal }) => {
                           }
                           style={{ marginRight: "8px" }}
                         />
-                        <span style={{ fontSize: "15px" }}>Accounting</span>
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          Accounting
+                        </span>
                       </a>
                     </li>
 
@@ -1263,7 +1265,9 @@ const PrincipalTopNav = ({ setShowModal }) => {
                           }
                           style={{ marginRight: "8px" }}
                         />
-                        <span style={{ fontSize: "15px" }}>Attendance</span>
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          Attendance
+                        </span>
                       </a>
                     </li>
 
@@ -1290,7 +1294,9 @@ const PrincipalTopNav = ({ setShowModal }) => {
                           }
                           style={{ marginRight: "8px" }}
                         />
-                        <span style={{ fontSize: "15px" }}>Study Material</span>
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          Study Material
+                        </span>
                       </a>
                     </li>
 
@@ -1317,7 +1323,9 @@ const PrincipalTopNav = ({ setShowModal }) => {
                           }
                           style={{ marginRight: "8px" }}
                         />
-                        <span style={{ fontSize: "15px" }}>General</span>
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          General
+                        </span>
                       </a>
                     </li>
 
