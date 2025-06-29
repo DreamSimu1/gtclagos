@@ -153,13 +153,7 @@ const JwtLogin = () => {
                     handleSubmit,
                   }) => (
                     <form onSubmit={handleSubmit}>
-                      <div
-                        class="login-userset"
-                        style={{
-                          paddingBottom: "40px", // Add extra bottom padding
-                          minHeight: "100%", // Ensure content fits
-                        }}
-                      >
+                      <div class="login-userset">
                         <div className="login-userheading">
                           <div
                             className="logo"
