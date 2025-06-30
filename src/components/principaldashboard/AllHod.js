@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { SessionContext } from "../../SessionContext";
+import AddHodModal from "./AddHodModal";
 
 const AllHod = () => {
   const { currentSession } = useContext(SessionContext);
@@ -35,7 +36,16 @@ const AllHod = () => {
             <div className="card-header flex justify-between items-center">
               <h4 className="card-title">All Heads of Department (HODs)</h4>
             </div>
-
+            <div className="card-header flex justify-between items-center">
+              <h4 className="card-title">Add HOD</h4>
+              <button
+                type="button"
+                className="force-mobile-button"
+                onClick={() => setShowModal(true)}
+              >
+                <span>Add HOD</span>
+              </button>
+            </div>
             <div className="card-body">
               <div className="table-responsive dataview">
                 <table className="table dashboard-expired-products">
@@ -81,13 +91,12 @@ const AllHod = () => {
                 </table>
 
                 {/* If you later want to add HOD from here, add modal */}
-                {/* 
+
                 <AddHodModal
                   showModal={showModal}
                   setShowModal={setShowModal}
                   updateTableData={fetchAllHods}
-                /> 
-                */}
+                />
               </div>
             </div>
           </div>
