@@ -11,8 +11,6 @@ import { useReactToPrint } from "react-to-print";
 
 import axios from "axios";
 
-import "./report.css";
-import "./print.css";
 import { SessionContext } from "../../SessionContext";
 import useFetch from "../../hooks/useFetch";
 import last from "./lastveblogo.png";
