@@ -28,7 +28,7 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
     try {
       const payload = {
         ...formData,
-        role: "hod",
+        role: "head_of_department",
         session: currentSession._id,
       };
 
@@ -48,7 +48,6 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
         phone: "",
         username: "",
         password: "",
-
         tradeection: "",
       });
     } catch (error) {
