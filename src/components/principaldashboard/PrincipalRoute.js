@@ -1,6 +1,7 @@
 import AllHod from "./AllHod";
 import AllStudent from "./AllStudent";
 import AllSubject from "./AllSubject";
+import AllVice from "./AllVice";
 import Exam from "./Exam";
 import Examlist from "./Examlist";
 import FirstTermRepCont from "./FirstTermRepContd";
@@ -68,6 +69,11 @@ const PrincipalRoute = [
   {
     path: "/principal/dashboard/hod",
     element: <AllHod />,
+    auth: "principal",
+  },
+  {
+    path: "/principal/dashboard/vice-principal",
+    element: <AllVice />,
     auth: "principal",
   },
   {
