@@ -13,7 +13,6 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
     phone: "",
     username: "",
     password: "",
-
     tradeSection: "",
   });
 
