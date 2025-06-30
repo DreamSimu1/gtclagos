@@ -71,11 +71,22 @@ const FirstTermRep = ({ studentId }) => {
   const [psyData, setPsyData] = useState(null);
   const { currentSession } = useContext(SessionContext);
 
-  const { id } = useParams();
-
   // const { data } = useFetch(`/students/${id}`);
 
-  const { data } = useFetch(`/get-students/${studentId}/${currentSession._id}`);
+  // const { data } = useFetch(`/auth/student/${studentId}/${currentSession._id}`);
+  // const { data } = useFetch(
+  //   currentSession?._id
+  //     ? `/auth/student/${studentId}/${currentSession._id}`
+  //     : null
+  // );
+  const { data: studentApiResponse } = useFetch(
+    currentSession?._id
+      ? `/auth/student/${studentId}/${currentSession._id}`
+      : null
+  );
+
+  // Destructure to get the actual student data
+  const student = studentApiResponse?.data;
 
   // const { data,  } = useFetch(`/students/${user._id}`); // Fetch data using the correct URL
 
@@ -142,7 +153,7 @@ const FirstTermRep = ({ studentId }) => {
       console.log("API Response for class:", response.data);
 
       // Assuming 'data' holds the student data
-      const studentClassName = data?.classname; // Replace with correct field
+      const studentClassName = student?.classname; // Replace with correct field
       if (!studentClassName) {
         throw new Error("Student's class is not found");
       }
@@ -165,7 +176,11 @@ const FirstTermRep = ({ studentId }) => {
     }
   };
 
-  fetchclassteacher();
+  useEffect(() => {
+    if (studentId && currentSession?._id) {
+      fetchclassteacher(studentId);
+    }
+  }, [studentId, currentSession]);
 
   const fetchStudentData = async (studentId) => {
     try {
@@ -179,7 +194,7 @@ const FirstTermRep = ({ studentId }) => {
       };
 
       const response = await axios.get(
-        `${apiUrl}/api/get-scores-by-student/${studentId}/${currentSession._id}`,
+        `${apiUrl}/api/offline/get-scores-by-student/${studentId}/${currentSession._id}`,
         { headers }
       );
 
@@ -252,7 +267,7 @@ const FirstTermRep = ({ studentId }) => {
       };
 
       const response = await axios.get(
-        `${apiUrl}/api/get-all-scores/${examId}/${subjectId}`,
+        `${apiUrl}/api/offline/get-all-scores/${examId}/${subjectId}`,
         { headers }
       );
 
@@ -524,180 +539,11 @@ const FirstTermRep = ({ studentId }) => {
                       Email: gotecolagos@yahoo.com
                     </p>
                     <h3 style={{ color: "#042954", margin: "10px 0" }}>
-                      {data?.classname || ""} First Term Report Card
+                      {student?.classname || ""} First Term Report Card
                     </h3>
                   </div>
                 </div>
 
-                {/*} <div
-              className="bd_detailssec"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div style={{ flex: "0 0 auto" }}>
-                <div className="bd_photo">
-                  <img
-                    className="profile-photo"
-                    alt="profile-photo"
-                    src="https://hlhs.portalreport.org/uploads/user.jpg"
-                    style={{ width: "100px", height: "100px" }}
-                  />
-                </div>
-              </div>
-              <div
-                style={{ flex: "1", padding: "0 20px", textAlign: "center" }}
-              >
-                <div style={{ marginBottom: "20px" }}>
-                  <span>Trainee's Name:</span>
-                  {""}
-                  <span
-                    style={{
-                      border: 0,
-                      outline: 0,
-                      background: "transparent",
-                      borderBottom: "1px solid black",
-                      width: "50%",
-                      marginLeft: "30px",
-                      textAlign: "center",
-                    }}
-                  >
-                    {data && Array.isArray(data) && data.length > 0
-                      ? data[0]?.studentName || "Name not available"
-                      : "Data format unexpected"}
-                  </span>
-                </div>
-                <div style={{ marginBottom: "20px" }}>
-                  <span>Session:</span>{" "}
-                  <p
-                    style={{
-                      border: 0,
-                      outline: 0,
-                      background: "transparent",
-                      borderBottom: "1px solid black",
-                      width: "50%",
-                      marginLeft: "30px",
-                      textAlign: "center",
-                    }}
-                  >
-                    {currentSession?.name
-                      ? `${currentSession.name}`
-                      : "No active session"}
-                  </p>
-                </div>
-                <div style={{ marginBottom: "20px" }}>
-                  <span>Class Teacher:</span>{" "}
-                  <span
-                    style={{
-                      border: 0,
-                      outline: 0,
-                      background: "transparent",
-                      borderBottom: "1px solid black",
-                      width: "50%",
-                      marginLeft: "30px",
-                      textAlign: "center",
-                    }}
-                  >
-                    {data?.[0]?.teacherName || "Teacher not available"}
-                  </span>
-                </div>
-              </div>
-              <div
-                style={{ flex: "1", padding: "0 20px", textAlign: "center" }}
-              >
-                <p style={{ color: "#042954" }}>
-                  <span>Student Id No:</span>{" "}
-                  <input
-                    type="text"
-                    style={{
-                      border: 0,
-                      outline: 0,
-                      background: "transparent",
-                      borderBottom: "1px solid black",
-                      width: "50%",
-                      marginLeft: "30px",
-                      textAlign: "center",
-                    }}
-                    value={data?.[0]?.AdmNo || "ID not available"}
-                    readOnly
-                  />
-                </p>
-                <p style={{ color: "#042954" }}>
-                  <span>Total Marks:</span>{" "}
-                  <input
-                    type="text"
-                    style={{
-                      border: 0,
-                      outline: 0,
-                      background: "transparent",
-                      borderBottom: "1px solid black",
-                      width: "50%",
-                      marginLeft: "30px",
-                      textAlign: "center",
-                    }}
-                    value={totalMarks || "0"}
-                    readOnly
-                  />
-                </p>
-              </div>
-              <div
-                style={{ flex: "1", padding: "0 20px", textAlign: "center" }}
-              >
-                <p style={{ color: "#042954" }}>
-                  <span>Marks Obtained:</span>{" "}
-                  <input
-                    type="text"
-                    style={{
-                      border: 0,
-                      outline: 0,
-                      background: "transparent",
-                      borderBottom: "1px solid black",
-                      width: "50%",
-                      marginLeft: "30px",
-                      textAlign: "center",
-                    }}
-                    value={totalMarksObtained || "0"}
-                    readOnly
-                  />
-                </p>
-                <p style={{ color: "#042954" }}>
-                  <span>Average Marks:</span>{" "}
-                  <input
-                    type="text"
-                    style={{
-                      border: 0,
-                      outline: 0,
-                      background: "transparent",
-                      borderBottom: "1px solid black",
-                      width: "50%",
-                      marginLeft: "30px",
-                      textAlign: "center",
-                    }}
-                    value={averageMarks || "0"}
-                    readOnly
-                  />
-                </p>
-                <p style={{ color: "#042954" }}>
-                  <span>Average Grade:</span>{" "}
-                  <input
-                    type="text"
-                    style={{
-                      border: 0,
-                      outline: 0,
-                      background: "transparent",
-                      borderBottom: "1px solid black",
-                      width: "50%",
-                      marginLeft: "30px",
-                      textAlign: "center",
-                    }}
-                    value={calculateAverageGrade() || "N/A"}
-                    readOnly
-                  />
-                </p>
-              </div>
-            </div>*/}
                 <div className="bd_detailssec" style={{ padding: "20px" }}>
                   <table
                     style={{
@@ -738,7 +584,7 @@ const FirstTermRep = ({ studentId }) => {
                         >
                           <div style={{ marginBottom: "10px" }}>
                             <span style={{ fontWeight: "bold" }}>
-                              Student Name:
+                              Trainee's Name:
                             </span>
                             <span
                               style={{
@@ -749,9 +595,7 @@ const FirstTermRep = ({ studentId }) => {
                                 minWidth: "200px",
                               }}
                             >
-                              {Array.isArray(data) && data.length > 0
-                                ? data[0]?.studentName || "Name not available"
-                                : "Data format unexpected"}
+                              {student?.fullname || "Name not available"}
                             </span>
                           </div>
                           <div style={{ marginBottom: "10px" }}>
@@ -767,13 +611,11 @@ const FirstTermRep = ({ studentId }) => {
                                 minWidth: "100px",
                               }}
                             >
-                              {data && data.length > 0
-                                ? data[0]?.AdmNo || "ID not available"
-                                : "Data format unexpected"}
+                              {student?.admNo || "Name not available"}
                             </span>
                           </div>
                           <div style={{ marginBottom: "10px" }}>
-                            <span style={{ fontWeight: "bold" }}>Session:</span>
+                            <span style={{ fontWeight: "bold" }}>Year:</span>
                             <span
                               style={{
                                 marginLeft: "10px",
@@ -800,7 +642,7 @@ const FirstTermRep = ({ studentId }) => {
                                 minWidth: "200px",
                               }}
                             >
-                              Mrs Adebisi Emmanuel
+                              -
                             </span>
                           </div>
                         </td>
@@ -811,9 +653,7 @@ const FirstTermRep = ({ studentId }) => {
                           }}
                         >
                           <div style={{ marginBottom: "10px" }}>
-                            <span style={{ fontWeight: "bold" }}>
-                              Total Marks:
-                            </span>
+                            <span style={{ fontWeight: "bold" }}>Section:</span>
                             <span
                               style={{
                                 marginLeft: "10px",
@@ -823,12 +663,27 @@ const FirstTermRep = ({ studentId }) => {
                                 minWidth: "100px",
                               }}
                             >
-                              {totalMarks || "0"}
+                              {student?.tradeSection?.name ||
+                                "Name not available"}
+                            </span>
+                          </div>
+                          <div style={{ marginBottom: "10px" }}>
+                            <span style={{ fontWeight: "bold" }}>Class:</span>
+                            <span
+                              style={{
+                                marginLeft: "10px",
+                                borderBottom: "1px solid black",
+                                display: "inline-block",
+                                paddingBottom: "2px",
+                                minWidth: "100px",
+                              }}
+                            >
+                              {student?.tech || "Name not available"}
                             </span>
                           </div>
                           <div style={{ marginBottom: "10px" }}>
                             <span style={{ fontWeight: "bold" }}>
-                              Marks Obtained:
+                              Next term begins:
                             </span>
                             <span
                               style={{
@@ -839,39 +694,7 @@ const FirstTermRep = ({ studentId }) => {
                                 minWidth: "100px",
                               }}
                             >
-                              {totalMarksObtained || "0"}
-                            </span>
-                          </div>
-                          <div style={{ marginBottom: "10px" }}>
-                            <span style={{ fontWeight: "bold" }}>
-                              Average Marks:
-                            </span>
-                            <span
-                              style={{
-                                marginLeft: "10px",
-                                borderBottom: "1px solid black",
-                                display: "inline-block",
-                                paddingBottom: "2px",
-                                minWidth: "100px",
-                              }}
-                            >
-                              {averageMarks || "0"}
-                            </span>
-                          </div>
-                          <div style={{ marginBottom: "10px" }}>
-                            <span style={{ fontWeight: "bold" }}>
-                              Average Grade:
-                            </span>
-                            <span
-                              style={{
-                                marginLeft: "10px",
-                                borderBottom: "1px solid black",
-                                display: "inline-block",
-                                paddingBottom: "2px",
-                                minWidth: "100px",
-                              }}
-                            >
-                              {calculateAverageGrade() || "N/A"}
+                              {averageMarks || "-"}
                             </span>
                           </div>
                         </td>
