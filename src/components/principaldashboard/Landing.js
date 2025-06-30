@@ -311,7 +311,6 @@ const Landing = () => {
               </div>
               <div class="dash-widgetcontent">
                 <h5>
-                  ₦
                   <span
                     class="counters"
                     data-count={totalLast30DaysProfit.toFixed(2)}
@@ -332,7 +331,6 @@ const Landing = () => {
               </div>
               <div class="dash-widgetcontent">
                 <h5>
-                  ₦
                   <span class="counters" data-count={totalProfit.toFixed(2)}>
                     {totalProfit.toLocaleString()}
                   </span>
@@ -351,7 +349,6 @@ const Landing = () => {
               </div>
               <div class="dash-widgetcontent">
                 <h5>
-                  ₦
                   <span
                     class="counters"
                     data-count={totalDailyProfit.toFixed(2)}
@@ -373,7 +370,6 @@ const Landing = () => {
 
               <div class="dash-widgetcontent">
                 <h5>
-                  ₦
                   <span
                     class="counters"
                     data-count={totalWeeklyProfit.toFixed(2)}
