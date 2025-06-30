@@ -5,6 +5,7 @@ import Exam from "./Exam";
 import Examlist from "./Examlist";
 import Profile from "./forms/Profile";
 import Landing from "./Landing";
+import MarkSheet from "./MarkSheet";
 import Section from "./Section";
 import SectionTeachersPage from "./SectionTeachersPage";
 import Teacher from "./Teacher";
@@ -41,6 +42,11 @@ const PrincipalRoute = [
   {
     path: "/principal/dashboard/sections",
     element: <Section />,
+    auth: "principal",
+  },
+  {
+    path: "/principal/dashboard/student_mark_sheet/:id",
+    element: <MarkSheet />,
     auth: "principal",
   },
   {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { SessionContext } from "../../SessionContext";
 import AddStudentModal from "./AddStudentModal";
@@ -132,9 +132,23 @@ const AllStudent = () => {
                             </div>
                             <button
                               onClick={() => handleViewResult(student._id)}
+                              style={{
+                                border: "none",
+                                backgroundColor: "#e63e54",
+                                color: "#fff",
+                                padding: "5px",
+                                borderRadius: "12px",
+                              }}
                             >
                               <Link
-                                to={`/principal/dashboard/student_mark_sheet/${item._id}`}
+                                to={`/principal/dashboard/student_mark_sheet/${student._id}`}
+                                style={{
+                                  border: "none",
+                                  backgroundColor: "#e63e54",
+                                  color: "#fff",
+                                  padding: "5px",
+                                  borderRadius: "12px",
+                                }}
                               >
                                 {" "}
                                 View Result
