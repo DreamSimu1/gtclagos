@@ -1,11 +1,12 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { SessionContext } from "../../SessionContext";
 
 const AddStudentModal = ({ showModal, setShowModal, updateTableData }) => {
   const { currentSession } = useContext(SessionContext);
   const apiUrl = process.env.REACT_APP_API_URL;
-
+  const [sections, setSections] = useState([]);
+  const [selectedSection, setSelectedSection] = useState("");
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
@@ -35,7 +36,7 @@ const AddStudentModal = ({ showModal, setShowModal, updateTableData }) => {
 
       const token = localStorage.getItem("jwtToken");
 
-      await axios.post(`${apiUrl}/register`, payload, {
+      await axios.post(`${apiUrl}/api/auth/register`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -62,7 +63,22 @@ const AddStudentModal = ({ showModal, setShowModal, updateTableData }) => {
       alert("Failed to register student. See console for details.");
     }
   };
+  useEffect(() => {
+    if (currentSession?._id) {
+      fetchSections();
+    }
+  }, [currentSession]);
 
+  const fetchSections = async () => {
+    try {
+      const response = await axios.get(
+        `${apiUrl}/api/section/${currentSession._id}`
+      );
+      setSections(response.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching sections:", error);
+    }
+  };
   return (
     <>
       {showModal && <div className="modal-backdrop show"></div>}
@@ -189,6 +205,22 @@ const AddStudentModal = ({ showModal, setShowModal, updateTableData }) => {
                       setFormData({ ...formData, birthday: e.target.value })
                     }
                   />
+                </div>
+                <div className="form-group">
+                  <label>Select Trade Section</label>
+
+                  <select
+                    className="form-select"
+                    value={selectedSection}
+                    onChange={(e) => setSelectedSection(e.target.value)}
+                  >
+                    <option value="">Select Section</option>
+                    {sections.map((section) => (
+                      <option key={section._id} value={section._id}>
+                        {section.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="form-group">

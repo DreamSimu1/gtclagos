@@ -1,21 +1,20 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { SessionContext } from "../../SessionContext";
 
 const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
   const { currentSession } = useContext(SessionContext);
   const apiUrl = process.env.REACT_APP_API_URL;
-
+  const [sections, setSections] = useState([]);
+  const [selectedSection, setSelectedSection] = useState("");
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
     phone: "",
     username: "",
     password: "",
-    admNo: "",
-    gender: "male",
-    birthday: "",
-    tech: "tech_1", // Default to tech_1
+
+    tradeSection: "",
   });
 
   const handleAddStudent = async (e) => {
@@ -29,13 +28,13 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
     try {
       const payload = {
         ...formData,
-        role: "student",
+        role: "hod",
         session: currentSession._id,
       };
 
       const token = localStorage.getItem("jwtToken");
 
-      await axios.post(`${apiUrl}/register`, payload, {
+      await axios.post(`${apiUrl}/api/auth/register`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -49,20 +48,30 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
         phone: "",
         username: "",
         password: "",
-        admNo: "",
-        gender: "male",
-        birthday: "",
-        tech: "tech_1",
+
+        tradeection: "",
       });
     } catch (error) {
-      console.error(
-        "Error registering student:",
-        error.response?.data || error
-      );
-      alert("Failed to register student. See console for details.");
+      console.error("Error registering hod:", error.response?.data || error);
+      alert("Failed to register hod. See console for details.");
     }
   };
+  useEffect(() => {
+    if (currentSession?._id) {
+      fetchSections();
+    }
+  }, [currentSession]);
 
+  const fetchSections = async () => {
+    try {
+      const response = await axios.get(
+        `${apiUrl}/api/section/${currentSession._id}`
+      );
+      setSections(response.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching sections:", error);
+    }
+  };
   return (
     <>
       {showModal && <div className="modal-backdrop show"></div>}
@@ -75,7 +84,7 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
         <div className="modal-dialog modal-lg" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Add New Student</h5>
+              <h5 className="modal-title">Add HOD</h5>
               <button
                 type="button"
                 className="close"
@@ -154,62 +163,26 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
                 </div>
 
                 <div className="form-group">
-                  <label>Admission Number</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={formData.admNo}
-                    onChange={(e) =>
-                      setFormData({ ...formData, admNo: e.target.value })
-                    }
-                  />
-                </div>
+                  <label>Select Trade Section</label>
 
-                <div className="form-group">
-                  <label>Gender</label>
                   <select
-                    className="form-control"
-                    value={formData.gender}
-                    onChange={(e) =>
-                      setFormData({ ...formData, gender: e.target.value })
-                    }
+                    className="form-select"
+                    value={selectedSection}
+                    onChange={(e) => setSelectedSection(e.target.value)}
                   >
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label>Birthday</label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    value={formData.birthday}
-                    onChange={(e) =>
-                      setFormData({ ...formData, birthday: e.target.value })
-                    }
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Tech</label>
-                  <select
-                    className="form-control"
-                    value={formData.tech}
-                    onChange={(e) =>
-                      setFormData({ ...formData, tech: e.target.value })
-                    }
-                  >
-                    <option value="tech_1">Tech 1</option>
-                    <option value="tech_2">Tech 2</option>
-                    <option value="tech_3">Tech 3</option>
+                    <option value="">Select Section</option>
+                    {sections.map((section) => (
+                      <option key={section._id} value={section._id}>
+                        {section.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
 
               <div className="modal-footer">
                 <button type="submit" className="btn btn-primary">
-                  Add Student
+                  Add Hod
                 </button>
                 <button
                   type="button"

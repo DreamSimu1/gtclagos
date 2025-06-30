@@ -1,7 +1,7 @@
 import { React, useEffect, useState, useContext } from "react";
 import axios from "axios";
 // import useFetch from "hooks/useFetch";
-import "./sales.css";
+
 import { SessionContext } from "../../SessionContext";
 import AddTeacherModal from "./AddTeacherModal";
 import useFetch from "../../hooks/useFetch";
