@@ -122,19 +122,23 @@ const MarkSheet = () => {
                     gap: "15px",
                   }}
                 >
-                  <Link to={`/dashboard/first_term_report_card/${id}`}>
+                  <Link
+                    to={`/principal/dashboard/first_term_report_card/${id}`}
+                  >
                     <button className="btn btn-primary w-100">
                       First Term Report Card
                     </button>
                   </Link>
 
-                  <Link to={`/dashboard/term_report_card/${id}`}>
+                  <Link to={`/principal/dashboard/term_report_card/${id}`}>
                     <button className="btn btn-primary w-100">
                       Second Term Report Card
                     </button>
                   </Link>
 
-                  <Link to={`/dashboard/third_term_report_card/${id}`}>
+                  <Link
+                    to={`/principal/dashboard/third_term_report_card/${id}`}
+                  >
                     <button className="btn btn-primary w-100">
                       Third Term Report Card
                     </button>

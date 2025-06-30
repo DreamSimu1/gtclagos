@@ -3,6 +3,7 @@ import AllStudent from "./AllStudent";
 import AllSubject from "./AllSubject";
 import Exam from "./Exam";
 import Examlist from "./Examlist";
+import FirstTermRepCont from "./FirstTermRepContd";
 import Profile from "./forms/Profile";
 import Landing from "./Landing";
 import MarkSheet from "./MarkSheet";
@@ -47,6 +48,11 @@ const PrincipalRoute = [
   {
     path: "/principal/dashboard/student_mark_sheet/:id",
     element: <MarkSheet />,
+    auth: "principal",
+  },
+  {
+    path: "/principal/dashboard/first_term_report_card/:id",
+    element: <FirstTermRepCont />,
     auth: "principal",
   },
   {
