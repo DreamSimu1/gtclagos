@@ -3,11 +3,12 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { SessionContext } from "../../SessionContext";
+import AddSubjectModal from "./AddSubjectModal";
 
 const AllSubject = () => {
   const { currentSession } = useContext(SessionContext);
   const { sectionId } = useParams();
-
+  const [showModal, setShowModal] = useState(false);
   const [subjects, setSubjects] = useState([]);
   const [activeTech, setActiveTech] = useState("tech_1");
   const [loading, setLoading] = useState(false);
@@ -51,7 +52,16 @@ const AllSubject = () => {
             <div className="card-header flex justify-between items-center">
               <h4 className="card-title">Subjects in Section</h4>
             </div>
-
+            <div className="card-header flex justify-between items-center">
+              <h4 className="card-title">Add Subject</h4>
+              <button
+                type="button"
+                className="force-mobile-button"
+                onClick={() => setShowModal(true)}
+              >
+                <span>Add Subject</span>
+              </button>
+            </div>
             {/* Tech Tabs */}
             <div className="mb-4 flex gap-4">
               {techTabs.map((tab) => (
@@ -118,6 +128,12 @@ const AllSubject = () => {
                     )}
                   </tbody>
                 </table>
+                <AddSubjectModal
+                  showModal={showModal}
+                  setShowModal={setShowModal}
+                  sectionId={sectionId}
+                  refreshSubjects={fetchSubjects}
+                />
               </div>
             </div>
           </div>

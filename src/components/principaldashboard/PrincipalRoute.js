@@ -2,6 +2,7 @@ import AllHod from "./AllHod";
 import AllStudent from "./AllStudent";
 import AllSubject from "./AllSubject";
 import AllVice from "./AllVice";
+import BroadSheet from "./BroadSheet";
 import Exam from "./Exam";
 import Examlist from "./Examlist";
 import FirstTermRepCont from "./FirstTermRepContd";
@@ -59,6 +60,11 @@ const PrincipalRoute = [
   {
     path: "/principal/dashboard/exam",
     element: <Exam />,
+    auth: "principal",
+  },
+  {
+    path: "/principal/dashboard/broad_sheet",
+    element: <BroadSheet />,
     auth: "principal",
   },
   {

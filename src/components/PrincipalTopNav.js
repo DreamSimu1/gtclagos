@@ -1105,7 +1105,7 @@ const PrincipalTopNav = ({ setShowModal }) => {
                           </li>
                           <li>
                             <a
-                              href="/principal/dashboard/manage-online-result"
+                              href="/principal/dashboard/broad_sheet"
                               style={{ color: darkMode ? "#fff" : "#000" }}
                             >
                               Broad Sheet
