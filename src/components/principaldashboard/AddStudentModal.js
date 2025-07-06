@@ -32,6 +32,7 @@ const AddStudentModal = ({ showModal, setShowModal, updateTableData }) => {
         ...formData,
         role: "student",
         session: currentSession._id,
+        tradeSection: selectedSection,
       };
 
       const token = localStorage.getItem("jwtToken");
