@@ -10,7 +10,7 @@ const Exam = () => {
   const [sections, setSections] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [students, setStudents] = useState([]);
-
+  const [subjectIdLookup, setSubjectIdLookup] = useState({});
   const [selectedExam, setSelectedExam] = useState("");
   const [selectedSection, setSelectedSection] = useState("");
   const [selectedTech, setSelectedTech] = useState("");
@@ -188,25 +188,124 @@ const Exam = () => {
   //     alert("Submission failed");
   //   }
   // };
+  // const handleSubmit = async () => {
+  //   try {
+  //     // const payload = {
+  //     //   examId: selectedExam,
+  //     //   subjectId: selectedSubject,
+  //     //   updates: students.map((s) => ({
+  //     //     studentId: s._id,
+  //     //     testscore: s.testscore,
+  //     //     examscore: s.examscore,
+  //     //     marksObtained: Number(s.testscore || 0) + Number(s.examscore || 0),
+  //     //     comment: s.comment,
+  //     //   })),
+  //     // };
+  //     const payload = {
+  //       examId: selectedExam,
+  //       subjectId: selectedSubject,
+  //       updates: students.map((s) => ({
+  //         studentId: s._id,
+  //         testscore: s.testscore,
+  //         examscore: s.examscore,
+  //         marksObtained: Number(s.testscore || 0) + Number(s.examscore || 0),
+  //         comment: s.comment,
+  //       })),
+  //     };
+
+  //     await axios.put(`${apiUrl}/api/offline/update-all-marks`, payload);
+  //     alert("Marks submitted successfully");
+  //   } catch (err) {
+  //     console.error("Error submitting marks:", err);
+  //     alert("Submission failed");
+  //   }
+  // };
+  // const handleSubmit = async () => {
+  //   try {
+  //     const payload = {
+  //       examId: selectedExam,
+  //       subjectId: selectedSubject,
+  //       updates: students.map((s) => ({
+  //         studentId: s._id,
+  //         testscore: s.testscore,
+  //         examscore: s.examscore,
+  //         marksObtained: Number(s.testscore || 0) + Number(s.examscore || 0),
+  //         comment: s.comment,
+  //       })),
+  //     };
+
+  //     await axios.post(
+  //       `${apiUrl}/api/offline/save-marks/${currentSession._id}`,
+  //       payload
+  //     );
+
+  //     alert("Marks submitted successfully");
+  //   } catch (err) {
+  //     console.error("Error submitting marks:", err);
+  //     alert("Submission failed");
+  //   }
+  // };
   const handleSubmit = async () => {
     try {
-      const payload = {
-        examId: selectedExam,
+      const marks = students.map((student) => ({
+        studentId: student._id,
         subjectId: selectedSubject,
-        updates: students.map((s) => ({
-          studentId: s._id,
-          testscore: s.testscore,
-          examscore: s.examscore,
-          marksObtained: Number(s.testscore || 0) + Number(s.examscore || 0),
-          comment: s.comment,
-        })),
+        testscore: student.testscore || 0,
+        examscore: student.examscore || 0,
+        marksObtained: (student.testscore || 0) + (student.examscore || 0),
+        comment: student.comment || "",
+      }));
+
+      const token = localStorage.getItem("jwtToken");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       };
 
-      await axios.put(`${apiUrl}/api/offline/update-all-marks`, payload);
-      alert("Marks submitted successfully");
+      const checkRes = await fetch(
+        `${apiUrl}/api/offline/get-all-scores/${selectedExam}/${selectedSubject}`,
+        { headers }
+      );
+
+      const data = await checkRes.json();
+      const existingMarks = data?.scores || [];
+
+      if (existingMarks.length > 0) {
+        // Update
+        const res = await fetch(`${apiUrl}/api/offline/update-all-marks`, {
+          method: "PUT",
+          headers,
+          body: JSON.stringify({
+            examId: selectedExam,
+            subjectId: selectedSubject,
+            updates: marks,
+          }),
+        });
+
+        if (!res.ok) throw new Error("Update failed");
+        alert("Marks updated successfully!");
+      } else {
+        // Save
+        const res = await fetch(
+          `${apiUrl}/api/offline/save-marks/${currentSession._id}`,
+          {
+            method: "POST",
+            headers,
+            body: JSON.stringify({
+              examId: selectedExam,
+              subjectId: selectedSubject,
+              updates: marks,
+              session: currentSession._id,
+            }),
+          }
+        );
+
+        if (!res.ok) throw new Error("Save failed");
+        alert("Marks saved successfully!");
+      }
     } catch (err) {
       console.error("Error submitting marks:", err);
-      alert("Submission failed");
+      alert("Failed to submit marks.");
     }
   };
 
