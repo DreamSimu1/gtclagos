@@ -1,11 +1,18 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import axios from "axios";
 import { SessionContext } from "../../SessionContext";
 import lagos from "./lagoslogo.png";
+import { useReactToPrint } from "react-to-print";
+import "./print.css";
+import "./report.css";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 const BroadSheet = () => {
   const { currentSession } = useContext(SessionContext);
   const apiUrl = process.env.REACT_APP_API_URL;
-
+  const componentRef = useRef();
   const [exams, setExams] = useState([]);
   const [sections, setSections] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -35,6 +42,11 @@ const BroadSheet = () => {
       fetchSubjects();
     }
   }, [selectedSection, selectedTech, currentSession]);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: "Broadsheet Report",
+    onAfterPrint: () => console.log("Print success"),
+  });
 
   const fetchExams = async () => {
     try {
@@ -102,7 +114,80 @@ const BroadSheet = () => {
     techTabs.find((t) => t.key === selectedTech)?.label || "";
   const selectedExamName =
     exams.find((exam) => exam._id === selectedExam)?.name || "";
+  const handleDownloadExcel = () => {
+    if (!students.length || !subjects.length) return;
 
+    const data = students.map((student, index) => {
+      const row = {
+        "#": index + 1,
+        "Student Name": student.fullname,
+      };
+
+      let total = 0;
+
+      subjects.forEach((subj) => {
+        const test = getScore(student._id, subj._id, "test") || 0;
+        const exam = getScore(student._id, subj._id, "exam") || 0;
+        const totalSubj = getScore(student._id, subj._id, "total") || 0;
+        total += Number(totalSubj);
+
+        row[`${subj.name} - Test`] = test;
+        row[`${subj.name} - Exam`] = exam;
+        row[`${subj.name} - Total`] = totalSubj;
+      });
+
+      row["Total"] = total;
+      row["Average"] = (total / subjects.length).toFixed(2);
+
+      return row;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Broadsheet");
+
+    const filename = `Broadsheet_${selectedTechLabel}_${selectedExamName}_${selectedSectionName}.xlsx`;
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: "application/octet-stream",
+    });
+
+    saveAs(blob, filename);
+  };
+  const handleDownloadPDF = () => {
+    const input = componentRef.current;
+    if (!input) return;
+
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("landscape", "pt", "a4");
+
+      const imgWidth = 820; // size of PDF content
+      const pageHeight = 595;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 20, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 20, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(
+        `Broadsheet_${selectedTechLabel}_${selectedExamName}_${selectedSectionName}.pdf`
+      );
+    });
+  };
   return (
     <div className="main-wrapper">
       <div className="page-wrapper">
@@ -163,15 +248,45 @@ const BroadSheet = () => {
 
             {showTable && (
               <div style={{ overflowX: "auto" }} className="mt-4">
-                <div
-                  style={{
-                    textAlign: "center",
-                    padding: "20px",
-                    backgroundColor: "#f0f0f0",
-                  }}
+                <button
+                  onClick={handlePrint}
+                  type="button"
+                  className="force-mobile-button"
                 >
-                  <div className="logo">
-                    {/*} <img
+                  Print this out!
+                </button>
+                <button
+                  type="button"
+                  className="force-mobile-button"
+                  onClick={handleDownloadExcel}
+                >
+                  Download as Excel
+                </button>
+                <button
+                  onClick={handleDownloadPDF}
+                  type="button"
+                  className="force-mobile-button"
+                >
+                  Download as PDF
+                </button>
+
+                <div style={{ display: showTable ? "block" : "none" }}>
+                  <div
+                    ref={componentRef}
+                    style={{
+                      width: "max-content", // allow full table width
+                      overflow: "visible", // prevent clipping
+                    }}
+                  >
+                    <div
+                      style={{
+                        textAlign: "center",
+                        padding: "20px",
+                        backgroundColor: "#f0f0f0",
+                      }}
+                    >
+                      <div className="logo">
+                        {/*} <img
                                     src={`https://edupros.s3.amazonaws.com/${accountSettings.schoolLogo}`}
                                     style={{
                                       width: "200px",
@@ -179,23 +294,23 @@ const BroadSheet = () => {
                                     }}
                                     alt="School Logo"
                                   />*/}
-                    <img
-                      src={lagos}
-                      alt="Logo 2"
-                      style={{
-                        width: "200px",
-                        height: "180px",
-                      }}
-                    />
-                  </div>
-                  <div className="bd_title">
-                    <h3 style={{ color: "#042954", margin: "10px 0" }}>
-                      LAGOS STATE TECHNICAL AND VOCATIONAL EDUCATION BOARD
-                    </h3>
-                    <h3 style={{ color: "#042954", margin: "10px 0" }}>
-                      GOVERNMENT TECHNICAL COLLEGE AGIDINGBI LAGOS
-                    </h3>
-                    {/*<h1
+                        <img
+                          src={lagos}
+                          alt="Logo 2"
+                          style={{
+                            width: "200px",
+                            height: "180px",
+                          }}
+                        />
+                      </div>
+                      <div className="bd_title">
+                        <h3 style={{ color: "#042954", margin: "10px 0" }}>
+                          LAGOS STATE TECHNICAL AND VOCATIONAL EDUCATION BOARD
+                        </h3>
+                        <h3 style={{ color: "#042954", margin: "10px 0" }}>
+                          GOVERNMENT TECHNICAL COLLEGE AGIDINGBI LAGOS
+                        </h3>
+                        {/*<h1
                                     style={{
                                       fontSize: "25px",
                                       fontWeight: "800",
@@ -205,93 +320,98 @@ const BroadSheet = () => {
                                   >
                                     {accountSettings.name || ""}
                                   </h1>*/}
-                    <h4 style={{ fontSize: "18px", margin: "5px 0" }}>
-                      Lateef Jakande road, Agidingbi, P.M.B 101233 Lagos State
-                    </h4>
-                    <p style={{ color: "#042954", margin: "5px 0" }}>
-                      Email: gotecolagos@yahoo.com
-                    </p>
-                    <h3 style={{ color: "#042954", margin: "10px 0" }}>
-                      2024/2025 {selectedTechLabel} {selectedExamName} Broad
-                      Sheet
-                    </h3>
+                        <h4 style={{ fontSize: "18px", margin: "5px 0" }}>
+                          Lateef Jakande road, Agidingbi, P.M.B 101233 Lagos
+                          State
+                        </h4>
+                        <p style={{ color: "#042954", margin: "5px 0" }}>
+                          Email: gotecolagos@yahoo.com
+                        </p>
+                        <h3 style={{ color: "#042954", margin: "10px 0" }}>
+                          2024/2025 {selectedTechLabel} {selectedExamName} Broad
+                          Sheet
+                        </h3>
 
-                    <h3 style={{ color: "#042954", margin: "10px 0" }}>
-                      {selectedSectionName} Section
-                    </h3>
+                        <h3 style={{ color: "#042954", margin: "10px 0" }}>
+                          {selectedSectionName} Section
+                        </h3>
+                      </div>
+                    </div>
+
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Student Name</th>
+                          {subjects.map((subj) => (
+                            <th key={subj._id} colSpan="3">
+                              {subj.name}
+                            </th>
+                          ))}
+                          <th>Total</th>
+                          <th>Average</th>
+                          <th>Remarks</th>
+                        </tr>
+                        <tr>
+                          <th></th>
+                          <th></th>
+                          {subjects.map((subj) => (
+                            <React.Fragment key={subj._id + "_headers"}>
+                              <th>Test</th>
+                              <th>Exam</th>
+                              <th>Total</th>
+                            </React.Fragment>
+                          ))}
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {students.map((student, index) => {
+                          let overallTotal = 0;
+                          return (
+                            <tr key={student._id}>
+                              <td>{index + 1}</td>
+                              <td>{student.fullname}</td>
+                              {subjects.map((subj) => {
+                                const test = getScore(
+                                  student._id,
+                                  subj._id,
+                                  "test"
+                                );
+                                const exam = getScore(
+                                  student._id,
+                                  subj._id,
+                                  "exam"
+                                );
+                                const total = getScore(
+                                  student._id,
+                                  subj._id,
+                                  "total"
+                                );
+                                overallTotal += Number(total || 0);
+                                return (
+                                  <React.Fragment
+                                    key={student._id + "_" + subj._id}
+                                  >
+                                    <td>{test}</td>
+                                    <td>{exam}</td>
+                                    <td>{total}</td>
+                                  </React.Fragment>
+                                );
+                              })}
+                              <td>{overallTotal}</td>
+                              <td>
+                                {(overallTotal / subjects.length).toFixed(2)}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
-
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Student Name</th>
-                      {subjects.map((subj) => (
-                        <th key={subj._id} colSpan="3">
-                          {subj.name}
-                        </th>
-                      ))}
-                      <th>Total</th>
-                      <th>Average</th>
-                      <th>Remarks</th>
-                    </tr>
-                    <tr>
-                      <th></th>
-                      <th></th>
-                      {subjects.map((subj) => (
-                        <React.Fragment key={subj._id + "_headers"}>
-                          <th>Test</th>
-                          <th>Exam</th>
-                          <th>Total</th>
-                        </React.Fragment>
-                      ))}
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {students.map((student, index) => {
-                      let overallTotal = 0;
-                      return (
-                        <tr key={student._id}>
-                          <td>{index + 1}</td>
-                          <td>{student.fullname}</td>
-                          {subjects.map((subj) => {
-                            const test = getScore(
-                              student._id,
-                              subj._id,
-                              "test"
-                            );
-                            const exam = getScore(
-                              student._id,
-                              subj._id,
-                              "exam"
-                            );
-                            const total = getScore(
-                              student._id,
-                              subj._id,
-                              "total"
-                            );
-                            overallTotal += Number(total || 0);
-                            return (
-                              <React.Fragment
-                                key={student._id + "_" + subj._id}
-                              >
-                                <td>{test}</td>
-                                <td>{exam}</td>
-                                <td>{total}</td>
-                              </React.Fragment>
-                            );
-                          })}
-                          <td>{overallTotal}</td>
-                          <td>{(overallTotal / subjects.length).toFixed(2)}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
               </div>
             )}
           </div>

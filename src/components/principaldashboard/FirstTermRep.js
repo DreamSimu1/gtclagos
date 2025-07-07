@@ -10,7 +10,10 @@ import { useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 
 import axios from "axios";
-
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 import { SessionContext } from "../../SessionContext";
 import useFetch from "../../hooks/useFetch";
 import last from "./lastveblogo.png";
@@ -479,6 +482,29 @@ const FirstTermRep = ({ studentId }) => {
 
     return averageGradeValue.toFixed(2);
   };
+  const handleDownloadPDF = () => {
+    const input = componentRef.current;
+    if (!input) return;
+
+    html2canvas(input, {
+      scrollX: 0,
+      scrollY: -window.scrollY,
+      windowWidth: input.scrollWidth,
+      useCORS: true,
+    }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+
+      // Use custom page size based on content
+      const pdf = new jsPDF("landscape", "pt", [imgWidth, imgHeight]);
+
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+
+      pdf.save(`ReportCard_${student?.fullname || "Student"}.pdf`);
+    });
+  };
 
   return (
     <div className="main-wrapper">
@@ -487,6 +513,13 @@ const FirstTermRep = ({ studentId }) => {
           <div className="card">
             <div width="100%" overflow="auto">
               <button onClick={handlePrint}>Print this out!</button>
+              <button
+                onClick={handleDownloadPDF}
+                type="button"
+                className="force-mobile-button"
+              >
+                Download as PDF
+              </button>
               <div className="comp" ref={componentRef}>
                 <div
                   style={{
@@ -796,9 +829,7 @@ const FirstTermRep = ({ studentId }) => {
                           </tr>
                         </>
                       ) : (
-                        <tr>
-                          <td colSpan="2">No data available</td>
-                        </tr>
+                        <tr></tr>
                       )}
                       <tr>
                         <th>PRINCIPAL'S NAME</th>
