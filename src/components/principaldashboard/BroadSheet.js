@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { SessionContext } from "../../SessionContext";
-
+import lagos from "./lagoslogo.png";
 const BroadSheet = () => {
   const { currentSession } = useContext(SessionContext);
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -96,6 +96,12 @@ const BroadSheet = () => {
   const getScore = (studentId, subjectId, field) => {
     return scores?.[studentId]?.[subjectId]?.[field] || "";
   };
+  const selectedSectionName =
+    sections.find((s) => s._id === selectedSection)?.name || "";
+  const selectedTechLabel =
+    techTabs.find((t) => t.key === selectedTech)?.label || "";
+  const selectedExamName =
+    exams.find((exam) => exam._id === selectedExam)?.name || "";
 
   return (
     <div className="main-wrapper">
@@ -157,6 +163,65 @@ const BroadSheet = () => {
 
             {showTable && (
               <div style={{ overflowX: "auto" }} className="mt-4">
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "20px",
+                    backgroundColor: "#f0f0f0",
+                  }}
+                >
+                  <div className="logo">
+                    {/*} <img
+                                    src={`https://edupros.s3.amazonaws.com/${accountSettings.schoolLogo}`}
+                                    style={{
+                                      width: "200px",
+                                      height: "180px",
+                                    }}
+                                    alt="School Logo"
+                                  />*/}
+                    <img
+                      src={lagos}
+                      alt="Logo 2"
+                      style={{
+                        width: "200px",
+                        height: "180px",
+                      }}
+                    />
+                  </div>
+                  <div className="bd_title">
+                    <h3 style={{ color: "#042954", margin: "10px 0" }}>
+                      LAGOS STATE TECHNICAL AND VOCATIONAL EDUCATION BOARD
+                    </h3>
+                    <h3 style={{ color: "#042954", margin: "10px 0" }}>
+                      GOVERNMENT TECHNICAL COLLEGE AGIDINGBI LAGOS
+                    </h3>
+                    {/*<h1
+                                    style={{
+                                      fontSize: "25px",
+                                      fontWeight: "800",
+                                      textTransform: "uppercase",
+                                      margin: "10px 0",
+                                    }}
+                                  >
+                                    {accountSettings.name || ""}
+                                  </h1>*/}
+                    <h4 style={{ fontSize: "18px", margin: "5px 0" }}>
+                      Lateef Jakande road, Agidingbi, P.M.B 101233 Lagos State
+                    </h4>
+                    <p style={{ color: "#042954", margin: "5px 0" }}>
+                      Email: gotecolagos@yahoo.com
+                    </p>
+                    <h3 style={{ color: "#042954", margin: "10px 0" }}>
+                      2024/2025 {selectedTechLabel} {selectedExamName} Broad
+                      Sheet
+                    </h3>
+
+                    <h3 style={{ color: "#042954", margin: "10px 0" }}>
+                      {selectedSectionName} Section
+                    </h3>
+                  </div>
+                </div>
+
                 <table className="table table-bordered">
                   <thead>
                     <tr>
