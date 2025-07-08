@@ -85,9 +85,139 @@ const BroadSheet = () => {
     }
   };
 
+  // const fetchBroadSheet = async () => {
+  //   try {
+  //     setIsLoading(true); // start loader
+  //     console.log("🔄 Fetching broad sheet data...");
+
+  //     const studentRes = await axios.get(
+  //       `${apiUrl}/api/section/${selectedSection}/students/${currentSession._id}`
+  //     );
+  //     const allStudents = studentRes.data?.data || [];
+  //     const filteredStudents = allStudents.filter(
+  //       (s) => s.tech === selectedTech
+  //     );
+
+  //     console.log(
+  //       "👨‍🎓 Filtered Students:",
+  //       filteredStudents.map((s) => s.fullname)
+  //     );
+
+  //     // const selectedExamObj = exams.find((e) => e._id === selectedExam);
+  //     const selectedExamObj = exams.find(
+  //       (e) => String(e._id) === String(selectedExam)
+  //     );
+
+  //     // const isSecondTerm = selectedExamObj?.term === "Second Term";
+  //     const isSecondTerm = selectedExamObj?.name
+  //       ?.toUpperCase()
+  //       .includes("SECOND TERM");
+
+  //     console.log("📘 Selected Exam Object:", selectedExamObj);
+  //     console.log("🧠 Is Second Term:", isSecondTerm);
+
+  //     const scoreRes = await axios.get(
+  //       `${apiUrl}/api/offline/get-broadsheet/${selectedExam}/${selectedSection}/${selectedTech}`
+  //     );
+
+  //     let tempFirstTermScores = {};
+
+  //     if (isSecondTerm) {
+  //       // const firstTermExam = exams.find(
+  //       //   (e) => e.term === "First Term" && e.sessionId === currentSession._id
+  //       // );
+  //       const firstTermExam = exams.find(
+  //         (e) =>
+  //           e.name?.toUpperCase().includes("FIRST TERM") &&
+  //           String(e.session) === String(currentSession._id)
+  //       );
+
+  //       if (firstTermExam?._id) {
+  //         console.log("✅ Found matching 1st Term Exam:", firstTermExam);
+
+  //         const token = localStorage.getItem("jwtToken");
+  //         const headers = {
+  //           Authorization: `Bearer ${token}`,
+  //         };
+
+  //         for (const student of filteredStudents) {
+  //           try {
+  //             const res = await axios.get(
+  //               `${apiUrl}/api/offline/get-scores-by-student/${student._id}/${currentSession._id}`,
+  //               { headers }
+  //             );
+
+  //             const scores = res.data?.scores || [];
+  //             console.log(`📚 Scores for ${student.fullname}:`, scores);
+
+  //             let matchedFirstTermScoreCount = 0;
+
+  //             scores.forEach((score) => {
+  //               const examName = score.examId?.name?.toUpperCase() || "UNKNOWN";
+
+  //               console.log(
+  //                 `🔍 Checking score for ${student.fullname} - Subject: ${
+  //                   score.subjectId?.name || "Unknown"
+  //                 }, Exam Name: ${examName}`
+  //               );
+
+  //               if (examName.includes("FIRST TERM") && score.subjectId?._id) {
+  //                 const studentId = student._id;
+  //                 const subjectId = score.subjectId._id;
+
+  //                 if (!tempFirstTermScores[studentId]) {
+  //                   tempFirstTermScores[studentId] = {};
+  //                 }
+
+  //                 tempFirstTermScores[studentId][subjectId] = {
+  //                   test: score.testscore || 0,
+  //                   exam: score.examscore || 0,
+  //                   total: (score.testscore || 0) + (score.examscore || 0),
+  //                 };
+
+  //                 matchedFirstTermScoreCount++;
+  //               }
+  //             });
+
+  //             if (matchedFirstTermScoreCount === 0) {
+  //               console.warn(
+  //                 `⚠️ No matching 1st Term scores for ${student.fullname}`
+  //               );
+  //             }
+  //           } catch (error) {
+  //             console.error(
+  //               `❌ Error fetching 1st term scores for ${student.fullname}`,
+  //               error
+  //             );
+  //           }
+  //         }
+
+  //         console.log(
+  //           "✅ Final First Term Scores Object:",
+  //           JSON.stringify(tempFirstTermScores, null, 2)
+  //         );
+  //         setFirstTermScores(tempFirstTermScores);
+  //       } else {
+  //         console.warn("⚠️ First Term Exam not found for current session.");
+  //       }
+  //     }
+
+  //     setStudents(filteredStudents);
+  //     setScores(scoreRes.data?.scores || {});
+  //     setFirstTermScores(tempFirstTermScores); // always set what we built
+  //     setShowTable(true);
+
+  //     console.log("✅ Scores for current term:", scoreRes.data?.scores || {});
+  //     console.log("✅ BroadSheet ready to render.");
+  //   } catch (err) {
+  //     console.error("❌ Error fetching broadsheet:", err);
+  //   } finally {
+  //     setIsLoading(false); // stop loader
+  //   }
+  // };
   const fetchBroadSheet = async () => {
     try {
-      setIsLoading(true); // start loader
+      setIsLoading(true);
       console.log("🔄 Fetching broad sheet data...");
 
       const studentRes = await axios.get(
@@ -103,29 +233,31 @@ const BroadSheet = () => {
         filteredStudents.map((s) => s.fullname)
       );
 
-      // const selectedExamObj = exams.find((e) => e._id === selectedExam);
       const selectedExamObj = exams.find(
         (e) => String(e._id) === String(selectedExam)
       );
 
-      // const isSecondTerm = selectedExamObj?.term === "Second Term";
-      const isSecondTerm = selectedExamObj?.name
-        ?.toUpperCase()
-        .includes("SECOND TERM");
+      const examName = selectedExamObj?.name?.toUpperCase() || "";
+      const isSecondTerm = examName.includes("SECOND TERM");
+      const isThirdTerm = examName.includes("THIRD TERM");
 
-      console.log("📘 Selected Exam Object:", selectedExamObj);
+      console.log("📘 Selected Exam:", examName);
       console.log("🧠 Is Second Term:", isSecondTerm);
+      console.log("🧠 Is Third Term:", isThirdTerm);
 
       const scoreRes = await axios.get(
         `${apiUrl}/api/offline/get-broadsheet/${selectedExam}/${selectedSection}/${selectedTech}`
       );
 
-      let tempFirstTermScores = {};
+      const token = localStorage.getItem("jwtToken");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
 
-      if (isSecondTerm) {
-        // const firstTermExam = exams.find(
-        //   (e) => e.term === "First Term" && e.sessionId === currentSession._id
-        // );
+      let tempFirstTermScores = {};
+      let tempSecondTermScores = {};
+
+      if (isSecondTerm || isThirdTerm) {
         const firstTermExam = exams.find(
           (e) =>
             e.name?.toUpperCase().includes("FIRST TERM") &&
@@ -133,12 +265,7 @@ const BroadSheet = () => {
         );
 
         if (firstTermExam?._id) {
-          console.log("✅ Found matching 1st Term Exam:", firstTermExam);
-
-          const token = localStorage.getItem("jwtToken");
-          const headers = {
-            Authorization: `Bearer ${token}`,
-          };
+          console.log("✅ Found 1st Term Exam:", firstTermExam.name);
 
           for (const student of filteredStudents) {
             try {
@@ -148,76 +275,95 @@ const BroadSheet = () => {
               );
 
               const scores = res.data?.scores || [];
-              console.log(`📚 Scores for ${student.fullname}:`, scores);
-
-              let matchedFirstTermScoreCount = 0;
-
               scores.forEach((score) => {
-                const examName = score.examId?.name?.toUpperCase() || "UNKNOWN";
-
-                console.log(
-                  `🔍 Checking score for ${student.fullname} - Subject: ${
-                    score.subjectId?.name || "Unknown"
-                  }, Exam Name: ${examName}`
-                );
-
-                if (examName.includes("FIRST TERM") && score.subjectId?._id) {
-                  const studentId = student._id;
-                  const subjectId = score.subjectId._id;
-
-                  if (!tempFirstTermScores[studentId]) {
-                    tempFirstTermScores[studentId] = {};
-                  }
-
-                  tempFirstTermScores[studentId][subjectId] = {
+                const examTitle = score.examId?.name?.toUpperCase() || "";
+                if (examTitle.includes("FIRST TERM") && score.subjectId?._id) {
+                  const sid = student._id;
+                  const subid = score.subjectId._id;
+                  if (!tempFirstTermScores[sid]) tempFirstTermScores[sid] = {};
+                  tempFirstTermScores[sid][subid] = {
                     test: score.testscore || 0,
                     exam: score.examscore || 0,
                     total: (score.testscore || 0) + (score.examscore || 0),
                   };
-
-                  matchedFirstTermScoreCount++;
                 }
               });
-
-              if (matchedFirstTermScoreCount === 0) {
-                console.warn(
-                  `⚠️ No matching 1st Term scores for ${student.fullname}`
-                );
-              }
-            } catch (error) {
-              console.error(
-                `❌ Error fetching 1st term scores for ${student.fullname}`,
-                error
-              );
+            } catch (err) {
+              console.error("❌ Error fetching 1st term scores:", err);
             }
           }
-
-          console.log(
-            "✅ Final First Term Scores Object:",
-            JSON.stringify(tempFirstTermScores, null, 2)
-          );
-          setFirstTermScores(tempFirstTermScores);
         } else {
-          console.warn("⚠️ First Term Exam not found for current session.");
+          console.warn("⚠️ No 1st term exam found.");
         }
       }
 
+      // 👇 Fetch 2nd term scores if third term
+      if (isThirdTerm) {
+        const secondTermExam = exams.find(
+          (e) =>
+            e.name?.toUpperCase().includes("SECOND TERM") &&
+            String(e.session) === String(currentSession._id)
+        );
+
+        if (secondTermExam?._id) {
+          console.log("✅ Found 2nd Term Exam:", secondTermExam.name);
+
+          for (const student of filteredStudents) {
+            try {
+              const res = await axios.get(
+                `${apiUrl}/api/offline/get-scores-by-student/${student._id}/${currentSession._id}`,
+                { headers }
+              );
+
+              const scores = res.data?.scores || [];
+              scores.forEach((score) => {
+                const examTitle = score.examId?.name?.toUpperCase() || "";
+                if (examTitle.includes("SECOND TERM") && score.subjectId?._id) {
+                  const sid = student._id;
+                  const subid = score.subjectId._id;
+                  if (!tempSecondTermScores[sid])
+                    tempSecondTermScores[sid] = {};
+                  tempSecondTermScores[sid][subid] = {
+                    test: score.testscore || 0,
+                    exam: score.examscore || 0,
+                    total: (score.testscore || 0) + (score.examscore || 0),
+                  };
+                }
+              });
+            } catch (err) {
+              console.error("❌ Error fetching 2nd term scores:", err);
+            }
+          }
+        } else {
+          console.warn("⚠️ No 2nd term exam found.");
+        }
+      }
+
+      // ✅ Set states
       setStudents(filteredStudents);
       setScores(scoreRes.data?.scores || {});
-      setFirstTermScores(tempFirstTermScores); // always set what we built
+      setFirstTermScores(tempFirstTermScores); // reused as needed
+      setSecondTermScores(tempSecondTermScores); // must declare via useState
       setShowTable(true);
 
-      console.log("✅ Scores for current term:", scoreRes.data?.scores || {});
-      console.log("✅ BroadSheet ready to render.");
+      console.log("✅ Broadsheet data ready.");
     } catch (err) {
       console.error("❌ Error fetching broadsheet:", err);
     } finally {
-      setIsLoading(false); // stop loader
+      setIsLoading(false);
     }
   };
 
+  // const getScore = (studentId, subjectId, field, term = "current") => {
+  //   const source = term === "first" ? firstTermScores : scores;
+
+  //   return source?.[studentId]?.[subjectId]?.[field] || "";
+  // };
   const getScore = (studentId, subjectId, field, term = "current") => {
-    const source = term === "first" ? firstTermScores : scores;
+    let source = scores;
+
+    if (term === "first") source = firstTermScores;
+    else if (term === "second") source = secondTermScores;
 
     return source?.[studentId]?.[subjectId]?.[field] || "";
   };
@@ -477,37 +623,23 @@ const BroadSheet = () => {
                         <tr>
                           <th>#</th>
                           <th>Student Name</th>
-                          {subjects.map((subj) => (
-                            <th
-                              key={subj._id}
-                              colSpan={
-                                selectedExamName.includes("Second Term") ? 4 : 3
-                              }
-                            >
-                              {subj.name}
-                            </th>
-                          ))}
+                          {subjects.map((subj) => {
+                            let colSpan = 3;
+                            if (selectedExamName.includes("Second Term"))
+                              colSpan = 4;
+                            if (selectedExamName.includes("Third Term"))
+                              colSpan = 5;
+
+                            return (
+                              <th key={subj._id} colSpan={colSpan}>
+                                {subj.name}
+                              </th>
+                            );
+                          })}
                           <th>Total</th>
                           <th>Average</th>
                           <th>Remarks</th>
                         </tr>
-                        {/*}  <tr>
-                          <th></th>
-                          <th></th>
-                          {subjects.map((subj) => (
-                            <React.Fragment key={subj._id + "_headers"}>
-                              {selectedExamName.includes("Second Term") && (
-                                <th>1st Term</th>
-                              )}
-                              <th>Test</th>
-                              <th>Exam</th>
-                              <th>Total</th>
-                            </React.Fragment>
-                          ))}
-                          <th></th>
-                          <th></th>
-                          <th></th>
-                        </tr>*/}
 
                         <tr>
                           <th></th>
@@ -516,6 +648,12 @@ const BroadSheet = () => {
                             <React.Fragment key={subj._id + "_headers"}>
                               {selectedExamName.includes("Second Term") && (
                                 <th>1st Term</th>
+                              )}
+                              {selectedExamName.includes("Third Term") && (
+                                <>
+                                  <th>1st Term</th>
+                                  <th>2nd Term</th>
+                                </>
                               )}
                               <th>Test</th>
                               <th>Exam</th>
@@ -527,52 +665,65 @@ const BroadSheet = () => {
                           <th></th>
                         </tr>
                       </thead>
+
                       <tbody>
                         {students.map((student, index) => {
                           let overallTotal = 0;
+
                           return (
                             <tr key={student._id}>
                               <td>{index + 1}</td>
                               <td>{student.fullname}</td>
+
                               {subjects.map((subj) => {
-                                const broughtForward = getScore(
-                                  student._id,
-                                  subj._id,
-                                  "total",
-                                  "first"
+                                const firstTerm = Number(
+                                  getScore(
+                                    student._id,
+                                    subj._id,
+                                    "total",
+                                    "first"
+                                  ) || 0
                                 );
-                                const test = getScore(
-                                  student._id,
-                                  subj._id,
-                                  "test"
+                                const secondTerm = Number(
+                                  getScore(
+                                    student._id,
+                                    subj._id,
+                                    "total",
+                                    "second"
+                                  ) || 0
                                 );
-                                const exam = getScore(
-                                  student._id,
-                                  subj._id,
-                                  "exam"
+                                const test = Number(
+                                  getScore(
+                                    student._id,
+                                    subj._id,
+                                    "test",
+                                    "current"
+                                  ) || 0
                                 );
-                                const total = getScore(
-                                  student._id,
-                                  subj._id,
-                                  "total"
-                                ); // ✅ This is needed
+                                const exam = Number(
+                                  getScore(
+                                    student._id,
+                                    subj._id,
+                                    "exam",
+                                    "current"
+                                  ) || 0
+                                );
+                                const totalCurrent = test + exam;
 
                                 let finalTotal = 0;
 
-                                if (selectedExamName.includes("Second Term")) {
-                                  const firstTermTotal = Number(
-                                    broughtForward || 0
-                                  );
-                                  const secondTermTest = Number(test || 0);
-                                  const secondTermExam = Number(exam || 0);
-                                  const secondTermTotal =
-                                    secondTermTest + secondTermExam;
-
+                                if (selectedExamName.includes("Third Term")) {
                                   finalTotal = Math.round(
-                                    (firstTermTotal + secondTermTotal) / 2
+                                    (firstTerm + secondTerm + totalCurrent) / 3
+                                  );
+                                } else if (
+                                  selectedExamName.includes("Second Term")
+                                ) {
+                                  finalTotal = Math.round(
+                                    (firstTerm + totalCurrent) / 2
                                   );
                                 } else {
-                                  finalTotal = Number(total || 0);
+                                  finalTotal = totalCurrent;
                                 }
 
                                 overallTotal += finalTotal;
@@ -583,7 +734,15 @@ const BroadSheet = () => {
                                   >
                                     {selectedExamName.includes(
                                       "Second Term"
-                                    ) && <td>{broughtForward}</td>}
+                                    ) && <td>{firstTerm}</td>}
+                                    {selectedExamName.includes(
+                                      "Third Term"
+                                    ) && (
+                                      <>
+                                        <td>{firstTerm}</td>
+                                        <td>{secondTerm}</td>
+                                      </>
+                                    )}
                                     <td>{test}</td>
                                     <td>{exam}</td>
                                     <td>{finalTotal}</td>
@@ -595,6 +754,7 @@ const BroadSheet = () => {
                               <td>
                                 {(overallTotal / subjects.length).toFixed(2)}
                               </td>
+                              <td></td>
                             </tr>
                           );
                         })}
