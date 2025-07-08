@@ -25,6 +25,7 @@ const BroadSheet = () => {
   const [selectedTech, setSelectedTech] = useState("");
   const [showTable, setShowTable] = useState(false);
   const [firstTermScores, setFirstTermScores] = useState({});
+  const [secondTermScores, setSecondTermScores] = useState({});
 
   const techTabs = [
     { key: "tech_1", label: "Tech 1", color: "#1b8914" },
