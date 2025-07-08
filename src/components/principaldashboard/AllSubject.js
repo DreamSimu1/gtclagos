@@ -39,7 +39,7 @@ const AllSubject = () => {
   useEffect(() => {
     fetchSubjects();
   }, [currentSession, sectionId]);
-
+  console.log("these arethe data", subjects);
   const filteredSubjects = subjects.filter(
     (subject) => subject.classname === activeTech
   );

@@ -18,11 +18,13 @@ const BroadSheet = () => {
   const [subjects, setSubjects] = useState([]);
   const [students, setStudents] = useState([]);
   const [scores, setScores] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedExam, setSelectedExam] = useState("");
   const [selectedSection, setSelectedSection] = useState("");
   const [selectedTech, setSelectedTech] = useState("");
   const [showTable, setShowTable] = useState(false);
+  const [firstTermScores, setFirstTermScores] = useState({});
 
   const techTabs = [
     { key: "tech_1", label: "Tech 1", color: "#1b8914" },
@@ -85,6 +87,9 @@ const BroadSheet = () => {
 
   const fetchBroadSheet = async () => {
     try {
+      setIsLoading(true); // start loader
+      console.log("🔄 Fetching broad sheet data...");
+
       const studentRes = await axios.get(
         `${apiUrl}/api/section/${selectedSection}/students/${currentSession._id}`
       );
@@ -93,21 +98,130 @@ const BroadSheet = () => {
         (s) => s.tech === selectedTech
       );
 
+      console.log(
+        "👨‍🎓 Filtered Students:",
+        filteredStudents.map((s) => s.fullname)
+      );
+
+      // const selectedExamObj = exams.find((e) => e._id === selectedExam);
+      const selectedExamObj = exams.find(
+        (e) => String(e._id) === String(selectedExam)
+      );
+
+      // const isSecondTerm = selectedExamObj?.term === "Second Term";
+      const isSecondTerm = selectedExamObj?.name
+        ?.toUpperCase()
+        .includes("SECOND TERM");
+
+      console.log("📘 Selected Exam Object:", selectedExamObj);
+      console.log("🧠 Is Second Term:", isSecondTerm);
+
       const scoreRes = await axios.get(
         `${apiUrl}/api/offline/get-broadsheet/${selectedExam}/${selectedSection}/${selectedTech}`
       );
 
+      let tempFirstTermScores = {};
+
+      if (isSecondTerm) {
+        // const firstTermExam = exams.find(
+        //   (e) => e.term === "First Term" && e.sessionId === currentSession._id
+        // );
+        const firstTermExam = exams.find(
+          (e) =>
+            e.name?.toUpperCase().includes("FIRST TERM") &&
+            String(e.session) === String(currentSession._id)
+        );
+
+        if (firstTermExam?._id) {
+          console.log("✅ Found matching 1st Term Exam:", firstTermExam);
+
+          const token = localStorage.getItem("jwtToken");
+          const headers = {
+            Authorization: `Bearer ${token}`,
+          };
+
+          for (const student of filteredStudents) {
+            try {
+              const res = await axios.get(
+                `${apiUrl}/api/offline/get-scores-by-student/${student._id}/${currentSession._id}`,
+                { headers }
+              );
+
+              const scores = res.data?.scores || [];
+              console.log(`📚 Scores for ${student.fullname}:`, scores);
+
+              let matchedFirstTermScoreCount = 0;
+
+              scores.forEach((score) => {
+                const examName = score.examId?.name?.toUpperCase() || "UNKNOWN";
+
+                console.log(
+                  `🔍 Checking score for ${student.fullname} - Subject: ${
+                    score.subjectId?.name || "Unknown"
+                  }, Exam Name: ${examName}`
+                );
+
+                if (examName.includes("FIRST TERM") && score.subjectId?._id) {
+                  const studentId = student._id;
+                  const subjectId = score.subjectId._id;
+
+                  if (!tempFirstTermScores[studentId]) {
+                    tempFirstTermScores[studentId] = {};
+                  }
+
+                  tempFirstTermScores[studentId][subjectId] = {
+                    test: score.testscore || 0,
+                    exam: score.examscore || 0,
+                    total: (score.testscore || 0) + (score.examscore || 0),
+                  };
+
+                  matchedFirstTermScoreCount++;
+                }
+              });
+
+              if (matchedFirstTermScoreCount === 0) {
+                console.warn(
+                  `⚠️ No matching 1st Term scores for ${student.fullname}`
+                );
+              }
+            } catch (error) {
+              console.error(
+                `❌ Error fetching 1st term scores for ${student.fullname}`,
+                error
+              );
+            }
+          }
+
+          console.log(
+            "✅ Final First Term Scores Object:",
+            JSON.stringify(tempFirstTermScores, null, 2)
+          );
+          setFirstTermScores(tempFirstTermScores);
+        } else {
+          console.warn("⚠️ First Term Exam not found for current session.");
+        }
+      }
+
       setStudents(filteredStudents);
       setScores(scoreRes.data?.scores || {});
+      setFirstTermScores(tempFirstTermScores); // always set what we built
       setShowTable(true);
+
+      console.log("✅ Scores for current term:", scoreRes.data?.scores || {});
+      console.log("✅ BroadSheet ready to render.");
     } catch (err) {
-      console.error("Error fetching broadsheet:", err);
+      console.error("❌ Error fetching broadsheet:", err);
+    } finally {
+      setIsLoading(false); // stop loader
     }
   };
 
-  const getScore = (studentId, subjectId, field) => {
-    return scores?.[studentId]?.[subjectId]?.[field] || "";
+  const getScore = (studentId, subjectId, field, term = "current") => {
+    const source = term === "first" ? firstTermScores : scores;
+
+    return source?.[studentId]?.[subjectId]?.[field] || "";
   };
+
   const selectedSectionName =
     sections.find((s) => s._id === selectedSection)?.name || "";
   const selectedTechLabel =
@@ -238,12 +352,32 @@ const BroadSheet = () => {
               </div>
             </div>
 
-            <button
+            {/*} <button
               className="btn btn-primary"
               onClick={fetchBroadSheet}
               disabled={!(selectedExam && selectedSection && selectedTech)}
             >
               Load BroadSheet
+            </button>*/}
+            <button
+              className="btn btn-primary"
+              onClick={fetchBroadSheet}
+              disabled={
+                isLoading || !(selectedExam && selectedSection && selectedTech)
+              }
+            >
+              {isLoading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Loading...
+                </>
+              ) : (
+                "Load BroadSheet"
+              )}
             </button>
 
             {showTable && (
@@ -344,7 +478,12 @@ const BroadSheet = () => {
                           <th>#</th>
                           <th>Student Name</th>
                           {subjects.map((subj) => (
-                            <th key={subj._id} colSpan="3">
+                            <th
+                              key={subj._id}
+                              colSpan={
+                                selectedExamName.includes("Second Term") ? 4 : 3
+                              }
+                            >
                               {subj.name}
                             </th>
                           ))}
@@ -352,11 +491,32 @@ const BroadSheet = () => {
                           <th>Average</th>
                           <th>Remarks</th>
                         </tr>
+                        {/*}  <tr>
+                          <th></th>
+                          <th></th>
+                          {subjects.map((subj) => (
+                            <React.Fragment key={subj._id + "_headers"}>
+                              {selectedExamName.includes("Second Term") && (
+                                <th>1st Term</th>
+                              )}
+                              <th>Test</th>
+                              <th>Exam</th>
+                              <th>Total</th>
+                            </React.Fragment>
+                          ))}
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                        </tr>*/}
+
                         <tr>
                           <th></th>
                           <th></th>
                           {subjects.map((subj) => (
                             <React.Fragment key={subj._id + "_headers"}>
+                              {selectedExamName.includes("Second Term") && (
+                                <th>1st Term</th>
+                              )}
                               <th>Test</th>
                               <th>Exam</th>
                               <th>Total</th>
@@ -375,6 +535,12 @@ const BroadSheet = () => {
                               <td>{index + 1}</td>
                               <td>{student.fullname}</td>
                               {subjects.map((subj) => {
+                                const broughtForward = getScore(
+                                  student._id,
+                                  subj._id,
+                                  "total",
+                                  "first"
+                                );
                                 const test = getScore(
                                   student._id,
                                   subj._id,
@@ -389,18 +555,42 @@ const BroadSheet = () => {
                                   student._id,
                                   subj._id,
                                   "total"
-                                );
-                                overallTotal += Number(total || 0);
+                                ); // ✅ This is needed
+
+                                let finalTotal = 0;
+
+                                if (selectedExamName.includes("Second Term")) {
+                                  const firstTermTotal = Number(
+                                    broughtForward || 0
+                                  );
+                                  const secondTermTest = Number(test || 0);
+                                  const secondTermExam = Number(exam || 0);
+                                  const secondTermTotal =
+                                    secondTermTest + secondTermExam;
+
+                                  finalTotal = Math.round(
+                                    (firstTermTotal + secondTermTotal) / 2
+                                  );
+                                } else {
+                                  finalTotal = Number(total || 0);
+                                }
+
+                                overallTotal += finalTotal;
+
                                 return (
                                   <React.Fragment
                                     key={student._id + "_" + subj._id}
                                   >
+                                    {selectedExamName.includes(
+                                      "Second Term"
+                                    ) && <td>{broughtForward}</td>}
                                     <td>{test}</td>
                                     <td>{exam}</td>
-                                    <td>{total}</td>
+                                    <td>{finalTotal}</td>
                                   </React.Fragment>
                                 );
                               })}
+
                               <td>{overallTotal}</td>
                               <td>
                                 {(overallTotal / subjects.length).toFixed(2)}
