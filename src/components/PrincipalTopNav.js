@@ -30,6 +30,7 @@ import { HiOutlineViewGrid } from "react-icons/hi";
 import "./TopNav.css";
 import last from "./lastveblogo.png";
 import lagos from "./lagoslogo.png";
+import { LogoutContext } from "./LogoutContext";
 // import { SessionContext } from "../../context/SessionContext";
 
 const PrincipalTopNav = ({ setShowModal }) => {
@@ -71,7 +72,7 @@ const PrincipalTopNav = ({ setShowModal }) => {
     }
     setOpenSubmenus(updatedSubmenus);
   };
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const { setShowLogoutModal } = useContext(LogoutContext);
   const toggleMenuDropdown = () => {
     setMenuDropdownOpen(!menuDropdownOpen);
   };
