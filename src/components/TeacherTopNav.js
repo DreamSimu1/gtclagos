@@ -20,6 +20,8 @@ import {
   FiMessageSquare,
   FiClock,
 } from "react-icons/fi";
+import { FiUsers, FiActivity, FiFileText, FiGrid } from "react-icons/fi";
+import { FiBook } from "react-icons/fi";
 import axios from "axios";
 import { DarkModeContext } from "../context/darkModeContext";
 import { MdPermMedia } from "react-icons/md";
@@ -28,6 +30,7 @@ import { HiOutlineViewGrid } from "react-icons/hi";
 import "./TopNav.css";
 import last from "./lastveblogo.png";
 import lagos from "./lagoslogo.png";
+import { LogoutContext } from "./LogoutContext";
 // import { SessionContext } from "../../context/SessionContext";
 
 const TeacherTopNav = ({ setShowModal }) => {
@@ -37,6 +40,7 @@ const TeacherTopNav = ({ setShowModal }) => {
   const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentSession, setCurrentSession] = useState(null);
+  const [sections, setSections] = useState([]);
   const toggleDesktopMenu = () => {
     setDesktopMenuOpen(!desktopMenuOpen);
   };
@@ -68,7 +72,7 @@ const TeacherTopNav = ({ setShowModal }) => {
     }
     setOpenSubmenus(updatedSubmenus);
   };
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const { setShowLogoutModal } = useContext(LogoutContext);
   const toggleMenuDropdown = () => {
     setMenuDropdownOpen(!menuDropdownOpen);
   };
@@ -91,17 +95,22 @@ const TeacherTopNav = ({ setShowModal }) => {
         .catch((err) => console.error("Session switch failed", err));
     }
   };
+  useEffect(() => {
+    const fetchSections = async () => {
+      try {
+        if (currentSession?._id) {
+          const response = await axios.get(
+            `${apiUrl}/api/section/${currentSession._id}`
+          );
+          setSections(response.data?.data || []);
+        }
+      } catch (error) {
+        console.error("Error fetching sections:", error);
+      }
+    };
 
-  const checkUserRoleAndRedirect = () => {
-    const token = localStorage.getItem("jwtToken");
-    if (!token) return navigate("/login");
-
-    const role = JSON.parse(atob(token.split(".")[1])).role;
-    if (role === "admin") navigate("/dashboard/admin");
-    else if (role === "teacher") navigate("/dashboard/teacher");
-    else if (role === "student") navigate("/dashboard/student");
-    else navigate("/login");
-  };
+    fetchSections();
+  }, [currentSession, apiUrl]);
 
   useEffect(() => {
     axios
@@ -262,10 +271,17 @@ const TeacherTopNav = ({ setShowModal }) => {
       <div className="top-nav mobile-only" style={topNavStyle}>
         <button
           onClick={handleSidebarToggle}
-          className=" text-2xl"
-          style={{ color: darkMode ? "white" : "black" }}
+          className="text-2xl"
+          style={{
+            backgroundColor: "#e63e54", // red background
+            color: "white", // white icon color
+            padding: "8px", // spacing inside button
+            borderRadius: "8px", // rounded corners
+            border: "none", // no border
+            cursor: "pointer", // pointer on hover
+          }}
         >
-          <FiMenu style={{ color: darkMode ? "white" : "black" }} />
+          <FiMenu />
         </button>
 
         <a
@@ -298,6 +314,15 @@ const TeacherTopNav = ({ setShowModal }) => {
             padding: "20px",
           }}
         >
+          <img
+            src={lagos}
+            alt="Logo 2"
+            style={{
+              height: "60px",
+              width: "auto",
+              objectFit: "contain",
+            }}
+          />
           <button
             onClick={handleSidebarToggle}
             style={{
@@ -327,8 +352,10 @@ const TeacherTopNav = ({ setShowModal }) => {
                   <ul>
                     <li className="submenu">
                       <a
-                        href="/home"
-                        className={`${isActive("/home") ? "active-menu" : ""}`}
+                        href="/principal/dashboard"
+                        className={`${
+                          isActive("/principal/dashboard") ? "active-menu" : ""
+                        }`}
                         style={{
                           // backgroundColor: isActive("/home")
                           //   ? darkMode
@@ -340,7 +367,7 @@ const TeacherTopNav = ({ setShowModal }) => {
                           display: "flex",
                           alignItems: "center",
                           gap: "8px",
-                          color: isActive("/home")
+                          color: isActive("/principal/dashboard")
                             ? darkMode
                               ? "white"
                               : "black" // active text color dark/light
@@ -353,7 +380,7 @@ const TeacherTopNav = ({ setShowModal }) => {
                         <FiHome
                           size={20}
                           color={
-                            isActive("/home")
+                            isActive("/principal/dashboard")
                               ? darkMode
                                 ? "white"
                                 : "black" // active color: white in dark, black in light
@@ -365,7 +392,7 @@ const TeacherTopNav = ({ setShowModal }) => {
                         <span
                           style={{
                             fontSize: "14px",
-                            color: isActive("/home")
+                            color: isActive("/principal/dashboard")
                               ? darkMode
                                 ? "white"
                                 : "black"
@@ -374,655 +401,931 @@ const TeacherTopNav = ({ setShowModal }) => {
                               : "#000",
                           }}
                         >
-                          Home
-                        </span>
-                      </a>
-                    </li>
-
-                    <li className="submenu">
-                      <a
-                        href="/chat/new"
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                          padding: "10px",
-                          color: darkMode ? "#fff" : "#000",
-                          textDecoration: "none",
-                        }}
-                      >
-                        <FiEdit
-                          size={20}
-                          color={
-                            isActive("/chat/new")
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555"
-                          }
-                        />
-                        <span
-                          style={{
-                            fontSize: "14px",
-                            color: isActive("/chat/new")
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555",
-                          }}
-                        >
-                          New Chat
+                          Dashboard
                         </span>
                       </a>
                     </li>
                     <li className="submenu">
                       <a
-                        href="/library"
+                        href="/principal/dashboard/sections"
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          gap: "8px",
                           padding: "10px",
-                          color: darkMode ? "#fff" : "#000",
-                          textDecoration: "none",
                         }}
                       >
-                        <MdPermMedia
+                        <FiGrid
                           size={20}
                           color={
-                            isActive("/digital")
+                            isActive("/principal/dashboard")
                               ? darkMode
                                 ? "white"
-                                : "black"
+                                : "black" // active color: white in dark, black in light
                               : darkMode
-                              ? "#ccc"
-                              : "#555"
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
                           }
+                          style={{ marginRight: "8px" }}
                         />
-                        <span
-                          style={{
-                            fontSize: "14px",
-                            color: isActive("/digital")
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555",
-                          }}
-                        >
-                          Library
-                        </span>
-                      </a>
-                    </li>
-
-                    <li className="submenu">
-                      <a
-                        href="/today"
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                          padding: "10px",
-                          color: darkMode ? "#fff" : "#000",
-                          textDecoration: "none",
-                        }}
-                      >
-                        <FiMessageSquare
-                          size={20}
-                          color={
-                            isActive("/today")
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555"
-                          }
-                        />
-                        <span
-                          style={{
-                            fontSize: "14px",
-                            color: isActive("/today")
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555",
-                          }}
-                        >
-                          Today's Chat
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          All Sections
                         </span>
                       </a>
                     </li>
                     <li className="submenu">
                       <a
-                        href="/yesterday"
+                        href="/principal/dashboard/vice-principal"
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          gap: "8px",
                           padding: "10px",
-                          color: darkMode ? "#fff" : "#000",
-                          textDecoration: "none",
                         }}
                       >
-                        <FiClock
+                        <FiUser
                           size={20}
                           color={
-                            isActive("/yesterday")
+                            isActive("/principal/dashboard")
                               ? darkMode
                                 ? "white"
-                                : "black"
+                                : "black" // active color: white in dark, black in light
                               : darkMode
-                              ? "#ccc"
-                              : "#555"
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
                           }
+                          style={{ marginRight: "8px" }}
                         />
-                        <span
-                          style={{
-                            fontSize: "14px",
-                            color: isActive("/yesterday")
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555",
-                          }}
-                        >
-                          Yesterday Chat
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          Vice Principal
                         </span>
                       </a>
                     </li>
-                    {/* Settings */}
+                    <li className="submenu">
+                      <a
+                        href="/principal/dashboard/hod"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "10px",
+                        }}
+                      >
+                        <FiUser
+                          size={20}
+                          color={
+                            isActive("/principal/dashboard")
+                              ? darkMode
+                                ? "white"
+                                : "black" // active color: white in dark, black in light
+                              : darkMode
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
+                          }
+                          style={{ marginRight: "8px" }}
+                        />
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          HOD
+                        </span>
+                      </a>
+                    </li>
 
                     <li className="submenu">
                       <a
                         href="#"
                         onClick={(e) => {
                           e.preventDefault();
-                          toggleSubmenu(5);
+                          toggleSubmenu("teachers");
                         }}
-                        className={`${
-                          openSubmenus.has(5) ? "subdrop active" : ""
-                        }`.trim()}
+                        className={`submenu-link ${
+                          openSubmenus.has("teachers") ? "subdrop active" : ""
+                        }`}
                         style={{
-                          backgroundColor: openSubmenus.has(5)
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: "10px",
+                          borderRadius: "5px",
+                          backgroundColor: openSubmenus.has("teachers")
                             ? darkMode
                               ? "#343541"
                               : "#ddd"
                             : "transparent",
-                          borderRadius: "5px",
-                          padding: "10px",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                          color: openSubmenus.has(5)
+                          textDecoration: "none",
+                          color: openSubmenus.has("teachers")
                             ? darkMode
-                              ? "white"
-                              : "black"
+                              ? "#fff"
+                              : "#000"
                             : darkMode
                             ? "#ccc"
                             : "#555",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <FiUser
+                            size={20}
+                            style={{ marginRight: "8px" }}
+                            color={
+                              openSubmenus.has("teachers")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555"
+                            }
+                          />
+                          <span
+                            style={{
+                              fontSize: "15px",
+                              color: openSubmenus.has("teachers")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555",
+                            }}
+                          >
+                            Teachers
+                          </span>
+                        </div>
+
+                        <FiChevronDown
+                          style={{
+                            transition: "transform 0.3s ease",
+                            transform: openSubmenus.has("teachers")
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                            color: darkMode ? "#fff" : "#000",
+                          }}
+                        />
+                      </a>
+
+                      {/* Dynamic dropdown */}
+                      {openSubmenus.has("teachers") && (
+                        <ul
+                          className="submenu-list"
+                          style={{ paddingLeft: "32px", marginTop: "5px" }}
+                        >
+                          {sections.map((section) => (
+                            <li key={section._id}>
+                              <a
+                                href={`/principal/dashboard/section-teachers/${section._id}`}
+                                style={{ color: darkMode ? "#fff" : "#000" }}
+                              >
+                                {section.name}
+                              </a>
+                            </li>
+                          ))}
+                          {sections.length === 0 && (
+                            <li>
+                              <span
+                                style={{ color: darkMode ? "#aaa" : "#555" }}
+                              >
+                                No sections yet
+                              </span>
+                            </li>
+                          )}
+                        </ul>
+                      )}
+                    </li>
+
+                    {/* Students */}
+                    <li className="submenu">
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleSubmenu("students");
+                        }}
+                        className={`submenu-link ${
+                          openSubmenus.has("students") ? "subdrop active" : ""
+                        }`}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: "10px",
+                          borderRadius: "5px",
+                          backgroundColor: openSubmenus.has("students")
+                            ? darkMode
+                              ? "#343541"
+                              : "#ddd"
+                            : "transparent",
                           textDecoration: "none",
+                          color: openSubmenus.has("students")
+                            ? darkMode
+                              ? "#fff"
+                              : "#000"
+                            : darkMode
+                            ? "#ccc"
+                            : "#555",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <FiUsers
+                            size={20}
+                            style={{ marginRight: "8px" }}
+                            color={
+                              openSubmenus.has("students")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555"
+                            }
+                          />
+                          <span
+                            style={{
+                              fontSize: "15px",
+                              color: openSubmenus.has("students")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555",
+                            }}
+                          >
+                            Students
+                          </span>
+                        </div>
+
+                        <FiChevronDown
+                          style={{
+                            transition: "transform 0.3s ease",
+                            transform: openSubmenus.has("students")
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                            color: darkMode ? "#fff" : "#000",
+                          }}
+                        />
+                      </a>
+
+                      {/* Dynamic dropdown */}
+                      {openSubmenus.has("students") && (
+                        <ul
+                          className="submenu-list"
+                          style={{ paddingLeft: "32px", marginTop: "5px" }}
+                        >
+                          {sections.map((section) => (
+                            <li key={section._id}>
+                              <a
+                                href={`/principal/dashboard/students/${section._id}`}
+                                style={{ color: darkMode ? "#fff" : "#000" }}
+                              >
+                                {section.name}
+                              </a>
+                            </li>
+                          ))}
+                          {sections.length === 0 && (
+                            <li>
+                              <span
+                                style={{ color: darkMode ? "#aaa" : "#555" }}
+                              >
+                                No sections yet
+                              </span>
+                            </li>
+                          )}
+                        </ul>
+                      )}
+                    </li>
+                    {/* Subjects */}
+
+                    {/* Subject */}
+                    <li className="submenu">
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleSubmenu("subject");
+                        }}
+                        className={`submenu-link ${
+                          openSubmenus.has("subject") ? "subdrop active" : ""
+                        }`}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: "10px",
+                          borderRadius: "5px",
+                          backgroundColor: openSubmenus.has("subject")
+                            ? darkMode
+                              ? "#343541"
+                              : "#ddd"
+                            : "transparent",
+                          textDecoration: "none",
+                          color: openSubmenus.has("subject")
+                            ? darkMode
+                              ? "#fff"
+                              : "#000"
+                            : darkMode
+                            ? "#ccc"
+                            : "#555",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <FiBook
+                            size={20}
+                            style={{ marginRight: "8px" }}
+                            color={
+                              openSubmenus.has("subject")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555"
+                            }
+                          />
+                          <span
+                            style={{
+                              fontSize: "15px",
+                              color: openSubmenus.has("subject")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555",
+                            }}
+                          >
+                            Subjects
+                          </span>
+                        </div>
+
+                        <FiChevronDown
+                          style={{
+                            transition: "transform 0.3s ease",
+                            transform: openSubmenus.has("subject")
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                            color: darkMode ? "#fff" : "#000",
+                          }}
+                        />
+                      </a>
+
+                      {/* Dynamic dropdown */}
+                      {openSubmenus.has("subject") && (
+                        <ul
+                          className="submenu-list"
+                          style={{ paddingLeft: "32px", marginTop: "5px" }}
+                        >
+                          {sections.map((section) => (
+                            <li key={section._id}>
+                              <a
+                                href={`/principal/dashboard/subject/${section._id}`}
+                                style={{ color: darkMode ? "#fff" : "#000" }}
+                              >
+                                {section.name}
+                              </a>
+                            </li>
+                          ))}
+                          {sections.length === 0 && (
+                            <li>
+                              <span
+                                style={{ color: darkMode ? "#aaa" : "#555" }}
+                              >
+                                No sections yet
+                              </span>
+                            </li>
+                          )}
+                        </ul>
+                      )}
+                    </li>
+
+                    {/* Exam Mark */}
+                    <li className="submenu">
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleSubmenu("past");
+                        }}
+                        className={`submenu-link ${
+                          openSubmenus.has("past") ? "subdrop active" : ""
+                        }`}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between", // ⬅️ ensures icon+text left, chevron right
+                          padding: "10px",
+                          borderRadius: "5px",
+                          backgroundColor: openSubmenus.has("past")
+                            ? darkMode
+                              ? "#343541"
+                              : "#ddd"
+                            : "transparent",
+                          textDecoration: "none",
+                          color: openSubmenus.has("past")
+                            ? darkMode
+                              ? "#fff"
+                              : "#000"
+                            : darkMode
+                            ? "#ccc"
+                            : "#555",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <FiActivity
+                            size={20}
+                            style={{ marginRight: "8px" }}
+                            color={
+                              openSubmenus.has("affective")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555"
+                            }
+                          />
+                          <span
+                            style={{
+                              fontSize: "15px",
+                              color: openSubmenus.has("affective")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555",
+                            }}
+                          >
+                            Psychomotor
+                          </span>
+                        </div>
+
+                        {/* Chevron */}
+                        <FiChevronDown
+                          style={{
+                            transition: "transform 0.3s ease",
+                            transform: openSubmenus.has("affective")
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                            color: darkMode ? "#fff" : "#000",
+                          }}
+                        />
+                      </a>
+
+                      {/* Dropdown items */}
+                      {openSubmenus.has("affective") && (
+                        <ul
+                          className="submenu-list"
+                          style={{ paddingLeft: "32px", marginTop: "5px" }}
+                        >
+                          <li>
+                            <a
+                              href="/principal/dashboard/jamb-past-questions"
+                              style={{ color: darkMode ? "#fff" : "#000" }}
+                            >
+                              Manage Category
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="/principal/dashboard/waec-past-questions"
+                              style={{ color: darkMode ? "#fff" : "#000" }}
+                            >
+                              Manage Student Report
+                            </a>
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+
+                    {/* Past Questions */}
+                    <li className="submenu">
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleSubmenu("past");
+                        }}
+                        className={`submenu-link ${
+                          openSubmenus.has("past") ? "subdrop active" : ""
+                        }`}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between", // ⬅️ ensures icon+text left, chevron right
+                          padding: "10px",
+                          borderRadius: "5px",
+                          backgroundColor: openSubmenus.has("past")
+                            ? darkMode
+                              ? "#343541"
+                              : "#ddd"
+                            : "transparent",
+                          textDecoration: "none",
+                          color: openSubmenus.has("past")
+                            ? darkMode
+                              ? "#fff"
+                              : "#000"
+                            : darkMode
+                            ? "#ccc"
+                            : "#555",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <FiFileText
+                            size={20}
+                            style={{ marginRight: "8px" }}
+                            color={
+                              openSubmenus.has("past")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555"
+                            }
+                          />
+                          <span
+                            style={{
+                              fontSize: "15px",
+                              color: openSubmenus.has("past")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555",
+                            }}
+                          >
+                            Past Questions
+                          </span>
+                        </div>
+
+                        {/* Chevron */}
+                        <FiChevronDown
+                          style={{
+                            transition: "transform 0.3s ease",
+                            transform: openSubmenus.has("past")
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                            color: darkMode ? "#fff" : "#000",
+                          }}
+                        />
+                      </a>
+
+                      {/* Dropdown items */}
+                      {openSubmenus.has("past") && (
+                        <ul
+                          className="submenu-list"
+                          style={{ paddingLeft: "32px", marginTop: "5px" }}
+                        >
+                          <li>
+                            <a
+                              href="/principal/dashboard/jamb-past-questions"
+                              style={{ color: darkMode ? "#fff" : "#000" }}
+                            >
+                              JAMB (UTME)
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="/principal/dashboard/waec-past-questions"
+                              style={{ color: darkMode ? "#fff" : "#000" }}
+                            >
+                              WAEC
+                            </a>
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                    {/* exams */}
+                    <li className="submenu">
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleSubmenu("exams");
+                        }}
+                        className={`submenu-link ${
+                          openSubmenus.has("exams") ? "subdrop active" : ""
+                        }`}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: "10px",
+                          borderRadius: "5px",
+                          backgroundColor: openSubmenus.has("exams")
+                            ? darkMode
+                              ? "#343541"
+                              : "#ddd"
+                            : "transparent",
+                          textDecoration: "none",
+                          color: openSubmenus.has("exams")
+                            ? darkMode
+                              ? "#fff"
+                              : "#000"
+                            : darkMode
+                            ? "#ccc"
+                            : "#555",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <FiEdit
+                            size={20}
+                            style={{ marginRight: "8px" }}
+                            color={
+                              openSubmenus.has("exams")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555"
+                            }
+                          />
+                          <span
+                            style={{
+                              fontSize: "15px",
+                              color: openSubmenus.has("exams")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555",
+                            }}
+                          >
+                            Exam
+                          </span>
+                        </div>
+
+                        {/* Chevron */}
+                        <FiChevronDown
+                          style={{
+                            transition: "transform 0.3s ease",
+                            transform: openSubmenus.has("exams")
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                            color: darkMode ? "#fff" : "#000",
+                          }}
+                        />
+                      </a>
+
+                      {/* Dropdown content */}
+                      {openSubmenus.has("exams") && (
+                        <ul
+                          className="submenu-list"
+                          style={{ paddingLeft: "32px", marginTop: "5px" }}
+                        >
+                          <li>
+                            <a
+                              href="/principal/dashboard/examlist"
+                              style={{ color: darkMode ? "#fff" : "#000" }}
+                            >
+                              Exam List
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="/principal/dashboard/manage-online-result"
+                              style={{ color: darkMode ? "#fff" : "#000" }}
+                            >
+                              Exam Grade
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="/principal/dashboard/exam"
+                              style={{ color: darkMode ? "#fff" : "#000" }}
+                            >
+                              Manage Marks
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="/principal/dashboard/manage-online-result"
+                              style={{ color: darkMode ? "#fff" : "#000" }}
+                            >
+                              Onscreen Marking
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="/principal/dashboard/broad_sheet"
+                              style={{ color: darkMode ? "#fff" : "#000" }}
+                            >
+                              Broad Sheet
+                            </a>
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                    <li className="submenu">
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleSubmenu("exam");
+                        }}
+                        className={`submenu-link ${
+                          openSubmenus.has("exam") ? "subdrop active" : ""
+                        }`}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: "10px",
+                          borderRadius: "5px",
+                          backgroundColor: openSubmenus.has("exam")
+                            ? darkMode
+                              ? "#343541"
+                              : "#ddd"
+                            : "transparent",
+                          textDecoration: "none",
+                          color: openSubmenus.has("exam")
+                            ? darkMode
+                              ? "#fff"
+                              : "#000"
+                            : darkMode
+                            ? "#ccc"
+                            : "#555",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <FiEdit
+                            size={20}
+                            style={{ marginRight: "8px" }}
+                            color={
+                              openSubmenus.has("exam")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555"
+                            }
+                          />
+                          <span
+                            style={{
+                              fontSize: "15px",
+                              color: openSubmenus.has("exam")
+                                ? darkMode
+                                  ? "#fff"
+                                  : "#000"
+                                : darkMode
+                                ? "#ccc"
+                                : "#555",
+                            }}
+                          >
+                            Online Exam
+                          </span>
+                        </div>
+
+                        {/* Chevron */}
+                        <FiChevronDown
+                          style={{
+                            transition: "transform 0.3s ease",
+                            transform: openSubmenus.has("exam")
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                            color: darkMode ? "#fff" : "#000",
+                          }}
+                        />
+                      </a>
+
+                      {/* Dropdown content */}
+                      {openSubmenus.has("exam") && (
+                        <ul
+                          className="submenu-list"
+                          style={{ paddingLeft: "32px", marginTop: "5px" }}
+                        >
+                          <li>
+                            <a
+                              href="/principal/dashboard/manage-online-exam"
+                              style={{ color: darkMode ? "#fff" : "#000" }}
+                            >
+                              Manage Online Exam
+                            </a>
+                          </li>
+                          <li>
+                            <a
+                              href="/principal/dashboard/manage-online-result"
+                              style={{ color: darkMode ? "#fff" : "#000" }}
+                            >
+                              View Result
+                            </a>
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+
+                    {/* Payment History */}
+                    <li className="submenu">
+                      <a
+                        href="/principal/dashboard/student-payment"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "10px",
                         }}
                       >
                         <FiBarChart2
                           size={20}
                           color={
-                            openSubmenus.has(5)
+                            isActive("/principal/dashboard")
                               ? darkMode
                                 ? "white"
-                                : "black"
+                                : "black" // active color: white in dark, black in light
                               : darkMode
-                              ? "#ccc"
-                              : "#555"
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
                           }
+                          style={{ marginRight: "8px" }}
                         />
-                        <span
-                          style={{
-                            fontSize: "14px",
-                            color: openSubmenus.has(5)
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555",
-                          }}
-                        >
-                          Finance Management
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          Accounting
                         </span>
-                        <FiChevronDown
-                          style={{
-                            marginLeft: "auto",
-                            transform: openSubmenus.has(5)
-                              ? "rotate(180deg)"
-                              : "rotate(0deg)",
-                            color: openSubmenus.has(5)
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555",
-                          }}
-                        />
                       </a>
-                      {openSubmenus.has(5) && (
-                        <ul
-                          className="submenu-list"
-                          style={{
-                            backgroundColor: darkMode ? "#202123" : "#f9f9f9",
-                            paddingLeft: "20px",
-                          }}
-                        >
-                          {[
-                            {
-                              href: "/financial-inquiries",
-                              label: "   Financial inquiries",
-                            },
-                            {
-                              href: "/budgeting",
-                              label: "       Budgeting & money management",
-                            },
-                            {
-                              href: "/spending-analysis",
-                              label: "  Smart spending analysis",
-                            },
-                            {
-                              href: "/goal-tracking",
-                              label: "  Goal tracking",
-                            },
-                          ].map(({ href, label }) => (
-                            <li key={href}>
-                              <a
-                                href={href}
-                                style={{
-                                  color: darkMode ? "white" : "black",
-                                  textDecoration: "none",
-                                  display: "block",
-                                  padding: "5px 0",
-                                }}
-                              >
-                                {label}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
                     </li>
 
+                    {/* Attendance */}
                     <li className="submenu">
                       <a
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          toggleSubmenu(7);
-                        }}
-                        className={`${
-                          openSubmenus.has(7) ? "subdrop active" : ""
-                        }`.trim()}
+                        href="/principal/dashboard/student-payment"
                         style={{
-                          backgroundColor: openSubmenus.has(7)
-                            ? darkMode
-                              ? "#343541"
-                              : "#ddd"
-                            : "transparent",
-                          borderRadius: "5px",
-                          padding: "10px",
                           display: "flex",
                           alignItems: "center",
-                          gap: "8px",
-                          color: openSubmenus.has(7)
-                            ? darkMode
-                              ? "white"
-                              : "black"
-                            : darkMode
-                            ? "#ccc"
-                            : "#555",
-                          textDecoration: "none",
+                          padding: "10px",
                         }}
                       >
-                        <FiTrendingUp
+                        <FiBook
                           size={20}
                           color={
-                            openSubmenus.has(7)
+                            isActive("/principal/dashboard")
                               ? darkMode
                                 ? "white"
-                                : "black"
+                                : "black" // active color: white in dark, black in light
                               : darkMode
-                              ? "#ccc"
-                              : "#555"
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
                           }
+                          style={{ marginRight: "8px" }}
                         />
-                        <span
-                          style={{
-                            fontSize: "14px",
-                            color: openSubmenus.has(7)
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555",
-                          }}
-                        >
-                          Investment Advisory
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          Attendance
                         </span>
-                        <FiChevronDown
-                          style={{
-                            marginLeft: "auto",
-                            transform: openSubmenus.has(7)
-                              ? "rotate(180deg)"
-                              : "rotate(0deg)",
-                            color: openSubmenus.has(7)
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555",
-                          }}
-                        />
                       </a>
-                      {openSubmenus.has(7) && (
-                        <ul
-                          className="submenu-list"
-                          style={{
-                            backgroundColor: darkMode ? "#202123" : "#f9f9f9",
-                            paddingLeft: "20px",
-                          }}
-                        >
-                          {[
-                            {
-                              href: "/investment-recommendation",
-                              label: "Investment Recommendation",
-                            },
-                            {
-                              href: "/market-analysis",
-                              label: "Forex Market",
-                            },
-                            {
-                              href: "/decentralized-finance",
-                              label: "  DeFi & Blockchain opportunities",
-                            },
-                          ].map(({ href, label }) => (
-                            <li key={href}>
-                              <a
-                                href={href}
-                                style={{
-                                  color: darkMode ? "white" : "black",
-                                  textDecoration: "none",
-                                  display: "block",
-                                  padding: "5px 0",
-                                }}
-                              >
-                                {label}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
                     </li>
 
+                    {/* Study Material */}
                     <li className="submenu">
                       <a
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          toggleSubmenu(8);
-                        }}
-                        className={`${
-                          openSubmenus.has(8) ? "subdrop active" : ""
-                        }`.trim()}
+                        href="/principal/dashboard/student-material"
                         style={{
-                          backgroundColor: openSubmenus.has(8)
-                            ? darkMode
-                              ? "#343541"
-                              : "#ddd"
-                            : "transparent",
-                          borderRadius: "5px",
-                          padding: "10px",
                           display: "flex",
                           alignItems: "center",
-                          gap: "8px",
-                          color: openSubmenus.has(8)
-                            ? darkMode
-                              ? "white"
-                              : "black"
-                            : darkMode
-                            ? "#ccc"
-                            : "#555",
-                          textDecoration: "none",
-                        }}
-                      >
-                        <FiBookOpen
-                          size={20}
-                          color={
-                            openSubmenus.has(8)
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555"
-                          }
-                        />
-                        <span
-                          style={{
-                            fontSize: "14px",
-                            color: openSubmenus.has(8)
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555",
-                          }}
-                        >
-                          Financial Education
-                        </span>
-                        <FiChevronDown
-                          style={{
-                            marginLeft: "auto",
-                            transform: openSubmenus.has(8)
-                              ? "rotate(180deg)"
-                              : "rotate(0deg)",
-                            color: openSubmenus.has(8)
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555",
-                          }}
-                        />
-                      </a>
-                      {openSubmenus.has(8) && (
-                        <ul
-                          className="submenu-list"
-                          style={{
-                            backgroundColor: darkMode ? "#202123" : "#f9f9f9",
-                            paddingLeft: "20px",
-                          }}
-                        >
-                          {[
-                            {
-                              href: "/finance-education",
-                              label: "  Financial education & coaching",
-                            },
-                            {
-                              href: "/ai-based-tax",
-                              label: "Business and tax advisory",
-                            },
-                            {
-                              href: "/expense-tracker",
-                              label: "Expense Tracking",
-                            },
-                          ].map(({ href, label }) => (
-                            <li key={href}>
-                              <a
-                                href={href}
-                                style={{
-                                  color: darkMode ? "white" : "black",
-                                  textDecoration: "none",
-                                  display: "block",
-                                  padding: "5px 0",
-                                }}
-                              >
-                                {label}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </li>
-                    <li className="submenu">
-                      <a
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          toggleSubmenu(12);
-                        }}
-                        className={`${
-                          openSubmenus.has(8) ? "subdrop active" : ""
-                        }`.trim()}
-                        style={{
-                          backgroundColor: openSubmenus.has(12)
-                            ? darkMode
-                              ? "#343541"
-                              : "#ddd"
-                            : "transparent",
-                          borderRadius: "5px",
                           padding: "10px",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                          color: openSubmenus.has(12)
-                            ? darkMode
-                              ? "white"
-                              : "black"
-                            : darkMode
-                            ? "#ccc"
-                            : "#555",
-                          textDecoration: "none",
                         }}
                       >
-                        <FiCreditCard
+                        <MdPermMedia
                           size={20}
                           color={
-                            openSubmenus.has(12)
+                            isActive("/principal/dashboard")
                               ? darkMode
                                 ? "white"
-                                : "black"
+                                : "black" // active color: white in dark, black in light
                               : darkMode
-                              ? "#ccc"
-                              : "#555"
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
                           }
+                          style={{ marginRight: "8px" }}
                         />
-                        <span
-                          style={{
-                            fontSize: "14px",
-                            color: openSubmenus.has(12)
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555",
-                          }}
-                        >
-                          Credit Solutions
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          Study Material
                         </span>
-                        <FiChevronDown
-                          style={{
-                            marginLeft: "auto",
-                            transform: openSubmenus.has(12)
-                              ? "rotate(180deg)"
-                              : "rotate(0deg)",
-                            color: openSubmenus.has(12)
-                              ? darkMode
-                                ? "white"
-                                : "black"
-                              : darkMode
-                              ? "#ccc"
-                              : "#555",
-                          }}
-                        />
                       </a>
-                      {openSubmenus.has(12) && (
-                        <ul
-                          className="submenu-list"
-                          style={{
-                            backgroundColor: darkMode ? "#202123" : "#f9f9f9",
-                            paddingLeft: "20px",
-                          }}
-                        >
-                          {[
-                            {
-                              href: "/credit-evaluation",
-                              label: "  Credit scoring and evaluation",
-                            },
-                            {
-                              href: "/loan-recommendation",
-                              label: "Loan recommendations",
-                            },
-                            {
-                              href: "/bnpl",
-                              label: "    Buy Now Pay Later (BNPL) options",
-                            },
-                          ].map(({ href, label }) => (
-                            <li key={href}>
-                              <a
-                                href={href}
-                                style={{
-                                  color: darkMode ? "white" : "black",
-                                  textDecoration: "none",
-                                  display: "block",
-                                  padding: "5px 0",
-                                }}
-                              >
-                                {label}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
                     </li>
 
+                    {/* Profile */}
                     <li className="submenu">
                       <a
-                        href="/pricing"
+                        href="/dashboard/profile"
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          gap: "8px",
                           padding: "10px",
-                          color: darkMode ? "white" : "black",
-                          textDecoration: "none",
-                          cursor: "pointer",
                         }}
                       >
-                        <HiOutlineViewGrid
+                        <FiUser
                           size={20}
-                          color={darkMode ? "white" : "black"}
-                          onClick={() => setShowLogoutModal(true)}
+                          color={
+                            isActive("/principal/dashboard")
+                              ? darkMode
+                                ? "white"
+                                : "black" // active color: white in dark, black in light
+                              : darkMode
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
+                          }
+                          style={{ marginRight: "8px" }}
                         />
-                        <span
-                          style={{
-                            fontSize: "14px",
-                            color: darkMode ? "white" : "black",
-                          }}
-                          href="/pricing"
-                        >
-                          Pricing
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          General
                         </span>
                       </a>
                     </li>
