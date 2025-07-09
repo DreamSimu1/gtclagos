@@ -91,13 +91,13 @@ const TeacherSidebar = () => {
                 {/* Dashboard */}
                 <li className="submenu">
                   <a
-                    href="/principal/dashboard"
+                    href="/teacher/dashboard"
                     style={{
                       display: "flex",
                       alignItems: "center",
                       borderRadius: "5px",
                       padding: "10px",
-                      color: isActive("/principal/dashboard")
+                      color: isActive("/teacher/dashboard")
                         ? darkMode
                           ? "#fff"
                           : "#000"
@@ -109,7 +109,7 @@ const TeacherSidebar = () => {
                     <FiHome
                       size={20}
                       color={
-                        isActive("/principal/dashboard")
+                        isActive("/teacher/dashboard")
                           ? darkMode
                             ? "white"
                             : "black" // active color: white in dark, black in light
@@ -124,7 +124,7 @@ const TeacherSidebar = () => {
                 </li>
                 {/*} <li className="submenu">
                   <a
-                    href="/principal/dashboard/sections"
+                    href="/teacher/dashboard/sections"
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -134,7 +134,7 @@ const TeacherSidebar = () => {
                     <FiGrid
                       size={20}
                       color={
-                        isActive("/principal/dashboard")
+                        isActive("/teacher/dashboard")
                           ? darkMode
                             ? "white"
                             : "black" 
@@ -231,7 +231,7 @@ const TeacherSidebar = () => {
                       {sections.map((section) => (
                         <li key={section._id}>
                           <a
-                            href={`/principal/dashboard/students/${section._id}`}
+                            href={`/teacher/dashboard/students/${section._id}`}
                             style={{ color: darkMode ? "#fff" : "#000" }}
                           >
                             {section.name}
@@ -332,7 +332,7 @@ const TeacherSidebar = () => {
                       {sections.map((section) => (
                         <li key={section._id}>
                           <a
-                            href={`/principal/dashboard/subject/${section._id}`}
+                            href={`/teacher/dashboard/subject/${section._id}`}
                             style={{ color: darkMode ? "#fff" : "#000" }}
                           >
                             {section.name}
@@ -432,7 +432,7 @@ const TeacherSidebar = () => {
                     >
                       <li>
                         <a
-                          href="/principal/dashboard/jamb-past-questions"
+                          href="/teacher/dashboard/jamb-past-questions"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           Manage Category
@@ -440,7 +440,7 @@ const TeacherSidebar = () => {
                       </li>
                       <li>
                         <a
-                          href="/principal/dashboard/waec-past-questions"
+                          href="/teacher/dashboard/waec-past-questions"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           Manage Student Report
@@ -532,7 +532,7 @@ const TeacherSidebar = () => {
                     >
                       <li>
                         <a
-                          href="/principal/dashboard/jamb-past-questions"
+                          href="/teacher/dashboard/jamb-past-questions"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           JAMB (UTME)
@@ -540,7 +540,7 @@ const TeacherSidebar = () => {
                       </li>
                       <li>
                         <a
-                          href="/principal/dashboard/waec-past-questions"
+                          href="/teacher/dashboard/waec-past-questions"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           WAEC
@@ -631,7 +631,7 @@ const TeacherSidebar = () => {
                     >
                       <li>
                         <a
-                          href="/principal/dashboard/examlist"
+                          href="/teacher/dashboard/examlist"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           Exam List
@@ -639,7 +639,7 @@ const TeacherSidebar = () => {
                       </li>
                       <li>
                         <a
-                          href="/principal/dashboard/manage-online-result"
+                          href="/teacher/dashboard/manage-online-result"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           Exam Grade
@@ -647,7 +647,7 @@ const TeacherSidebar = () => {
                       </li>
                       <li>
                         <a
-                          href="/principal/dashboard/exam"
+                          href="/teacher/dashboard/exam"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           Manage Marks
@@ -655,7 +655,7 @@ const TeacherSidebar = () => {
                       </li>
                       <li>
                         <a
-                          href="/principal/dashboard/manage-online-result"
+                          href="/teacher/dashboard/manage-online-result"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           Onscreen Marking
@@ -663,7 +663,7 @@ const TeacherSidebar = () => {
                       </li>
                       <li>
                         <a
-                          href="/principal/dashboard/broad_sheet"
+                          href="/teacher/dashboard/broad_sheet"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           Broad Sheet
@@ -753,7 +753,7 @@ const TeacherSidebar = () => {
                     >
                       <li>
                         <a
-                          href="/principal/dashboard/manage-online-exam"
+                          href="/teacher/dashboard/manage-online-exam"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           Manage Online Exam
@@ -761,7 +761,7 @@ const TeacherSidebar = () => {
                       </li>
                       <li>
                         <a
-                          href="/principal/dashboard/manage-online-result"
+                          href="/teacher/dashboard/manage-online-result"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           View Result
@@ -774,7 +774,7 @@ const TeacherSidebar = () => {
                 {/* Payment History */}
                 <li className="submenu">
                   <a
-                    href="/principal/dashboard/student-payment"
+                    href="/teacher/dashboard/student-payment"
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -784,7 +784,7 @@ const TeacherSidebar = () => {
                     <FiBarChart2
                       size={20}
                       color={
-                        isActive("/principal/dashboard")
+                        isActive("/teacher/dashboard")
                           ? darkMode
                             ? "white"
                             : "black" // active color: white in dark, black in light
@@ -801,7 +801,7 @@ const TeacherSidebar = () => {
                 {/* Attendance */}
                 <li className="submenu">
                   <a
-                    href="/principal/dashboard/student-payment"
+                    href="/teacher/dashboard/student-payment"
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -811,7 +811,7 @@ const TeacherSidebar = () => {
                     <FiBook
                       size={20}
                       color={
-                        isActive("/principal/dashboard")
+                        isActive("/teacher/dashboard")
                           ? darkMode
                             ? "white"
                             : "black" // active color: white in dark, black in light
@@ -828,7 +828,7 @@ const TeacherSidebar = () => {
                 {/* Study Material */}
                 <li className="submenu">
                   <a
-                    href="/principal/dashboard/student-material"
+                    href="/teacher/dashboard/student-material"
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -838,7 +838,7 @@ const TeacherSidebar = () => {
                     <MdPermMedia
                       size={20}
                       color={
-                        isActive("/principal/dashboard")
+                        isActive("/teacher/dashboard")
                           ? darkMode
                             ? "white"
                             : "black" // active color: white in dark, black in light
@@ -865,7 +865,7 @@ const TeacherSidebar = () => {
                     <FiUser
                       size={20}
                       color={
-                        isActive("/principal/dashboard")
+                        isActive("/teacher/dashboard")
                           ? darkMode
                             ? "white"
                             : "black" // active color: white in dark, black in light
