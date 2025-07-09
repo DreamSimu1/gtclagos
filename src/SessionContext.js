@@ -9,83 +9,27 @@
 //   const apiUrl = process.env.REACT_APP_API_URL;
 
 //   useEffect(() => {
-//     axios
-//       .get(`${apiUrl}/api/sessions`)
-//       .then((response) => {
-//         if (Array.isArray(response.data)) {
-//           setSessions(response.data);
-
-//           // Set the session that matches the current date as active
-//           const activeSession = response.data.find((session) => {
-//             const now = new Date();
-//             const startDate = new Date(session.startDate);
-//             const endDate = new Date(session.endDate);
-//             return now >= startDate && now <= endDate;
-//           });
-
-//           if (activeSession) {
-//             setCurrentSession(activeSession);
-//           }
-//         } else {
-//           console.error("Unexpected response structure", response);
-//         }
-//       })
-//       .catch((error) => {
-//         console.error("Error fetching sessions:", error);
-//       });
-//   }, []);
-
-//   return (
-//     <SessionContext.Provider
-//       value={{ sessions, currentSession, setSessions, setCurrentSession }}
-//     >
-//       {children}
-//     </SessionContext.Provider>
-//   );
-// // };
-// import React, { createContext, useState, useEffect } from "react";
-// import axios from "axios";
-
-// export const SessionContext = createContext();
-
-// export const SessionProvider = ({ children }) => {
-//   const [sessions, setSessions] = useState([]);
-//   const [currentSession, setCurrentSession] = useState(null);
-//   const apiUrl = process.env.REACT_APP_API_URL;
-
-//   useEffect(() => {
 //     const fetchSessions = async () => {
 //       try {
-//         const token = localStorage.getItem("jwtToken"); // optional
-//         const res = await axios.get(`${apiUrl}/api/sessions`, {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
+//         const token = localStorage.getItem("jwtToken");
+//         const response = await axios.get(`${apiUrl}/api/session`, {
+//           headers: { Authorization: `Bearer ${token}` },
 //         });
 
-//         const sessionArray = res.data?.data;
+//         console.log("✅ SessionProvider fetched:", response.data);
 
-//         if (Array.isArray(sessionArray)) {
-//           setSessions(sessionArray);
+//         const sessionList = response.data || [];
+//         setSessions(sessionList);
 
-//           const now = new Date();
-//           const activeSession = sessionArray.find((session) => {
-//             const startDate = new Date(session.startDate);
-//             const endDate = new Date(session.endDate);
-//             return now >= startDate && now <= endDate;
-//           });
-
-//           if (activeSession) {
-//             console.log("✅ Setting active session:", activeSession);
-//             setCurrentSession(activeSession);
-//           } else {
-//             console.warn("⚠️ No active session found.");
-//           }
+//         const active = sessionList.find((s) => s.isActive);
+//         if (active) {
+//           setCurrentSession(active);
+//           console.log("✅ Active session set:", active);
 //         } else {
-//           console.error("❌ Unexpected response format:", res.data);
+//           console.warn("⚠️ No active session found.");
 //         }
 //       } catch (error) {
-//         console.error("❌ Failed to fetch sessions:", error);
+//         console.error("❌ Failed to fetch sessions", error);
 //       }
 //     };
 
@@ -94,13 +38,12 @@
 
 //   return (
 //     <SessionContext.Provider
-//       value={{ sessions, currentSession, setSessions, setCurrentSession }}
+//       value={{ sessions, currentSession, setCurrentSession, setSessions }}
 //     >
 //       {children}
 //     </SessionContext.Provider>
 //   );
 // };
-
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
@@ -111,6 +54,25 @@ export const SessionProvider = ({ children }) => {
   const [currentSession, setCurrentSession] = useState(null);
   const apiUrl = process.env.REACT_APP_API_URL;
 
+  // Load saved session from localStorage on first render
+  useEffect(() => {
+    const saved = localStorage.getItem("currentSession");
+    if (saved) {
+      try {
+        setCurrentSession(JSON.parse(saved));
+      } catch (e) {
+        console.error("❌ Failed to parse saved session:", e);
+      }
+    }
+  }, []);
+
+  // Whenever session changes, save to localStorage
+  useEffect(() => {
+    if (currentSession) {
+      localStorage.setItem("currentSession", JSON.stringify(currentSession));
+    }
+  }, [currentSession]);
+
   useEffect(() => {
     const fetchSessions = async () => {
       try {
@@ -119,17 +81,19 @@ export const SessionProvider = ({ children }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log("✅ SessionProvider fetched:", response.data);
-
         const sessionList = response.data || [];
         setSessions(sessionList);
 
-        const active = sessionList.find((s) => s.isActive);
-        if (active) {
-          setCurrentSession(active);
-          console.log("✅ Active session set:", active);
-        } else {
-          console.warn("⚠️ No active session found.");
+        // Only set and save session if not already set
+        if (!currentSession) {
+          const active = sessionList.find((s) => s.isActive);
+          if (active) {
+            setCurrentSession(active);
+            localStorage.setItem("currentSession", JSON.stringify(active));
+            console.log("✅ Active session set from API:", active);
+          } else {
+            console.warn("⚠️ No active session found.");
+          }
         }
       } catch (error) {
         console.error("❌ Failed to fetch sessions", error);
@@ -137,7 +101,7 @@ export const SessionProvider = ({ children }) => {
     };
 
     fetchSessions();
-  }, []);
+  }, [apiUrl]);
 
   return (
     <SessionContext.Provider

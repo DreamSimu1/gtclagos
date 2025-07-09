@@ -159,7 +159,7 @@ export const AuthProvider = ({ children }) => {
         // Optional: fetch user profile from backend
         try {
           const response = await axios.get(`${apiUrl}/api/auth/profile`);
-          const user = response.data;
+          const user = response.data.data; // ✅ Fix here
           localStorage.setItem("user", JSON.stringify(user));
           dispatch({ type: "INIT", payload: { isAuthenticated: true, user } });
         } catch (err) {

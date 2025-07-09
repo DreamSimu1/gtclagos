@@ -246,20 +246,6 @@ const Landing = () => {
 
         <div className="row">
           <div className="col-xl-3 col-sm-6 col-12 d-flex">
-            <div className="dash-widget w-100">
-              <div className="dash-widgetimg">
-                <span>
-                  <FaUserGraduate size={30} />
-                </span>
-              </div>
-              <div className="dash-widgetcontent">
-                <h5>{userCounts.students}</h5>
-                <h6>Total Students</h6>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-xl-3 col-sm-6 col-12 d-flex">
             <div className="dash-widget dash2 w-100">
               <div className="dash-widgetimg">
                 <span>
@@ -300,8 +286,6 @@ const Landing = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
           <div class="col-xl-3 col-sm-6 col-12 d-flex">
             <div class="dash-widget dash1 w-100">
               <div class="dash-widgetimg">
@@ -319,65 +303,6 @@ const Landing = () => {
                   </span>
                 </h5>
                 <h6>Total Sections</h6>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 col-12 d-flex">
-            <div class="dash-widget w-100">
-              <div class="dash-widgetimg">
-                <span>
-                  <FaUserGraduate size={30} />
-                </span>
-              </div>
-              <div class="dash-widgetcontent">
-                <h5>
-                  <span class="counters" data-count={totalProfit.toFixed(2)}>
-                    {totalProfit.toLocaleString()}
-                  </span>
-                </h5>
-                <h6>Today Tech 1</h6>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-xl-3 col-sm-6 col-12 d-flex">
-            <div class="dash-widget dash2 w-100">
-              <div class="dash-widgetimg">
-                <span>
-                  <FaUserGraduate size={30} />
-                </span>
-              </div>
-              <div class="dash-widgetcontent">
-                <h5>
-                  <span
-                    class="counters"
-                    data-count={totalDailyProfit.toFixed(2)}
-                  >
-                    {totalDailyProfit.toLocaleString()}
-                  </span>
-                </h5>
-                <h6>Total Tech 2</h6>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 col-12 d-flex">
-            <div class="dash-widget dash3 w-100">
-              <div class="dash-widgetimg">
-                <span>
-                  <FaUserGraduate size={30} />
-                </span>
-              </div>
-
-              <div class="dash-widgetcontent">
-                <h5>
-                  <span
-                    class="counters"
-                    data-count={totalWeeklyProfit.toFixed(2)}
-                  >
-                    {totalWeeklyProfit.toLocaleString()}
-                  </span>
-                </h5>
-                <h6>Total Tech 3</h6>
               </div>
             </div>
           </div>
