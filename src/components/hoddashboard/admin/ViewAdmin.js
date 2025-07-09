@@ -34,19 +34,19 @@ const ViewAdmin = () => {
   useEffect(() => {
     fetchAdmins();
   }, []);
-  const deleteUser = async (userId) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      try {
-        await axios.delete(`${apiUrl}/api/users/${userId}`);
-        // Remove the deleted user from the state
-        setAdmins(admins.filter((admin) => admin._id !== userId));
-        alert("User deleted successfully");
-      } catch (error) {
-        console.error("Error deleting user:", error);
-        alert("Failed to delete user. Please try again.");
-      }
-    }
-  };
+  // const deleteUser = async (userId) => {
+  //   if (window.confirm("Are you sure you want to delete this user?")) {
+  //     try {
+  //       await axios.delete(`${apiUrl}/api/users/${userId}`);
+  //       // Remove the deleted user from the state
+  //       setAdmins(admins.filter((admin) => admin._id !== userId));
+  //       alert("User deleted successfully");
+  //     } catch (error) {
+  //       console.error("Error deleting user:", error);
+  //       alert("Failed to delete user. Please try again.");
+  //     }
+  //   }
+  // };
 
   const openEditModal = (userId) => {
     setSelectedUserId(userId);
@@ -127,7 +127,6 @@ const ViewAdmin = () => {
                               <a
                                 className="confirm-text p-2"
                                 href="javascript:void(0);"
-                                onClick={() => deleteUser(admin._id)}
                               >
                                 <FaTrash className="delete-icon" />
                               </a>

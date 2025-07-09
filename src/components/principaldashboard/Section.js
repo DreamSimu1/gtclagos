@@ -7,6 +7,7 @@ import AddTeacherModal from "./AddTeacherModal";
 import useFetch from "../../hooks/useFetch";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import AddSectionModal from "./AddSectionModal";
+import DeleteSection from "./DeleteSection";
 const Section = () => {
   const { currentSession } = useContext(SessionContext);
   const { data, loading, error, reFetch } = useFetch(
@@ -17,7 +18,7 @@ const Section = () => {
     console.log("🟢 Raw fetched data:", data);
     console.log("🟢 Array of sections:", data?.data);
   }, [data, currentSession]);
-
+  const [section, setSection] = useState([]);
   const [page, setPage] = useState(0);
   const [editTeacherData, setEditTeacherData] = useState(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
@@ -25,6 +26,8 @@ const Section = () => {
   const [anchorElMap, setAnchorElMap] = useState({});
   const [tableData, setTableData] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
+  const [sectionToDelete, setSectionToDelete] = useState(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [action, setAction] = useState(null);
   const [newPassword, setNewPassword] = useState("");
@@ -37,26 +40,6 @@ const Section = () => {
   };
   const [showModal, setShowModal] = useState(false);
 
-  const handleDeleteUser = async () => {
-    try {
-      const response = await axios.delete(
-        `${apiUrl}/api/users/${userToDelete._id}`
-      );
-
-      console.log("Response from delete API:", response.data);
-
-      if (response.status === 200) {
-        console.log("User deleted successfully");
-
-        // Manually trigger data refetch
-        reFetch();
-      } else {
-        console.error("Failed to delete User");
-      }
-    } catch (error) {
-      console.error("Error deleting User:", error);
-    }
-  };
   const handleEditTeacher = (teacherId) => {
     // Find the selected student by ID
     const selectedTeacher = data.find((teacher) => teacher?._id === teacherId);
@@ -118,7 +101,18 @@ const Section = () => {
 
     reFetch(); // Trigger data refetch after updating tableData1
   };
+  const handleDeleteSection = async () => {
+    try {
+      await axios.delete(`${apiUrl}/api/section/${sectionToDelete}`);
+      reFetch(); // ✅ refetch from server
 
+      setConfirmDeleteModal(false);
+      setSectionToDelete(null);
+    } catch (err) {
+      console.error("Error deleting teacher:", err);
+      alert("Failed to delete section.");
+    }
+  };
   return (
     <div>
       <div class="main-wrapper">
@@ -161,7 +155,13 @@ const Section = () => {
                               <a className="me-2 p-2 cursor-pointer">
                                 <FiEdit size={18} />
                               </a>
-                              <a className="confirm-text p-2 cursor-pointer">
+                              <a
+                                className="confirm-text p-2 cursor-pointer"
+                                onClick={() => {
+                                  setSectionToDelete(item._id); // ✅ use item._id, not section._id
+                                  setConfirmDeleteModal(true);
+                                }}
+                              >
                                 <FiTrash2 size={18} />
                               </a>
                             </div>
@@ -180,6 +180,11 @@ const Section = () => {
                     showModal={showModal}
                     setShowModal={setShowModal}
                     updateTableData={updateTableData}
+                  />
+                  <DeleteSection
+                    show={confirmDeleteModal}
+                    onClose={() => setConfirmDeleteModal(false)}
+                    onConfirm={handleDeleteSection}
                   />
                 </div>
               </div>

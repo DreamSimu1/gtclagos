@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { SessionContext } from "../../SessionContext";
 import AddStudentModal from "./AddStudentModal";
+import DeleteStudent from "./DeleteStudent";
 
 const AllStudent = () => {
   const { currentSession } = useContext(SessionContext);
@@ -11,6 +12,8 @@ const AllStudent = () => {
   const [students, setStudents] = useState([]);
   const [activeTech, setActiveTech] = useState("tech_1");
   const apiUrl = process.env.REACT_APP_API_URL;
+  const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
+  const [teacherToDelete, setStudentToDelete] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const fetchStudents = async () => {
     try {
@@ -47,6 +50,17 @@ const AllStudent = () => {
     console.log("Viewing result for student:", studentId);
     // Example if using react-router:
     // navigate(`/student/${studentId}/result`);
+  };
+  const handleDeleteTeacher = async () => {
+    try {
+      await axios.delete(`${apiUrl}/api/auth/user/${teacherToDelete}`);
+      setStudents((prev) => prev.filter((t) => t._id !== teacherToDelete));
+      setConfirmDeleteModal(false);
+      setStudentToDelete(null);
+    } catch (err) {
+      console.error("Error deleting teacher:", err);
+      alert("Failed to delete teacher.");
+    }
   };
 
   return (
@@ -126,7 +140,13 @@ const AllStudent = () => {
                               <a className="me-2 p-2 cursor-pointer">
                                 <FiEdit size={18} />
                               </a>
-                              <a className="confirm-text p-2 cursor-pointer">
+                              <a
+                                className="confirm-text p-2 cursor-pointer"
+                                onClick={() => {
+                                  setStudentToDelete(student._id);
+                                  setConfirmDeleteModal(true);
+                                }}
+                              >
                                 <FiTrash2 size={18} />
                               </a>
                             </div>
@@ -173,7 +193,11 @@ const AllStudent = () => {
                 setShowModal={setShowModal}
                 updateTableData={fetchStudents}
               />
-
+              <DeleteStudent
+                show={confirmDeleteModal}
+                onClose={() => setConfirmDeleteModal(false)}
+                onConfirm={handleDeleteTeacher}
+              />
               {/* Debug: All students */}
               {/* <pre>{JSON.stringify(students, null, 2)}</pre> */}
             </div>

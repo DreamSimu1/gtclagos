@@ -88,21 +88,6 @@ const AllSale = () => {
     fetchTransactions();
   }, [user]);
 
-  const deleteUser = async (userId) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      try {
-        await axios.delete(`${apiUrl}/api/cash/${userId}`);
-        // Remove the deleted user from the state
-        setTransactions(
-          transactions.filter((transaction) => transaction._id !== userId)
-        );
-        alert("User deleted successfully");
-      } catch (error) {
-        console.error("Error deleting user:", error);
-        alert("Failed to delete user. Please try again.");
-      }
-    }
-  };
   return (
     <div>
       <body>
@@ -199,7 +184,6 @@ const AllSale = () => {
                                 <a
                                   className="confirm-text p-2"
                                   href="javascript:void(0);"
-                                  onClick={() => deleteUser(transaction._id)}
                                 >
                                   <FaTrash className="delete-icon" />
                                 </a>

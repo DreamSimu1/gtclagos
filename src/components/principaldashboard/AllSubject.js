@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { SessionContext } from "../../SessionContext";
 import AddSubjectModal from "./AddSubjectModal";
+import DeleteSubject from "./DeleteSubject";
+import EditSubject from "./EditSubject";
 
 const AllSubject = () => {
   const { currentSession } = useContext(SessionContext);
@@ -13,6 +15,10 @@ const AllSubject = () => {
   const [activeTech, setActiveTech] = useState("tech_1");
   const [loading, setLoading] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL;
+  const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
+  const [subjectToDelete, setSubjectToDelete] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState(null);
 
   const techTabs = [
     { key: "tech_1", label: "Tech 1", color: "#1b8914" },
@@ -43,7 +49,19 @@ const AllSubject = () => {
   const filteredSubjects = subjects.filter(
     (subject) => subject.classname === activeTech
   );
-
+  const handleDeleteSubject = async () => {
+    try {
+      await axios.delete(
+        `${apiUrl}/api/subject/delete-subject/${subjectToDelete}`
+      );
+      setSubjects((prev) => prev.filter((t) => t._id !== subjectToDelete));
+      setConfirmDeleteModal(false);
+      setSubjectToDelete(null);
+    } catch (err) {
+      console.error("Error deleting subject:", err);
+      alert("Failed to delete subject.");
+    }
+  };
   return (
     <div className="main-wrapper">
       <div className="page-wrapper">
@@ -109,10 +127,22 @@ const AllSubject = () => {
                           <td>{subject.classname?.replace("_", " ")}</td>
                           <td className="action-table-data">
                             <div className="edit-delete-action">
-                              <a className="me-2 p-2 cursor-pointer">
+                              <a
+                                className="me-2 p-2 cursor-pointer"
+                                onClick={() => {
+                                  setSelectedSubject(subject); // pass full subject object
+                                  setEditModalOpen(true);
+                                }}
+                              >
                                 <FiEdit size={18} />
                               </a>
-                              <a className="confirm-text p-2 cursor-pointer">
+                              <a
+                                className="confirm-text p-2 cursor-pointer"
+                                onClick={() => {
+                                  setSubjectToDelete(subject._id);
+                                  setConfirmDeleteModal(true);
+                                }}
+                              >
                                 <FiTrash2 size={18} />
                               </a>
                             </div>
@@ -133,6 +163,18 @@ const AllSubject = () => {
                   setShowModal={setShowModal}
                   sectionId={sectionId}
                   refreshSubjects={fetchSubjects}
+                />
+                <DeleteSubject
+                  show={confirmDeleteModal}
+                  onClose={() => setConfirmDeleteModal(false)}
+                  onConfirm={handleDeleteSubject}
+                />
+                <EditSubject
+                  showModal={editModalOpen}
+                  setShowModal={setEditModalOpen}
+                  sectionId={sectionId}
+                  refreshSubjects={fetchSubjects}
+                  selectedSubject={selectedSubject}
                 />
               </div>
             </div>
