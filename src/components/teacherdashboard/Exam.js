@@ -41,16 +41,40 @@ const Exam = () => {
     }
   };
 
-  const fetchSections = async () => {
-    try {
-      const response = await axios.get(
-        `${apiUrl}/api/section/${currentSession._id}`
-      );
-      setSections(response.data?.data || []);
-    } catch (error) {
-      console.error("Error fetching sections:", error);
-    }
-  };
+  // const fetchSections = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${apiUrl}/api/section/${currentSession._id}`
+  //     );
+  //     setSections(response.data?.data || []);
+  //   } catch (error) {
+  //     console.error("Error fetching sections:", error);
+  //   }
+  // };
+  useEffect(() => {
+    const fetchSections = async () => {
+      try {
+        if (user?.tradeSection && currentSession?._id) {
+          console.log("Fetching section for user:", user);
+          const response = await axios.get(
+            `${apiUrl}/api/section/one/${user.tradeSection}`
+          );
+          console.log("Fetched section:", response.data?.data);
+          setSections(response.data?.data ? [response.data.data] : []);
+        } else {
+          console.warn("Waiting for user or currentSession...");
+        }
+      } catch (error) {
+        console.error("Error fetching sections:", error);
+      }
+    };
+
+    fetchSections();
+  }, [user, currentSession, apiUrl]);
+
+  if (!user || !currentSession?._id) {
+    return null; // or <LoadingSpinner />
+  }
 
   const fetchSubjects = async () => {
     try {
