@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { SessionContext } from "../../SessionContext";
+import useAuth from "../hooks/useAuth";
 
 const Exam = () => {
   const { currentSession } = useContext(SessionContext);
   const apiUrl = process.env.REACT_APP_API_URL;
-
+  const { user } = useAuth();
   const [exams, setExams] = useState([]);
   const [sections, setSections] = useState([]);
   const [subjects, setSubjects] = useState([]);
