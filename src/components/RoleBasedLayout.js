@@ -1,5 +1,5 @@
 // RoleBasedLayout.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import StudentSidebar from "./StudentSidebar";
 import TeacherSidebar from "./TeacherSidebar";
@@ -7,12 +7,14 @@ import PrincipalSidebar from "./PrincipalSidebar";
 import HodSidebar from "./HodSidebar";
 import ViceSidebar from "./ViceSidebar";
 import { jwtDecode } from "jwt-decode";
+import "./Modal.css";
 import TopNav from "./TopNav";
 import PrincipalTopNav from "./PrincipalTopNav";
 import StudentTopNav from "./StudentTopNav";
 import TeacherTopNav from "./TeacherTopNav";
 import HodTopNav from "./HodTopNav";
 import ViceTopNav from "./ViceTopNav";
+import { LogoutContext } from "./LogoutContext";
 
 // const RoleBasedLayout = () => {
 //   const [role, setRole] = useState("");
@@ -54,6 +56,15 @@ import ViceTopNav from "./ViceTopNav";
 const RoleBasedLayout = () => {
   const [role, setRole] = useState(null);
   const navigate = useNavigate();
+  const { showLogoutModal, setShowLogoutModal } = useContext(LogoutContext);
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+  useEffect(() => {
+    setShowLogoutModal(false); // force it off at layout mount
+  }, [setShowLogoutModal]);
+
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     // Detect screen size
@@ -136,6 +147,31 @@ const RoleBasedLayout = () => {
       <div className="main-content">
         <Outlet />
       </div>
+
+      {/* ✅ Logout Modal Global */}
+      {showLogoutModal && (
+        <div className="modal-overlay">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <h3 className="modal-title">Confirm Logout</h3>
+              <p className="modal-text">
+                Are you sure you want to logout from your account?
+              </p>
+              <div className="modal-actions">
+                <button
+                  onClick={() => setShowLogoutModal(false)}
+                  className="modal-btn cancel"
+                >
+                  Cancel
+                </button>
+                <button onClick={handleLogout} className="modal-btn confirm">
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

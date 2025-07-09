@@ -29,6 +29,7 @@ import "./app.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { SidebarProvider } from "./components/SidebarProvider";
+import { LogoutProvider } from "./components/LogoutContext";
 function App() {
   const content = useRoutes(routes);
   const navigate = useNavigate();
@@ -36,9 +37,11 @@ function App() {
   return (
     <div>
       <SidebarProvider>
-        <AuthProvider>
-          {content} {/* Wrap routes with a single AuthProvider */}
-        </AuthProvider>
+        <LogoutProvider>
+          <AuthProvider>
+            {content} {/* Wrap routes with a single AuthProvider */}
+          </AuthProvider>
+        </LogoutProvider>
       </SidebarProvider>
     </div>
   );

@@ -17,13 +17,15 @@ import { MdPermMedia } from "react-icons/md";
 import { DarkModeContext } from "../context/darkModeContext";
 import { SessionContext } from "../SessionContext";
 import axios from "axios";
+import { LogoutContext } from "./LogoutContext";
 const PrincipalSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { currentSession } = useContext(SessionContext);
+  const { setShowLogoutModal } = useContext(LogoutContext);
   const { darkMode } = useContext(DarkModeContext);
   const [openSubmenus, setOpenSubmenus] = useState(new Set());
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  // const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [sections, setSections] = useState([]);
   const isActive = (path) => location.pathname === path;
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -1035,42 +1037,6 @@ const PrincipalSidebar = () => {
           </ul>
         </div>
         {/* Logout Confirmation Modal */}
-        {showLogoutModal && (
-          <div
-            className="fixed inset-0  bg-opacity-50 z-50 flex items-center justify-center p-4"
-            style={{ backgroundColor: darkMode ? "#212121" : "#f5f5f5" }}
-          >
-            <div
-              className=" rounded-lg shadow-lg max-w-md w-full p-6"
-              style={{ color: darkMode ? "#fff" : "#2f2f2f" }}
-            >
-              <h3
-                className="text-lg font-medium  mb-4"
-                style={{ color: darkMode ? "#fff" : "#000" }}
-              >
-                Confirm Logout
-              </h3>
-              <p className="text-gray-500 mb-5">
-                Are you sure you want to logout from your account?
-              </p>
-              <div className="flex justify-end space-x-3">
-                <button
-                  onClick={() => setShowLogoutModal(false)}
-                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700  rounded-md"
-                  style={{ color: darkMode ? "#fff" : "#000" }}
-                >
-                  Logout
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
