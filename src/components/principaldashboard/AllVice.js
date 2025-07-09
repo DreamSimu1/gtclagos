@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { SessionContext } from "../../SessionContext";
+import AddViceModal from "./AddViceModal";
 
 const AllVice = () => {
   const { currentSession } = useContext(SessionContext);
@@ -35,7 +36,16 @@ const AllVice = () => {
             <div className="card-header flex justify-between items-center">
               <h4 className="card-title">All Vice Principals</h4>
             </div>
-
+            <div className="card-header flex justify-between items-center">
+              <h4 className="card-title">Add Vice Principal</h4>
+              <button
+                type="button"
+                className="force-mobile-button"
+                onClick={() => setShowModal(true)}
+              >
+                <span>Add Vice Principal</span>
+              </button>
+            </div>
             <div className="card-body">
               <div className="table-responsive dataview">
                 <table className="table dashboard-expired-products">
@@ -81,13 +91,12 @@ const AllVice = () => {
                 </table>
 
                 {/* If you later want to add HOD from here, add modal */}
-                {/* 
-                <AddHodModal
+
+                <AddViceModal
                   showModal={showModal}
                   setShowModal={setShowModal}
                   updateTableData={fetchAllHods}
-                /> 
-                */}
+                />
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { SessionContext } from "../../SessionContext";
 
-const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
+const AddViceModal = ({ showModal, setShowModal, updateTableData }) => {
   const { currentSession } = useContext(SessionContext);
   const apiUrl = process.env.REACT_APP_API_URL;
   const [sections, setSections] = useState([]);
@@ -13,7 +13,6 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
     phone: "",
     username: "",
     password: "",
-    tradeSection: "",
   });
 
   const handleAddStudent = async (e) => {
@@ -27,7 +26,7 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
     try {
       const payload = {
         ...formData,
-        role: "head_of_department",
+        role: "vice_principal",
         session: currentSession._id,
       };
 
@@ -47,7 +46,6 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
         phone: "",
         username: "",
         password: "",
-        tradeection: "",
       });
     } catch (error) {
       console.error("Error registering hod:", error.response?.data || error);
@@ -56,20 +54,9 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
   };
   useEffect(() => {
     if (currentSession?._id) {
-      fetchSections();
     }
   }, [currentSession]);
 
-  const fetchSections = async () => {
-    try {
-      const response = await axios.get(
-        `${apiUrl}/api/section/${currentSession._id}`
-      );
-      setSections(response.data?.data || []);
-    } catch (error) {
-      console.error("Error fetching sections:", error);
-    }
-  };
   return (
     <>
       {showModal && <div className="modal-backdrop show"></div>}
@@ -82,7 +69,7 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
         <div className="modal-dialog modal-lg" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Add HOD</h5>
+              <h5 className="modal-title">Add Vice Principal</h5>
               <button
                 type="button"
                 className="close"
@@ -159,34 +146,11 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
                     }
                   />
                 </div>
-
-                <div className="form-group">
-                  <label>Select Trade Section</label>
-
-                  <select
-                    className="form-select"
-                    value={selectedSection}
-                    onChange={(e) => {
-                      setSelectedSection(e.target.value);
-                      setFormData({
-                        ...formData,
-                        tradeSection: e.target.value,
-                      });
-                    }}
-                  >
-                    <option value="">Select Section</option>
-                    {sections.map((section) => (
-                      <option key={section._id} value={section._id}>
-                        {section.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
               </div>
 
               <div className="modal-footer">
                 <button type="submit" className="btn btn-primary">
-                  Add Hod
+                  Add V.P
                 </button>
                 <button
                   type="button"
@@ -204,4 +168,4 @@ const AddHodModal = ({ showModal, setShowModal, updateTableData }) => {
   );
 };
 
-export default AddHodModal;
+export default AddViceModal;
