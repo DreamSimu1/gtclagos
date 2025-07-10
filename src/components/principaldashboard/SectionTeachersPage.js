@@ -5,6 +5,7 @@ import { FiEdit, FiTrash2 } from "react-icons/fi";
 import AddTeacherModal from "./AddTeacherModal"; // Optional: use if you want to allow adding from here
 import { SessionContext } from "../../SessionContext";
 import DeleteConfirmModal from "./DeleteConfirmModal";
+import EditTeacher from "./EditTeacher";
 
 const SectionTeachersPage = () => {
   const { sectionId } = useParams();
@@ -12,6 +13,8 @@ const SectionTeachersPage = () => {
   const [teachers, setTeachers] = useState([]);
   const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
   const [teacherToDelete, setTeacherToDelete] = useState(null);
+  const [selectedTeacher, setSelectedTeacher] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -97,7 +100,13 @@ const SectionTeachersPage = () => {
                           <td className="action-table-data">
                             <div className="edit-delete-action">
                               <a className="me-2 p-2 cursor-pointer">
-                                <FiEdit size={18} />
+                                <FiEdit
+                                  size={18}
+                                  onClick={() => {
+                                    setSelectedTeacher(teacher);
+                                    setShowEditModal(true);
+                                  }}
+                                />
                               </a>
                               <a
                                 className="confirm-text p-2 cursor-pointer"
@@ -132,6 +141,12 @@ const SectionTeachersPage = () => {
                   show={confirmDeleteModal}
                   onClose={() => setConfirmDeleteModal(false)}
                   onConfirm={handleDeleteTeacher}
+                />
+                <EditTeacher
+                  showModal={showEditModal}
+                  setShowModal={setShowEditModal}
+                  selectedTeacher={selectedTeacher}
+                  updateTableData={fetchTeachersBySection}
                 />
               </div>
             </div>
