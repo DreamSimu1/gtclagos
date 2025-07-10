@@ -647,16 +647,20 @@ const BroadSheet = () => {
                           <th></th>
                           {subjects.map((subj) => (
                             <React.Fragment key={subj._id + "_headers"}>
-                              {(selectedExamName.includes("Second Term") ||
-                                selectedExamName.includes("Third Term")) && (
+                              {selectedExamName.includes("Second Term") && (
                                 <th>BF</th>
+                              )}
+                              {selectedExamName.includes("Third Term") && (
+                                <>
+                                  <th>1st Term</th>
+                                  <th>2nd Term</th>
+                                </>
                               )}
                               <th>Test</th>
                               <th>Exam</th>
                               <th>Total</th>
                             </React.Fragment>
                           ))}
-
                           <th></th>
                           <th></th>
                           <th></th>
