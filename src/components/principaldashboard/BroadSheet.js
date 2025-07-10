@@ -707,20 +707,17 @@ const BroadSheet = () => {
                                 );
                                 const totalCurrent = test + exam;
 
-                                let bf = 0;
                                 let finalTotal = 0;
 
                                 if (selectedExamName.includes("Third Term")) {
-                                  bf = Math.round((firstTerm + secondTerm) / 2);
                                   finalTotal = Math.round(
-                                    (bf + totalCurrent) / 2
+                                    (firstTerm + secondTerm + totalCurrent) / 3
                                   );
                                 } else if (
                                   selectedExamName.includes("Second Term")
                                 ) {
-                                  bf = firstTerm;
                                   finalTotal = Math.round(
-                                    (bf + totalCurrent) / 2
+                                    (firstTerm + totalCurrent) / 2
                                   );
                                 } else {
                                   finalTotal = totalCurrent;
@@ -732,12 +729,17 @@ const BroadSheet = () => {
                                   <React.Fragment
                                     key={student._id + "_" + subj._id}
                                   >
-                                    {(selectedExamName.includes(
+                                    {selectedExamName.includes(
                                       "Second Term"
-                                    ) ||
-                                      selectedExamName.includes(
-                                        "Third Term"
-                                      )) && <td>{bf}</td>}
+                                    ) && <td>{firstTerm}</td>}
+                                    {selectedExamName.includes(
+                                      "Third Term"
+                                    ) && (
+                                      <>
+                                        <td>{firstTerm}</td>
+                                        <td>{secondTerm}</td>
+                                      </>
+                                    )}
                                     <td>{test}</td>
                                     <td>{exam}</td>
                                     <td>{finalTotal}</td>
