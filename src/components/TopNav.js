@@ -28,14 +28,17 @@ import { HiOutlineViewGrid } from "react-icons/hi";
 import "./TopNav.css";
 import last from "./lastveblogo.png";
 import lagos from "./lagoslogo.png";
+import useAuth from "./hooks/useAuth";
 // import { SessionContext } from "../../context/SessionContext";
 
 const TopNav = ({ setShowModal }) => {
+  const { user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [menuDropdownOpen, setMenuDropdownOpen] = useState(false);
   const [sessions, setSessions] = useState([]);
   const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sections, setSections] = useState([]);
   const [currentSession, setCurrentSession] = useState(null);
   const toggleDesktopMenu = () => {
     setDesktopMenuOpen(!desktopMenuOpen);
@@ -103,19 +106,43 @@ const TopNav = ({ setShowModal }) => {
     else navigate("/login");
   };
 
-  useEffect(() => {
-    axios
-      .get(`${apiUrl}/api/session`)
-      .then((res) => {
-        console.log("✅ Raw session response:", res.data); // ADD THIS LINE
-        const all = res.data || [];
-        setSessions(all);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${apiUrl}/api/session`)
+  //     .then((res) => {
+  //       console.log("✅ Raw session response:", res.data); // ADD THIS LINE
+  //       const all = res.data || [];
+  //       setSessions(all);
 
-        const active = all.find((s) => s.isActive);
-        setCurrentSession(active);
-      })
-      .catch((err) => console.error("❌ Failed to load sessions", err));
-  }, []);
+  //       const active = all.find((s) => s.isActive);
+  //       setCurrentSession(active);
+  //     })
+  //     .catch((err) => console.error("❌ Failed to load sessions", err));
+  // }, []);
+  useEffect(() => {
+    const fetchSections = async () => {
+      try {
+        if (user?.tradeSection && currentSession?._id) {
+          console.log("Fetching section for user:", user);
+          const response = await axios.get(
+            `${apiUrl}/api/section/one/${user.tradeSection}`
+          );
+          console.log("Fetched section:", response.data?.data);
+          setSections(response.data?.data ? [response.data.data] : []);
+        } else {
+          console.warn("Waiting for user or currentSession...");
+        }
+      } catch (error) {
+        console.error("Error fetching sections:", error);
+      }
+    };
+
+    fetchSections();
+  }, [user, currentSession, apiUrl]);
+
+  if (!user || !currentSession?._id) {
+    return null; // or <LoadingSpinner />
+  }
 
   return (
     <>

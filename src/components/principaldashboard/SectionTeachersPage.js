@@ -82,9 +82,10 @@ const SectionTeachersPage = () => {
                     <tr>
                       <th>S/N</th>
                       <th>Fullname</th>
+                      <th>Username</th>
                       <th>Email</th>
                       <th>Phone</th>
-                      <th>Address</th>
+
                       <th class="no-sort">Action</th>
                     </tr>
                   </thead>
@@ -94,9 +95,10 @@ const SectionTeachersPage = () => {
                         <tr key={teacher._id}>
                           <td>{index + 1}</td>
                           <td>{teacher.fullname}</td>
+                          <td>{teacher.username}</td>
                           <td>{teacher.email}</td>
                           <td>{teacher.phone}</td>
-                          <td>{teacher.address}</td>
+
                           <td className="action-table-data">
                             <div className="edit-delete-action">
                               <a className="me-2 p-2 cursor-pointer">
