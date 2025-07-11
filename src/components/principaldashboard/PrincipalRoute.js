@@ -1,3 +1,4 @@
+import Account from "./Account";
 import AllHod from "./AllHod";
 import AllStudent from "./AllStudent";
 import AllSubject from "./AllSubject";
@@ -60,6 +61,11 @@ const PrincipalRoute = [
   {
     path: "/principal/dashboard/sections",
     element: <Section />,
+    auth: "principal",
+  },
+  {
+    path: "/principal/dashboard/account",
+    element: <Account />,
     auth: "principal",
   },
   {

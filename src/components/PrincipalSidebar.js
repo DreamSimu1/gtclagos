@@ -1017,6 +1017,31 @@ const PrincipalSidebar = () => {
                   </a>
                 </li>
                 <li className="submenu">
+                  <a
+                    href="/principal/dashboard/account"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      padding: "10px",
+                    }}
+                  >
+                    <FiUser
+                      size={20}
+                      color={
+                        isActive("/principal/dashboard/account")
+                          ? darkMode
+                            ? "white"
+                            : "black" // active color: white in dark, black in light
+                          : darkMode
+                          ? "#fff"
+                          : "#000" // inactive color: lighter gray dark/light
+                      }
+                      style={{ marginRight: "8px" }}
+                    />
+                    <span style={{ fontSize: "15px" }}>Account</span>
+                  </a>
+                </li>
+                <li className="submenu">
                   <a href="#" onClick={() => setShowLogoutModal(true)}>
                     <FiLogOut
                       size={20}
