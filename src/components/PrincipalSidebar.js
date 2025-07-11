@@ -1016,7 +1016,7 @@ const PrincipalSidebar = () => {
                       }
                       style={{ marginRight: "8px" }}
                     />
-                    <span style={{ fontSize: "15px" }}>General</span>
+                    <span style={{ fontSize: "15px" }}>Profile</span>
                   </a>
                 </li>
                 <li className="submenu">
@@ -1066,7 +1066,7 @@ const PrincipalSidebar = () => {
                       }
                       style={{ marginRight: "8px" }}
                     />
-                    <span style={{ fontSize: "15px" }}>Settings</span>
+                    <span style={{ fontSize: "15px" }}>System Settings</span>
                   </a>
                 </li>
                 <li className="submenu">

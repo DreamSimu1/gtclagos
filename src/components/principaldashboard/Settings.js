@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import useFetch from "../../hooks/useFetch";
 import { SessionContext } from "../../SessionContext";
 
 const Settings = () => {
   const { currentSession } = useContext(SessionContext);
-  const [exams, setExams] = useState([]);
-  const [selectedExam, setSelectedExam] = useState("");
+
   const [formData, setFormData] = useState({
     name: "",
-    principalName: "",
-    resumptionDate: "",
-    signature: null,
+    motto: "",
+    address: "",
+    phone: "",
+    phonetwo: "",
+    currency: "",
+    email: "",
+    sessionStart: "",
+    sessionEnd: "",
+    schoolLogo: null,
   });
 
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -24,10 +28,6 @@ const Settings = () => {
     }));
   };
 
-  const handleExamChange = (e) => {
-    setSelectedExam(e.target.value);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,15 +35,12 @@ const Settings = () => {
     if (!currentSessionId) return;
 
     const formDataToSend = new FormData();
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("principalName", formData.principalName);
-    formDataToSend.append("resumptionDate", formData.resumptionDate);
-    formDataToSend.append("examName", selectedExam);
-    formDataToSend.append("session", currentSessionId);
-
-    if (formData.signature) {
-      formDataToSend.append("signature", formData.signature);
+    for (const key in formData) {
+      if (formData[key]) {
+        formDataToSend.append(key, formData[key]);
+      }
     }
+    formDataToSend.append("session", currentSessionId);
 
     try {
       await axios.post(`${apiUrl}/api/setting`, formDataToSend, {
@@ -51,39 +48,22 @@ const Settings = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      alert("Profile updated successfully!");
+      alert("Settings updated successfully!");
     } catch (err) {
       console.error("Error:", err);
-      alert("Failed to update profile.");
+      alert("Failed to update settings.");
     }
   };
 
-  useEffect(() => {
-    if (currentSession?._id) {
-      fetchExams();
-    }
-  }, [currentSession]);
-
-  const fetchExams = async () => {
-    try {
-      const res = await axios.get(
-        `${apiUrl}/api/offline/get-exams/${currentSession._id}`
-      );
-      setExams(res.data || []);
-    } catch (err) {
-      console.error("Error fetching exams:", err);
-    }
-  };
   return (
     <div className="main-wrapper">
       <div className="page-wrapper">
         <div className="content">
           <div className="card p-4">
-            <h4 className="mb-4">Profile Setting</h4>
+            <h4 className="mb-4">System Settings</h4>
 
             <form onSubmit={handleSubmit}>
               <div className="row g-3">
-                {/* School Name */}
                 <div className="col-md-6">
                   <label className="form-label">Name of School</label>
                   <input
@@ -97,67 +77,115 @@ const Settings = () => {
                   />
                 </div>
 
-                {/* Principal Name */}
                 <div className="col-md-6">
-                  <label className="form-label">Principal Name</label>
+                  <label className="form-label">Motto</label>
                   <input
                     type="text"
-                    name="principalName"
+                    name="motto"
                     className="form-control"
-                    placeholder="Enter principal's name"
-                    value={formData.principalName}
+                    placeholder="Enter school motto"
+                    value={formData.motto}
                     onChange={handleChange}
-                    required
                   />
                 </div>
 
-                {/* Resumption Date */}
                 <div className="col-md-6">
-                  <label className="form-label">Resumption Date</label>
+                  <label className="form-label">Address</label>
                   <input
-                    type="date"
-                    name="resumptionDate"
+                    type="text"
+                    name="address"
                     className="form-control"
-                    value={formData.resumptionDate}
+                    placeholder="School address"
+                    value={formData.address}
                     onChange={handleChange}
-                    required
                   />
                 </div>
 
-                {/* Exam Selection */}
                 <div className="col-md-6">
-                  <label className="form-label">Select Exam</label>
-                  <select
-                    name="examName"
-                    className="form-select"
-                    value={selectedExam}
-                    onChange={handleExamChange}
-                    required
-                  >
-                    <option value="">-- Select Exam --</option>
-                    {exams?.map((exam) => (
-                      <option key={exam._id} value={exam._id}>
-                        {exam.name}
-                      </option>
-                    ))}
-                  </select>
+                  <label className="form-label">Phone Number</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    className="form-control"
+                    placeholder="Phone number"
+                    value={formData.phone}
+                    onChange={handleChange}
+                  />
                 </div>
 
-                {/* Signature Upload */}
                 <div className="col-md-6">
-                  <label className="form-label">Upload Signature</label>
+                  <label className="form-label">Additional Phone Number</label>
+                  <input
+                    type="text"
+                    name="phonetwo"
+                    className="form-control"
+                    placeholder="Optional"
+                    value={formData.phonetwo}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Currency</label>
+                  <input
+                    type="text"
+                    name="currency"
+                    className="form-control"
+                    placeholder="e.g. NGN"
+                    value={formData.currency}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">School Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    className="form-control"
+                    placeholder="Enter school email"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-3">
+                  <label className="form-label">Start Session</label>
+                  <input
+                    type="text"
+                    name="sessionStart"
+                    className="form-control"
+                    placeholder="e.g. 2024/2025"
+                    value={formData.sessionStart}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-3">
+                  <label className="form-label">End Session</label>
+                  <input
+                    type="text"
+                    name="sessionEnd"
+                    className="form-control"
+                    placeholder="e.g. 2025/2026"
+                    value={formData.sessionEnd}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Upload School Logo</label>
                   <input
                     type="file"
-                    name="signature"
+                    name="schoolLogo"
                     className="form-control"
                     onChange={handleChange}
                   />
                 </div>
 
-                {/* Submit Button */}
                 <div className="col-12">
                   <button type="submit" className="btn btn-primary mt-3">
-                    Submit
+                    Save Settings
                   </button>
                 </div>
               </div>

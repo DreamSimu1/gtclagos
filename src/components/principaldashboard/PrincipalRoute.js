@@ -15,6 +15,7 @@ import PsyCat from "./PsyCat";
 import SecondTermRepCont from "./SecondTermRepContd";
 import Section from "./Section";
 import SectionTeachersPage from "./SectionTeachersPage";
+import Settings from "./Settings";
 import Teacher from "./Teacher";
 import ThirdTermRepCont from "./ThirdTermRepContd";
 
@@ -66,6 +67,11 @@ const PrincipalRoute = [
   {
     path: "/principal/dashboard/account",
     element: <Account />,
+    auth: "principal",
+  },
+  {
+    path: "/principal/dashboard/settings",
+    element: <Settings />,
     auth: "principal",
   },
   {

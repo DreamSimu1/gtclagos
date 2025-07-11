@@ -1328,7 +1328,7 @@ const PrincipalTopNav = ({ setShowModal }) => {
                           style={{ marginRight: "8px" }}
                         />
                         <span style={{ fontSize: "15px", color: "black" }}>
-                          General
+                          Profile
                         </span>
                       </a>
                     </li>
@@ -1382,7 +1382,7 @@ const PrincipalTopNav = ({ setShowModal }) => {
                           style={{ marginRight: "8px" }}
                         />
                         <span style={{ fontSize: "15px", color: "black" }}>
-                          Settings
+                          System Settings
                         </span>
                       </a>
                     </li>
