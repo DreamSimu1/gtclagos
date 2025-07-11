@@ -352,10 +352,10 @@ const TeacherSidebar = () => {
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      toggleSubmenu("past");
+                      toggleSubmenu("affective");
                     }}
                     className={`submenu-link ${
-                      openSubmenus.has("past") ? "subdrop active" : ""
+                      openSubmenus.has("affective") ? "subdrop active" : ""
                     }`}
                     style={{
                       display: "flex",
@@ -363,13 +363,13 @@ const TeacherSidebar = () => {
                       justifyContent: "space-between", // ⬅️ ensures icon+text left, chevron right
                       padding: "10px",
                       borderRadius: "5px",
-                      backgroundColor: openSubmenus.has("past")
+                      backgroundColor: openSubmenus.has("affective")
                         ? darkMode
                           ? "#343541"
                           : "#ddd"
                         : "transparent",
                       textDecoration: "none",
-                      color: openSubmenus.has("past")
+                      color: openSubmenus.has("affective")
                         ? darkMode
                           ? "#fff"
                           : "#000"
@@ -428,7 +428,7 @@ const TeacherSidebar = () => {
                     >
                       <li>
                         <a
-                          href="/teacher/dashboard/jamb-past-questions"
+                          href="/teacher/dashboard/psychomotor_report_category"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           Manage Category
@@ -436,7 +436,7 @@ const TeacherSidebar = () => {
                       </li>
                       <li>
                         <a
-                          href="/teacher/dashboard/waec-past-questions"
+                          href="/teacher/dashboard/manage-psychomotor"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           Manage Student Report
