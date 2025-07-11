@@ -5,6 +5,7 @@ import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { SessionContext } from "../../SessionContext";
 import AddStudentModal from "./AddStudentModal";
 import DeleteStudent from "./DeleteStudent";
+import EditStudentModal from "./EditStudent";
 
 const AllStudent = () => {
   const { currentSession } = useContext(SessionContext);
@@ -15,6 +16,9 @@ const AllStudent = () => {
   const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
   const [teacherToDelete, setStudentToDelete] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
   const fetchStudents = async () => {
     try {
       if (!currentSession?._id || !sectionId) return;
@@ -140,7 +144,13 @@ const AllStudent = () => {
                           <td className="action-table-data">
                             <div className="edit-delete-action">
                               <a className="me-2 p-2 cursor-pointer">
-                                <FiEdit size={18} />
+                                <FiEdit
+                                  size={18}
+                                  onClick={() => {
+                                    setSelectedStudent(student); // ✅
+                                    setShowEditModal(true); // ✅
+                                  }}
+                                />
                               </a>
                               <a
                                 className="confirm-text p-2 cursor-pointer"
@@ -200,6 +210,13 @@ const AllStudent = () => {
                 onClose={() => setConfirmDeleteModal(false)}
                 onConfirm={handleDeleteTeacher}
               />
+              <EditStudentModal
+                showModal={showEditModal}
+                setShowModal={setShowEditModal}
+                selectedStudent={selectedStudent}
+                updateTableData={fetchStudents}
+              />
+
               {/* Debug: All students */}
               {/* <pre>{JSON.stringify(students, null, 2)}</pre> */}
             </div>
