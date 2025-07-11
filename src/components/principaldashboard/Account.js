@@ -5,11 +5,7 @@ import { SessionContext } from "../../SessionContext";
 
 const Account = () => {
   const { currentSession } = useContext(SessionContext);
-
-  const { data: examData } = useFetch(
-    currentSession ? `/getofflineexam/${currentSession._id}` : null
-  );
-
+  const [exams, setExams] = useState([]);
   const [selectedExam, setSelectedExam] = useState("");
   const [formData, setFormData] = useState({
     name: "",
@@ -62,6 +58,22 @@ const Account = () => {
     }
   };
 
+  useEffect(() => {
+    if (currentSession?._id) {
+      fetchExams();
+    }
+  }, [currentSession]);
+
+  const fetchExams = async () => {
+    try {
+      const res = await axios.get(
+        `${apiUrl}/api/offline/get-exams/${currentSession._id}`
+      );
+      setExams(res.data || []);
+    } catch (err) {
+      console.error("Error fetching exams:", err);
+    }
+  };
   return (
     <div className="main-wrapper">
       <div className="page-wrapper">
@@ -123,7 +135,7 @@ const Account = () => {
                     required
                   >
                     <option value="">-- Select Exam --</option>
-                    {examData?.map((exam) => (
+                    {exams?.map((exam) => (
                       <option key={exam._id} value={exam._id}>
                         {exam.name}
                       </option>
