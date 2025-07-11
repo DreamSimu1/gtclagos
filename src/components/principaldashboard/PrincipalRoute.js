@@ -11,9 +11,11 @@ import Landing from "./Landing";
 import ManagePsy from "./ManagePsy";
 import MarkSheet from "./MarkSheet";
 import PsyCat from "./PsyCat";
+import SecondTermRepCont from "./SecondTermRepContd";
 import Section from "./Section";
 import SectionTeachersPage from "./SectionTeachersPage";
 import Teacher from "./Teacher";
+import ThirdTermRepCont from "./ThirdTermRepContd";
 
 // Optional fallback
 const LoadingFallback = () => <div>Loading...</div>;
@@ -68,6 +70,16 @@ const PrincipalRoute = [
   {
     path: "/principal/dashboard/first_term_report_card/:id",
     element: <FirstTermRepCont />,
+    auth: "principal",
+  },
+  {
+    path: "/principal/dashboard/second_term_report_card/:id",
+    element: <SecondTermRepCont />,
+    auth: "principal",
+  },
+  {
+    path: "/principal/dashboard/third_term_report_card/:id",
+    element: <ThirdTermRepCont />,
     auth: "principal",
   },
   {

@@ -130,7 +130,9 @@ const MarkSheet = () => {
                     </button>
                   </Link>
 
-                  <Link to={`/principal/dashboard/term_report_card/${id}`}>
+                  <Link
+                    to={`/principal/dashboard/second_term_report_card/${id}`}
+                  >
                     <button className="btn btn-primary w-100">
                       Second Term Report Card
                     </button>

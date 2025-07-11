@@ -18,7 +18,7 @@ import { SessionContext } from "../../SessionContext";
 import useFetch from "../../hooks/useFetch";
 import last from "./lastveblogo.png";
 import lagos from "./lagoslogo.png";
-const FirstTermRep = ({ studentId }) => {
+const ThirdTermRep = ({ studentId }) => {
   const componentRef = useRef();
   const gradeDefinitions = [
     { markfrom: 70, markupto: 100, comment: "Excellent", grade: "A" },
@@ -139,7 +139,7 @@ const FirstTermRep = ({ studentId }) => {
         throw new Error("Missing sessionId");
       }
 
-      const examName = "FIRST TERM";
+      const examName = "THIRD TERM";
 
       const response = await axios.get(
         `${apiUrl}/api/get-psy-by-student/${studentId}/${currentSession._id}`,
@@ -243,7 +243,7 @@ const FirstTermRep = ({ studentId }) => {
         (score) =>
           (score.marksObtained !== undefined || score.marksObtained === 0) &&
           // score.examId.name.toUpperCase() === "SECOND TERM"
-          score?.examId?.name?.toUpperCase() === "FIRST TERM"
+          score?.examId?.name?.toUpperCase() === "THIRD TERM"
       );
 
       if (filteredScores.length === 0) {
@@ -338,13 +338,13 @@ const FirstTermRep = ({ studentId }) => {
         console.log("API URL:", `${apiUrl}/api/setting`);
         console.log("Parameters:", {
           sessionId: currentSession._id,
-          term: "FIRST TERM",
+          term: "THIRD TERM",
         });
 
         const response = await axios.get(`${apiUrl}/api/setting`, {
           params: {
             sessionId: currentSession._id,
-            term: "FIRST TERM", // Or dynamically determine term
+            term: "THIRD TERM", // Or dynamically determine term
           },
         });
 
@@ -614,7 +614,7 @@ const FirstTermRep = ({ studentId }) => {
                       Email: gotecolagos@yahoo.com
                     </p>
                     <h3 style={{ color: "#042954", margin: "10px 0" }}>
-                      {student?.classname || ""} First Term Report Card
+                      {student?.classname || ""} Third Term Report Card
                     </h3>
                   </div>
                 </div>
@@ -930,4 +930,4 @@ const FirstTermRep = ({ studentId }) => {
   );
 };
 
-export default FirstTermRep;
+export default ThirdTermRep;
