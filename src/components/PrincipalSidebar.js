@@ -13,6 +13,9 @@ import {
   FiGrid,
   FiBarChart2,
 } from "react-icons/fi";
+import { FiSettings } from "react-icons/fi";
+import { MdAccountCircle, MdSettings } from "react-icons/md"; // Optional modern look
+
 import { MdPermMedia } from "react-icons/md";
 import { DarkModeContext } from "../context/darkModeContext";
 import { SessionContext } from "../SessionContext";
@@ -1025,7 +1028,7 @@ const PrincipalSidebar = () => {
                       padding: "10px",
                     }}
                   >
-                    <FiUser
+                    <MdAccountCircle
                       size={20}
                       color={
                         isActive("/principal/dashboard/account")
@@ -1039,6 +1042,31 @@ const PrincipalSidebar = () => {
                       style={{ marginRight: "8px" }}
                     />
                     <span style={{ fontSize: "15px" }}>Account</span>
+                  </a>
+                </li>
+                <li className="submenu">
+                  <a
+                    href="/principal/dashboard/settings"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      padding: "10px",
+                    }}
+                  >
+                    <MdSettings
+                      size={20}
+                      color={
+                        isActive("/principal/dashboard/settings")
+                          ? darkMode
+                            ? "white"
+                            : "black" // active color: white in dark, black in light
+                          : darkMode
+                          ? "#fff"
+                          : "#000" // inactive color: lighter gray dark/light
+                      }
+                      style={{ marginRight: "8px" }}
+                    />
+                    <span style={{ fontSize: "15px" }}>Settings</span>
                   </a>
                 </li>
                 <li className="submenu">

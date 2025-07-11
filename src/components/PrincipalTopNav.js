@@ -20,6 +20,9 @@ import {
   FiMessageSquare,
   FiClock,
 } from "react-icons/fi";
+
+import { MdAccountCircle, MdSettings } from "react-icons/md"; // Optional modern look
+
 import { FiUsers, FiActivity, FiFileText, FiGrid } from "react-icons/fi";
 import { FiBook } from "react-icons/fi";
 import axios from "axios";
@@ -1338,7 +1341,7 @@ const PrincipalTopNav = ({ setShowModal }) => {
                           padding: "10px",
                         }}
                       >
-                        <FiUser
+                        <MdAccountCircle
                           size={20}
                           color={
                             isActive("/principal/dashboard/account")
@@ -1353,6 +1356,33 @@ const PrincipalTopNav = ({ setShowModal }) => {
                         />
                         <span style={{ fontSize: "15px", color: "black" }}>
                           Account
+                        </span>
+                      </a>
+                    </li>
+                    <li className="submenu">
+                      <a
+                        href="/principal/dashboard/settings"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "10px",
+                        }}
+                      >
+                        <MdSettings
+                          size={20}
+                          color={
+                            isActive("/principal/dashboard/settings")
+                              ? darkMode
+                                ? "white"
+                                : "black" // active color: white in dark, black in light
+                              : darkMode
+                              ? "#fff"
+                              : "#000" // inactive color: lighter gray dark/light
+                          }
+                          style={{ marginRight: "8px" }}
+                        />
+                        <span style={{ fontSize: "15px", color: "black" }}>
+                          Settings
                         </span>
                       </a>
                     </li>
