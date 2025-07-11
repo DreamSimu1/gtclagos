@@ -114,18 +114,39 @@ const FirstTermRep = ({ studentId }) => {
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
+  //   useEffect(() => {
+  //   if (!studentId || !currentSession?._id) return;
+
+  //   const fetchData = async () => {
+  //     setLoading(true);
+
+  //     try {
+  //       const studentScores = await fetchStudentData(studentId);
+  //       setStudentData(studentScores);
+  //     } catch (error) {
+  //       console.error("Error loading student scores:", error);
+  //       setError("Failed to load student data");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [studentId, currentSession]);
+
   useEffect(() => {
     if (!studentId || !currentSession?._id) return;
 
     const fetchData = async () => {
       setLoading(true);
-
       try {
         const studentScores = await fetchStudentData(studentId);
+        const psyRecord = await fetchPsyData(studentId);
+        console.log("Fetched Psy Record:", psyRecord);
+        setPsyData(psyRecord);
         setStudentData(studentScores);
       } catch (error) {
-        console.error("Error loading student scores:", error);
-        setError("Failed to load student data");
+        setError("Failed to fetch student data");
       } finally {
         setLoading(false);
       }
@@ -133,6 +154,50 @@ const FirstTermRep = ({ studentId }) => {
 
     fetchData();
   }, [studentId, currentSession]);
+
+  const fetchPsyData = async (studentId) => {
+    console.log("Before API call...");
+
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      if (!currentSession?._id) {
+        throw new Error("Missing sessionId");
+      }
+
+      const examName = "FIRST TERM";
+
+      const response = await axios.get(
+        `${apiUrl}/api/get-psy-by-student/${studentId}/${currentSession._id}`,
+        { headers }
+      );
+
+      console.log("API response status:", response.status);
+      console.log("Original data:", response.data);
+
+      const records = response.data.records;
+
+      const firstTermRecord = records.find(
+        (record) => record.examName?.toUpperCase() === examName
+      );
+
+      if (!firstTermRecord) {
+        // console.warn("No firsr term scores found for the student");
+        // alert("No first term scores available for this student.");
+        return null;
+      }
+
+      console.log("First Term Record:", firstTermRecord);
+      return firstTermRecord;
+    } catch (error) {
+      console.error("Error fetching student data:", error);
+      alert("An error occurred while fetching data. Please try again.");
+      return null;
+    }
+  };
 
   const fetchclassteacher = async (studentId) => {
     try {
@@ -211,7 +276,7 @@ const FirstTermRep = ({ studentId }) => {
       );
 
       if (filteredScores.length === 0) {
-        console.warn("No first term scores found for the student");
+        // console.warn("No first term scores found for the student");
         return []; // <<< Important: Return empty array instead of throwing
       }
       console.log("Filtered Scores:", filteredScores);
@@ -656,13 +721,14 @@ const FirstTermRep = ({ studentId }) => {
                                 minWidth: "200px",
                               }}
                             >
-                              {accountSettings.sessionStart}-
-                              {accountSettings.sessionEnd}
+                              {currentSession?.name
+                                ? `${currentSession.name}`
+                                : "No active session"}
                             </span>
                           </div>
                           <div style={{ marginBottom: "10px" }}>
                             <span style={{ fontWeight: "bold" }}>
-                              Class Teacher:
+                              Teacher's Name:
                             </span>
                             <span
                               style={{
@@ -672,9 +738,7 @@ const FirstTermRep = ({ studentId }) => {
                                 paddingBottom: "2px",
                                 minWidth: "200px",
                               }}
-                            >
-                              -
-                            </span>
+                            ></span>
                           </div>
                         </td>
                         <td
@@ -725,7 +789,11 @@ const FirstTermRep = ({ studentId }) => {
                                 minWidth: "100px",
                               }}
                             >
-                              {averageMarks || "-"}
+                              {schoolSettings.resumptionDate
+                                ? new Date(
+                                    schoolSettings.resumptionDate
+                                  ).toLocaleDateString()
+                                : ""}
                             </span>
                           </div>
                         </td>
@@ -745,12 +813,11 @@ const FirstTermRep = ({ studentId }) => {
                       <tr>
                         <th>S/No</th>
                         <th>Subject</th>
-                        <th>Test</th>
-                        <th>Exam</th>
-                        <th>Obtained Marks</th>
-                        <th>Position</th>
+                        <th>CA(40)</th>
+                        <th>Exam(60)</th>
+                        <th>AVE. TOTAL(100)</th>
+
                         <th>Grade</th>
-                        <th>Remark</th>
                       </tr>
                     </thead>
                     <tbody style={{ width: "100% !important" }}>
@@ -780,16 +847,9 @@ const FirstTermRep = ({ studentId }) => {
                             </td>{" "}
                             {/* Obtained Marks */}
                             <td>
-                              {score?.position !== undefined
-                                ? score.position
-                                : "-"}
-                            </td>{" "}
-                            {/* Position */}
-                            <td>
                               {calculateGrade(score?.comment) || "-"}
                             </td>{" "}
                             {/* Grade */}
-                            <td>{score?.comment || "-"}</td>{" "}
                             {/* Comment/Remark */}
                           </tr>
                         ))
@@ -805,32 +865,58 @@ const FirstTermRep = ({ studentId }) => {
                   {/* Second Table */}
                 </div>
 
-                <div style={{ color: "#042954", fontSize: "16px" }}>
-                  KEY TO GRADES A (DISTINCTION)=70% &amp; ABOVE , C
-                  (CREDIT)=55-69% , P(PASS)=40-54% , F(FAIL)=BELOW 40%
+                <div
+                  style={{
+                    color: "#000",
+                    fontSize: "16px",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <table
+                    className="table table-bordered"
+                    style={{ width: "100%", backgroundColor: "#f9f9f9" }}
+                  >
+                    <thead style={{ backgroundColor: "#e6f0ff" }}>
+                      <tr>
+                        <th
+                          colSpan="1"
+                          style={{
+                            fontWeight: "bold",
+                            color: "#042954",
+                            textAlign: "left",
+                          }}
+                        >
+                          GRADING
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          A = 70% and above (Excellent), B = 60 - 69% (Very
+                          Good), C = 50 - 59% (Good), D = 40 - 49% (Fair), E = 0
+                          - 39% (Fail)
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
+
                 <div className="remarksbox" style={{ padding: "10px 0" }}>
                   <table className="table">
                     <tbody>
-                      {psyData ? (
-                        <>
-                          <tr>
-                            <th>CLASS TEACHER'S REMARK</th>
-                            <td colSpan="2">
-                              {psyData?.remarks || "No remarks"}
-                            </td>
-                          </tr>
+                      <tr>
+                        <th>CLASS TEACHER'S COMMENT</th>
+                        <td colSpan="2">{psyData?.remarks || "No remarks"}</td>
+                      </tr>
 
-                          <tr>
-                            <th>PRINCIPAL'S REMARK</th>
-                            <td colSpan="2">
-                              {psyData?.premarks || "No principal remarks"}
-                            </td>
-                          </tr>
-                        </>
-                      ) : (
-                        <tr></tr>
-                      )}
+                      <tr>
+                        <th>PRINCIPAL'S COMMENT</th>
+                        <td colSpan="2">
+                          {psyData?.premarks || "No principal remarks"}
+                        </td>
+                      </tr>
+
                       <tr>
                         <th>PRINCIPAL'S NAME</th>
                         <td>{schoolSettings?.principalName || "N/A"}</td>
@@ -855,26 +941,6 @@ const FirstTermRep = ({ studentId }) => {
                       </tr>
                     </tbody>
                   </table>
-                </div>
-
-                <div
-                  className="bd_key"
-                  style={{ color: "#042954", fontSize: "16px" }}
-                >
-                  KEY TO RATINGS : 5 = Excellent , 4 = Good , 3 = Fair , 2 =
-                  Poor , 1 = Very Poor
-                </div>
-
-                <div className="bdftrtop">
-                  <div className="float-left text-right bdftrtopl">
-                    <span style={{ color: "#042954" }}>
-                      Seal of the Register
-                    </span>
-                  </div>
-                  <div className="float-right text-left bdftrtopr">
-                    <span style={{ color: "#042954" }}>Date</span>
-                  </div>
-                  <div className="clearfix"></div>
                 </div>
               </div>
             </div>

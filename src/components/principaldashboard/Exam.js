@@ -5,6 +5,7 @@ import { SessionContext } from "../../SessionContext";
 const Exam = () => {
   const { currentSession } = useContext(SessionContext);
   const apiUrl = process.env.REACT_APP_API_URL;
+  const [isLoadingStudents, setIsLoadingStudents] = useState(false);
 
   const [exams, setExams] = useState([]);
   const [sections, setSections] = useState([]);
@@ -111,6 +112,7 @@ const Exam = () => {
   // };
   const fetchStudents = async () => {
     try {
+      setIsLoadingStudents(true); // Start loading
       // Get all students in the section
       const res = await axios.get(
         `${apiUrl}/api/section/${selectedSection}/students/${currentSession._id}`
@@ -145,6 +147,8 @@ const Exam = () => {
       setShowTable(true);
     } catch (err) {
       console.error("Error fetching students:", err);
+    } finally {
+      setIsLoadingStudents(false); // Stop loading
     }
   };
 
@@ -156,13 +160,12 @@ const Exam = () => {
     updated[index].comment = generateComment(updated[index].marksObtained);
     setStudents(updated);
   };
-
   const generateComment = (total) => {
-    if (total >= 70) return "Excellent";
-    if (total >= 60) return "Very Good";
-    if (total >= 50) return "Good";
-    if (total >= 40) return "Fair";
-    return "Poor";
+    if (total >= 70) return "Excellent"; // A
+    if (total >= 60) return "Very Good"; // B
+    if (total >= 50) return "Good"; // C
+    if (total >= 40) return "Fair"; // D
+    return "Fail"; // E
   };
 
   // const handleSubmit = async () => {
@@ -383,7 +386,7 @@ const Exam = () => {
               </div>
             </div>
 
-            <button
+            {/*} <button
               className="force-mobile-button"
               onClick={fetchStudents}
               disabled={
@@ -396,6 +399,32 @@ const Exam = () => {
               }
             >
               Load Students
+            </button>*/}
+
+            <button
+              className="force-mobile-button"
+              onClick={fetchStudents}
+              disabled={
+                !(
+                  selectedExam &&
+                  selectedSection &&
+                  selectedTech &&
+                  selectedSubject
+                )
+              }
+            >
+              {isLoadingStudents ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Loading...
+                </>
+              ) : (
+                "Load Students"
+              )}
             </button>
 
             {showTable && (

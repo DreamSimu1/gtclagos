@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 const PsyCat = () => {
   const { currentSession } = useContext(SessionContext);
   const apiUrl = process.env.REACT_APP_API_URL;
+  const [isLoadingStudents, setIsLoadingStudents] = useState(false);
 
   const [exams, setExams] = useState([]);
   const [sections, setSections] = useState([]);
@@ -54,6 +55,8 @@ const PsyCat = () => {
 
   const fetchStudents = async () => {
     try {
+      setIsLoadingStudents(true); // Start loading
+
       const token = localStorage.getItem("jwtToken");
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -90,6 +93,8 @@ const PsyCat = () => {
     } catch (err) {
       console.error("Error fetching students:", err);
       toast.error("Failed to load students.");
+    } finally {
+      setIsLoadingStudents(false); // Stop loading
     }
   };
 
@@ -257,12 +262,30 @@ const PsyCat = () => {
               </div>
             </div>
 
-            <button
+            {/*}  <button
               className="btn btn-primary mb-3"
               onClick={fetchStudents}
               disabled={!(selectedExam && selectedSection && selectedTech)}
             >
               Load Students
+            </button>*/}
+            <button
+              className="force-mobile-button"
+              onClick={fetchStudents}
+              disabled={!(selectedExam && selectedSection && selectedTech)}
+            >
+              {isLoadingStudents ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Loading...
+                </>
+              ) : (
+                "Load Students"
+              )}
             </button>
 
             {showTable && (
