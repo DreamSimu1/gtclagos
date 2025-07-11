@@ -8,7 +8,9 @@ import Examlist from "./Examlist";
 import FirstTermRepCont from "./FirstTermRepContd";
 import Profile from "./forms/Profile";
 import Landing from "./Landing";
+import ManagePsy from "./ManagePsy";
 import MarkSheet from "./MarkSheet";
+import PsyCat from "./PsyCat";
 import Section from "./Section";
 import SectionTeachersPage from "./SectionTeachersPage";
 import Teacher from "./Teacher";
@@ -35,6 +37,17 @@ const PrincipalRoute = [
   {
     path: "/principal/dashboard/students/:sectionId",
     element: <AllStudent />,
+    auth: "principal",
+  },
+  {
+    path: "/principal/dashboard/psychomotor_report_category",
+
+    element: <ManagePsy />,
+    auth: "principal",
+  },
+  {
+    path: "/principal/dashboard/manage-psychomotor",
+    element: <PsyCat />,
     auth: "principal",
   },
   {

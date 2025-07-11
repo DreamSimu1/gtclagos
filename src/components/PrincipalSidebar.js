@@ -494,10 +494,10 @@ const PrincipalSidebar = () => {
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      toggleSubmenu("past");
+                      toggleSubmenu("affective");
                     }}
                     className={`submenu-link ${
-                      openSubmenus.has("past") ? "subdrop active" : ""
+                      openSubmenus.has("affective") ? "subdrop active" : ""
                     }`}
                     style={{
                       display: "flex",
@@ -505,13 +505,13 @@ const PrincipalSidebar = () => {
                       justifyContent: "space-between", // ⬅️ ensures icon+text left, chevron right
                       padding: "10px",
                       borderRadius: "5px",
-                      backgroundColor: openSubmenus.has("past")
+                      backgroundColor: openSubmenus.has("affective")
                         ? darkMode
                           ? "#343541"
                           : "#ddd"
                         : "transparent",
                       textDecoration: "none",
-                      color: openSubmenus.has("past")
+                      color: openSubmenus.has("affective")
                         ? darkMode
                           ? "#fff"
                           : "#000"
@@ -570,7 +570,7 @@ const PrincipalSidebar = () => {
                     >
                       <li>
                         <a
-                          href="/principal/dashboard/jamb-past-questions"
+                          href="/principal/dashboard/psychomotor_report_category"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           Manage Category
@@ -578,7 +578,7 @@ const PrincipalSidebar = () => {
                       </li>
                       <li>
                         <a
-                          href="/principal/dashboard/waec-past-questions"
+                          href="/principal/dashboard/manage-psychomotor"
                           style={{ color: darkMode ? "#fff" : "#000" }}
                         >
                           Manage Student Report
