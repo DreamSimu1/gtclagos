@@ -15,6 +15,7 @@ const EditStudentModal = ({
   const [selectedSection, setSelectedSection] = useState("");
   const [formData, setFormData] = useState({
     fullname: "",
+    username: "",
     email: "",
     phone: "",
     admNo: "",
@@ -28,6 +29,7 @@ const EditStudentModal = ({
     if (selectedStudent) {
       setFormData({
         fullname: selectedStudent.fullname || "",
+        username: selectedStudent.username || "",
         email: selectedStudent.email || "",
         phone: selectedStudent.phone || "",
         admNo: selectedStudent.admNo || "",
@@ -152,7 +154,18 @@ const EditStudentModal = ({
                     required
                   />
                 </div>
-
+                <div className="form-group">
+                  <label>User Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={formData.username}
+                    onChange={(e) =>
+                      setFormData({ ...formData, username: e.target.value })
+                    }
+                    required
+                  />
+                </div>
                 <div className="form-group">
                   <label>Email</label>
                   <input
