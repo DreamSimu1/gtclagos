@@ -108,6 +108,7 @@ const AllStudent = () => {
                     <tr>
                       <th>S/N</th>
                       <th>Fullname</th>
+                      <th>Username</th>
                       <th>Email</th>
                       <th>Phone</th>
                       <th>Photo</th>
@@ -120,6 +121,7 @@ const AllStudent = () => {
                         <tr key={student._id}>
                           <td>{index + 1}</td>
                           <td>{student.fullname}</td>
+                          <td>{student.username}</td>
                           <td>{student.email}</td>
                           <td>{student.phone}</td>
                           <td>
