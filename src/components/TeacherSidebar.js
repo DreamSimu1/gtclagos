@@ -68,10 +68,6 @@ const TeacherSidebar = () => {
     fetchSections();
   }, [user, currentSession, apiUrl]);
 
-  if (!user || !currentSession?._id) {
-    return null; // or <LoadingSpinner />
-  }
-
   return (
     <div
       className={`sidebar open`}

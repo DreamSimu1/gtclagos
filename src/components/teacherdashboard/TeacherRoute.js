@@ -12,6 +12,8 @@ import SectionTeachersPage from "./SectionTeachersPage";
 import Landing from "./Landing";
 import Teacher from "./Teacher";
 import Profile from "./forms/Profile";
+import PsyCat from "./PsyCat";
+import ManagePsy from "./ManagePsy";
 
 // Optional fallback
 const LoadingFallback = () => <div>Loading...</div>;
@@ -41,6 +43,17 @@ const TeacherRoute = [
   {
     path: "/teacher/dashboard/students/:sectionId",
     element: <AllStudent />,
+    auth: "teacher",
+  },
+  {
+    path: "/teacher/dashboard/psychomotor_report_category",
+
+    element: <ManagePsy />,
+    auth: "teacher",
+  },
+  {
+    path: "/teacher/dashboard/manage-psychomotor",
+    element: <PsyCat />,
     auth: "teacher",
   },
   {

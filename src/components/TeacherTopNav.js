@@ -31,15 +31,18 @@ import "./TopNav.css";
 import last from "./lastveblogo.png";
 import lagos from "./lagoslogo.png";
 import { LogoutContext } from "./LogoutContext";
+import useAuth from "./hooks/useAuth";
 // import { SessionContext } from "../../context/SessionContext";
 
 const TeacherTopNav = ({ setShowModal }) => {
+  const { user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [menuDropdownOpen, setMenuDropdownOpen] = useState(false);
   const [sessions, setSessions] = useState([]);
   const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentSession, setCurrentSession] = useState(null);
+
   const [sections, setSections] = useState([]);
   const toggleDesktopMenu = () => {
     setDesktopMenuOpen(!desktopMenuOpen);
@@ -98,11 +101,15 @@ const TeacherTopNav = ({ setShowModal }) => {
   useEffect(() => {
     const fetchSections = async () => {
       try {
-        if (currentSession?._id) {
+        if (user?.tradeSection && currentSession?._id) {
+          console.log("Fetching section for user:", user);
           const response = await axios.get(
-            `${apiUrl}/api/section/${currentSession._id}`
+            `${apiUrl}/api/section/one/${user.tradeSection}`
           );
-          setSections(response.data?.data || []);
+          console.log("Fetched section:", response.data?.data);
+          setSections(response.data?.data ? [response.data.data] : []);
+        } else {
+          console.warn("Waiting for user or currentSession...");
         }
       } catch (error) {
         console.error("Error fetching sections:", error);
@@ -110,7 +117,7 @@ const TeacherTopNav = ({ setShowModal }) => {
     };
 
     fetchSections();
-  }, [currentSession, apiUrl]);
+  }, [user, currentSession, apiUrl]);
 
   useEffect(() => {
     axios
@@ -794,15 +801,16 @@ const TeacherTopNav = ({ setShowModal }) => {
                     </li>
 
                     {/* Exam Mark */}
+                    {/* Exam Mark */}
                     <li className="submenu">
                       <a
                         href="#"
                         onClick={(e) => {
                           e.preventDefault();
-                          toggleSubmenu("past");
+                          toggleSubmenu("affective");
                         }}
                         className={`submenu-link ${
-                          openSubmenus.has("past") ? "subdrop active" : ""
+                          openSubmenus.has("affective") ? "subdrop active" : ""
                         }`}
                         style={{
                           display: "flex",
@@ -810,13 +818,13 @@ const TeacherTopNav = ({ setShowModal }) => {
                           justifyContent: "space-between", // ⬅️ ensures icon+text left, chevron right
                           padding: "10px",
                           borderRadius: "5px",
-                          backgroundColor: openSubmenus.has("past")
+                          backgroundColor: openSubmenus.has("affective")
                             ? darkMode
                               ? "#343541"
                               : "#ddd"
                             : "transparent",
                           textDecoration: "none",
-                          color: openSubmenus.has("past")
+                          color: openSubmenus.has("affective")
                             ? darkMode
                               ? "#fff"
                               : "#000"
@@ -875,7 +883,7 @@ const TeacherTopNav = ({ setShowModal }) => {
                         >
                           <li>
                             <a
-                              href="/principal/dashboard/jamb-past-questions"
+                              href="/teacher/dashboard/psychomotor_report_category"
                               style={{ color: darkMode ? "#fff" : "#000" }}
                             >
                               Manage Category
@@ -883,7 +891,7 @@ const TeacherTopNav = ({ setShowModal }) => {
                           </li>
                           <li>
                             <a
-                              href="/principal/dashboard/waec-past-questions"
+                              href="/teacher/dashboard/manage-psychomotor"
                               style={{ color: darkMode ? "#fff" : "#000" }}
                             >
                               Manage Student Report
