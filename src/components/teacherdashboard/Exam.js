@@ -73,12 +73,36 @@ const Exam = () => {
   //   }
   // };
 
+  // const fetchSubjects = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       `${apiUrl}/api/subject/all/${selectedSection}/${currentSession._id}`
+  //     );
+  //     setSubjects(res.data || []);
+  //   } catch (err) {
+  //     console.error("Error fetching subjects:", err);
+  //   }
+  // };
   const fetchSubjects = async () => {
     try {
       const res = await axios.get(
         `${apiUrl}/api/subject/all/${selectedSection}/${currentSession._id}`
       );
-      setSubjects(res.data || []);
+
+      console.log("Fetched subjects from API:", res.data);
+      console.log("Current teacher/user ID:", user?._id);
+
+      const filteredSubjects = res.data.filter((subject) => {
+        const teacherId =
+          typeof subject.teacher === "object"
+            ? subject.teacher._id
+            : subject.teacher;
+
+        return teacherId === user._id;
+      });
+
+      console.log("Filtered subjects:", filteredSubjects);
+      setSubjects(filteredSubjects);
     } catch (err) {
       console.error("Error fetching subjects:", err);
     }

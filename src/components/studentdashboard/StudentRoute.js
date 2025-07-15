@@ -38,6 +38,7 @@
 
 // export default StudentRoute;
 import Landing from "./Landing";
+import MarkSheet from "./MarkSheet";
 import Teacher from "./Teacher";
 import Profile from "./forms/Profile";
 
@@ -58,6 +59,11 @@ const StudentRoute = [
   {
     path: "/student/dashboard/profile",
     element: <Profile />,
+    auth: "student",
+  },
+  {
+    path: "/student/dashboard/student_mark_sheet",
+    element: <MarkSheet />,
     auth: "student",
   },
 ];
