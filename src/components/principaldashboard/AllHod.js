@@ -48,48 +48,49 @@ const AllHod = () => {
             </div>
             <div className="card-body">
               <div className="table-responsive dataview">
-                <table className="table dashboard-expired-products">
-                  <thead>
-                    <tr>
-                      <th>S/N</th>
-                      <th>Fullname</th>
-                      <th>Email</th>
-                      <th>Phone</th>
-                      <th>Address</th>
-                      <th className="no-sort">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {hods.length > 0 ? (
-                      hods.map((hod, index) => (
-                        <tr key={hod._id}>
-                          <td>{index + 1}</td>
-                          <td>{hod.fullname}</td>
-                          <td>{hod.email}</td>
-                          <td>{hod.phone}</td>
-                          <td>{hod.address}</td>
-                          <td className="action-table-data">
-                            <div className="edit-delete-action">
-                              <a className="me-2 p-2 cursor-pointer">
-                                <FiEdit size={18} />
-                              </a>
-                              <a className="confirm-text p-2 cursor-pointer">
-                                <FiTrash2 size={18} />
-                              </a>
-                            </div>
+                <div style={{ overflowX: "auto" }}>
+                  <table className="table dashboard-expired-products">
+                    <thead>
+                      <tr>
+                        <th>S/N</th>
+                        <th>Fullname</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th className="no-sort">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {hods.length > 0 ? (
+                        hods.map((hod, index) => (
+                          <tr key={hod._id}>
+                            <td>{index + 1}</td>
+                            <td>{hod.fullname}</td>
+                            <td>{hod.email}</td>
+                            <td>{hod.phone}</td>
+                            <td>{hod.address}</td>
+                            <td className="action-table-data">
+                              <div className="edit-delete-action">
+                                <a className="me-2 p-2 cursor-pointer">
+                                  <FiEdit size={18} />
+                                </a>
+                                <a className="confirm-text p-2 cursor-pointer">
+                                  <FiTrash2 size={18} />
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="6" className="text-center">
+                            No HODs found
                           </td>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="6" className="text-center">
-                          No HODs found
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-
+                      )}
+                    </tbody>
+                  </table>
+                </div>
                 {/* If you later want to add HOD from here, add modal */}
 
                 <AddHodModal

@@ -619,148 +619,151 @@ const BroadSheet = () => {
                       </div>
                     </div>
 
-                    <table className="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Student Name</th>
-                          {subjects.map((subj) => {
-                            let colSpan = 3;
-                            if (selectedExamName.includes("Second Term"))
-                              colSpan = 4;
-                            if (selectedExamName.includes("Third Term"))
-                              colSpan = 5;
+                    <div style={{ overflowX: "auto" }}>
+                      <table className="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Student Name</th>
+                            {subjects.map((subj) => {
+                              let colSpan = 3;
+                              if (selectedExamName.includes("Second Term"))
+                                colSpan = 4;
+                              if (selectedExamName.includes("Third Term"))
+                                colSpan = 5;
+
+                              return (
+                                <th key={subj._id} colSpan={colSpan}>
+                                  {subj.name}
+                                </th>
+                              );
+                            })}
+                            <th>Total</th>
+                            <th>Average</th>
+                            <th>Remarks</th>
+                          </tr>
+
+                          <tr>
+                            <th></th>
+                            <th></th>
+                            {subjects.map((subj) => (
+                              <React.Fragment key={subj._id + "_headers"}>
+                                {selectedExamName.includes("Second Term") && (
+                                  <th>BF</th>
+                                )}
+                                {selectedExamName.includes("Third Term") && (
+                                  <>
+                                    <th>1st Term</th>
+                                    <th>2nd Term</th>
+                                  </>
+                                )}
+                                <th>Test</th>
+                                <th>Exam</th>
+                                <th>Total</th>
+                              </React.Fragment>
+                            ))}
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          {students.map((student, index) => {
+                            let overallTotal = 0;
 
                             return (
-                              <th key={subj._id} colSpan={colSpan}>
-                                {subj.name}
-                              </th>
+                              <tr key={student._id}>
+                                <td>{index + 1}</td>
+                                <td>{student.fullname}</td>
+
+                                {subjects.map((subj) => {
+                                  const firstTerm = Number(
+                                    getScore(
+                                      student._id,
+                                      subj._id,
+                                      "total",
+                                      "first"
+                                    ) || 0
+                                  );
+                                  const secondTerm = Number(
+                                    getScore(
+                                      student._id,
+                                      subj._id,
+                                      "total",
+                                      "second"
+                                    ) || 0
+                                  );
+                                  const test = Number(
+                                    getScore(
+                                      student._id,
+                                      subj._id,
+                                      "test",
+                                      "current"
+                                    ) || 0
+                                  );
+                                  const exam = Number(
+                                    getScore(
+                                      student._id,
+                                      subj._id,
+                                      "exam",
+                                      "current"
+                                    ) || 0
+                                  );
+                                  const totalCurrent = test + exam;
+
+                                  let finalTotal = 0;
+
+                                  if (selectedExamName.includes("Third Term")) {
+                                    finalTotal = Math.round(
+                                      (firstTerm + secondTerm + totalCurrent) /
+                                        3
+                                    );
+                                  } else if (
+                                    selectedExamName.includes("Second Term")
+                                  ) {
+                                    finalTotal = Math.round(
+                                      (firstTerm + totalCurrent) / 2
+                                    );
+                                  } else {
+                                    finalTotal = totalCurrent;
+                                  }
+
+                                  overallTotal += finalTotal;
+
+                                  return (
+                                    <React.Fragment
+                                      key={student._id + "_" + subj._id}
+                                    >
+                                      {selectedExamName.includes(
+                                        "Second Term"
+                                      ) && <td>{firstTerm}</td>}
+                                      {selectedExamName.includes(
+                                        "Third Term"
+                                      ) && (
+                                        <>
+                                          <td>{firstTerm}</td>
+                                          <td>{secondTerm}</td>
+                                        </>
+                                      )}
+                                      <td>{test}</td>
+                                      <td>{exam}</td>
+                                      <td>{finalTotal}</td>
+                                    </React.Fragment>
+                                  );
+                                })}
+
+                                <td>{overallTotal}</td>
+                                <td>
+                                  {(overallTotal / subjects.length).toFixed(2)}
+                                </td>
+                                <td></td>
+                              </tr>
                             );
                           })}
-                          <th>Total</th>
-                          <th>Average</th>
-                          <th>Remarks</th>
-                        </tr>
-
-                        <tr>
-                          <th></th>
-                          <th></th>
-                          {subjects.map((subj) => (
-                            <React.Fragment key={subj._id + "_headers"}>
-                              {selectedExamName.includes("Second Term") && (
-                                <th>BF</th>
-                              )}
-                              {selectedExamName.includes("Third Term") && (
-                                <>
-                                  <th>1st Term</th>
-                                  <th>2nd Term</th>
-                                </>
-                              )}
-                              <th>Test</th>
-                              <th>Exam</th>
-                              <th>Total</th>
-                            </React.Fragment>
-                          ))}
-                          <th></th>
-                          <th></th>
-                          <th></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        {students.map((student, index) => {
-                          let overallTotal = 0;
-
-                          return (
-                            <tr key={student._id}>
-                              <td>{index + 1}</td>
-                              <td>{student.fullname}</td>
-
-                              {subjects.map((subj) => {
-                                const firstTerm = Number(
-                                  getScore(
-                                    student._id,
-                                    subj._id,
-                                    "total",
-                                    "first"
-                                  ) || 0
-                                );
-                                const secondTerm = Number(
-                                  getScore(
-                                    student._id,
-                                    subj._id,
-                                    "total",
-                                    "second"
-                                  ) || 0
-                                );
-                                const test = Number(
-                                  getScore(
-                                    student._id,
-                                    subj._id,
-                                    "test",
-                                    "current"
-                                  ) || 0
-                                );
-                                const exam = Number(
-                                  getScore(
-                                    student._id,
-                                    subj._id,
-                                    "exam",
-                                    "current"
-                                  ) || 0
-                                );
-                                const totalCurrent = test + exam;
-
-                                let finalTotal = 0;
-
-                                if (selectedExamName.includes("Third Term")) {
-                                  finalTotal = Math.round(
-                                    (firstTerm + secondTerm + totalCurrent) / 3
-                                  );
-                                } else if (
-                                  selectedExamName.includes("Second Term")
-                                ) {
-                                  finalTotal = Math.round(
-                                    (firstTerm + totalCurrent) / 2
-                                  );
-                                } else {
-                                  finalTotal = totalCurrent;
-                                }
-
-                                overallTotal += finalTotal;
-
-                                return (
-                                  <React.Fragment
-                                    key={student._id + "_" + subj._id}
-                                  >
-                                    {selectedExamName.includes(
-                                      "Second Term"
-                                    ) && <td>{firstTerm}</td>}
-                                    {selectedExamName.includes(
-                                      "Third Term"
-                                    ) && (
-                                      <>
-                                        <td>{firstTerm}</td>
-                                        <td>{secondTerm}</td>
-                                      </>
-                                    )}
-                                    <td>{test}</td>
-                                    <td>{exam}</td>
-                                    <td>{finalTotal}</td>
-                                  </React.Fragment>
-                                );
-                              })}
-
-                              <td>{overallTotal}</td>
-                              <td>
-                                {(overallTotal / subjects.length).toFixed(2)}
-                              </td>
-                              <td></td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>

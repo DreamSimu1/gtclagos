@@ -783,64 +783,68 @@ const FirstTermRep = ({ studentId }) => {
 
                 <div className="tables-container flex">
                   {/* First Table */}
-                  <table
-                    className="table"
-                    id="customers"
-                    style={{ width: "100%" }}
-                  >
-                    <thead>
-                      <tr>
-                        <th>S/No</th>
-                        <th>Subject</th>
-                        <th>CA(40)</th>
-                        <th>Exam(60)</th>
-                        <th>AVE. TOTAL(100)</th>
 
-                        <th>Grade</th>
-                      </tr>
-                    </thead>
-                    <tbody style={{ width: "100% !important" }}>
-                      {/* Check if there's data and map through the scores */}
-                      {studentData && studentData.length > 0 ? (
-                        studentData.map((score, index) => (
-                          <tr key={index}>
-                            <td>{index + 1}</td> {/* Serial number */}
-                            <td>{score?.subjectName || "-"}</td>{" "}
-                            {/* Subject Name */}
-                            <td>
-                              {score?.testscore !== undefined
-                                ? score.testscore
-                                : "-"}
-                            </td>{" "}
-                            {/* Test Score */}
-                            <td>
-                              {score?.examscore !== undefined
-                                ? score.examscore
-                                : "-"}
-                            </td>{" "}
-                            {/* Exam Score */}
-                            <td>
-                              {score?.marksObtained !== undefined
-                                ? score.marksObtained
-                                : "-"}
-                            </td>{" "}
-                            {/* Obtained Marks */}
-                            <td>
-                              {calculateGrade(score?.comment) || "-"}
-                            </td>{" "}
-                            {/* Grade */}
-                            {/* Comment/Remark */}
-                          </tr>
-                        ))
-                      ) : (
-                        // Fallback for when no data is available
+                  <div style={{ overflowX: "auto" }}>
+                    <table
+                      className="table"
+                      id="customers"
+                      style={{ width: "100%" }}
+                    >
+                      <thead>
                         <tr>
-                          <td colSpan="8">No data available for this term.</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
+                          <th>S/No</th>
+                          <th>Subject</th>
+                          <th>CA(40)</th>
+                          <th>Exam(60)</th>
+                          <th>AVE. TOTAL(100)</th>
 
+                          <th>Grade</th>
+                        </tr>
+                      </thead>
+                      <tbody style={{ width: "100% !important" }}>
+                        {/* Check if there's data and map through the scores */}
+                        {studentData && studentData.length > 0 ? (
+                          studentData.map((score, index) => (
+                            <tr key={index}>
+                              <td>{index + 1}</td> {/* Serial number */}
+                              <td>{score?.subjectName || "-"}</td>{" "}
+                              {/* Subject Name */}
+                              <td>
+                                {score?.testscore !== undefined
+                                  ? score.testscore
+                                  : "-"}
+                              </td>{" "}
+                              {/* Test Score */}
+                              <td>
+                                {score?.examscore !== undefined
+                                  ? score.examscore
+                                  : "-"}
+                              </td>{" "}
+                              {/* Exam Score */}
+                              <td>
+                                {score?.marksObtained !== undefined
+                                  ? score.marksObtained
+                                  : "-"}
+                              </td>{" "}
+                              {/* Obtained Marks */}
+                              <td>
+                                {calculateGrade(score?.comment) || "-"}
+                              </td>{" "}
+                              {/* Grade */}
+                              {/* Comment/Remark */}
+                            </tr>
+                          ))
+                        ) : (
+                          // Fallback for when no data is available
+                          <tr>
+                            <td colSpan="8">
+                              No data available for this term.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                   {/* Second Table */}
                 </div>
 

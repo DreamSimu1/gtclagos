@@ -429,56 +429,58 @@ const Exam = () => {
 
             {showTable && (
               <>
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Student Name</th>
-                      <th>Test Score</th>
-                      <th>Exam Score</th>
-                      <th>Total</th>
-                      <th>Comment</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {students.map((student, index) => (
-                      <tr key={student._id}>
-                        <td>{index + 1}</td>
-                        <td>{student.fullname}</td>
-                        <td>
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={student.testscore}
-                            onChange={(e) =>
-                              handleScoreChange(
-                                index,
-                                "testscore",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={student.examscore}
-                            onChange={(e) =>
-                              handleScoreChange(
-                                index,
-                                "examscore",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </td>
-                        <td>{student.marksObtained}</td>
-                        <td>{student.comment}</td>
+                <div style={{ overflowX: "auto" }}>
+                  <table className="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Student Name</th>
+                        <th>Test Score</th>
+                        <th>Exam Score</th>
+                        <th>Total</th>
+                        <th>Comment</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {students.map((student, index) => (
+                        <tr key={student._id}>
+                          <td>{index + 1}</td>
+                          <td>{student.fullname}</td>
+                          <td>
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={student.testscore}
+                              onChange={(e) =>
+                                handleScoreChange(
+                                  index,
+                                  "testscore",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={student.examscore}
+                              onChange={(e) =>
+                                handleScoreChange(
+                                  index,
+                                  "examscore",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </td>
+                          <td>{student.marksObtained}</td>
+                          <td>{student.comment}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
                 <button
                   className="btn "
                   onClick={handleSubmit}
