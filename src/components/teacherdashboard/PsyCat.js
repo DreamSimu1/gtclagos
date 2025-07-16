@@ -301,55 +301,56 @@ const PsyCat = () => {
 
             {showTable && (
               <>
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Adm No</th>
-                      <th>Student Name</th>
-                      <th>Class Teacher Comment</th>
-                      <th>Principal Comment</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {students.map((student, index) => (
-                      <tr key={student._id}>
-                        <td>{index + 1}</td>
-                        <td>{student.admissionNumber}</td>
-                        <td>{student.fullname}</td>
-                        <td>
-                          <input
-                            type="text"
-                            className="form-control"
-                            value={student.remarks}
-                            onChange={(e) =>
-                              handleCommentChange(
-                                index,
-                                "remarks",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="text"
-                            className="form-control"
-                            value={student.premarks}
-                            onChange={(e) =>
-                              handleCommentChange(
-                                index,
-                                "premarks",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </td>
+                <div style={{ overflowX: "auto" }}>
+                  <table className="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Adm No</th>
+                        <th>Student Name</th>
+                        <th>Class Teacher Comment</th>
+                        <th>Principal Comment</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-
+                    </thead>
+                    <tbody>
+                      {students.map((student, index) => (
+                        <tr key={student._id}>
+                          <td>{index + 1}</td>
+                          <td>{student.admissionNumber}</td>
+                          <td>{student.fullname}</td>
+                          <td>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={student.remarks}
+                              onChange={(e) =>
+                                handleCommentChange(
+                                  index,
+                                  "remarks",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={student.premarks}
+                              onChange={(e) =>
+                                handleCommentChange(
+                                  index,
+                                  "premarks",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
                 <button
                   className="btn"
                   onClick={handleSubmit}

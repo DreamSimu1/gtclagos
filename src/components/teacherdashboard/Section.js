@@ -131,50 +131,52 @@ const Section = () => {
 
               <div class="card-body">
                 <div class="table-responsive dataview">
-                  <table class="table dashboard-expired-products">
-                    <thead>
-                      <tr>
-                        <th>S/N</th>
-                        <th>Name</th>
-                        <th>HOD</th>
-                        <th>Description</th>
+                  <div style={{ overflowX: "auto" }}>
+                    <table class="table dashboard-expired-products">
+                      <thead>
+                        <tr>
+                          <th>S/N</th>
+                          <th>Name</th>
+                          <th>HOD</th>
+                          <th>Description</th>
 
-                        <th class="no-sort">Action</th>
-                      </tr>
-                    </thead>
-                    {Array.isArray(data?.data) && data.data.length > 0 ? (
-                      data.data.map((item, index) => (
-                        <tr key={item?._id}>
-                          <td>{index + 1}</td>
-                          <td>{item?.name}</td>
-                          <td>{item?.hod?.fullname}</td>
-                          <td>{item?.description}</td>
-                          <td className="action-table-data">
-                            <div className="edit-delete-action">
-                              <a className="me-2 p-2 cursor-pointer">
-                                <FiEdit size={18} />
-                              </a>
-                              <a
-                                className="confirm-text p-2 cursor-pointer"
-                                onClick={() => {
-                                  setSectionToDelete(item._id); // ✅ use item._id, not section._id
-                                  setConfirmDeleteModal(true);
-                                }}
-                              >
-                                <FiTrash2 size={18} />
-                              </a>
-                            </div>
+                          <th class="no-sort">Action</th>
+                        </tr>
+                      </thead>
+                      {Array.isArray(data?.data) && data.data.length > 0 ? (
+                        data.data.map((item, index) => (
+                          <tr key={item?._id}>
+                            <td>{index + 1}</td>
+                            <td>{item?.name}</td>
+                            <td>{item?.hod?.fullname}</td>
+                            <td>{item?.description}</td>
+                            <td className="action-table-data">
+                              <div className="edit-delete-action">
+                                <a className="me-2 p-2 cursor-pointer">
+                                  <FiEdit size={18} />
+                                </a>
+                                <a
+                                  className="confirm-text p-2 cursor-pointer"
+                                  onClick={() => {
+                                    setSectionToDelete(item._id); // ✅ use item._id, not section._id
+                                    setConfirmDeleteModal(true);
+                                  }}
+                                >
+                                  <FiTrash2 size={18} />
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="5" className="text-center">
+                            No section found
                           </td>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="5" className="text-center">
-                          No section found
-                        </td>
-                      </tr>
-                    )}
-                  </table>
+                      )}
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>

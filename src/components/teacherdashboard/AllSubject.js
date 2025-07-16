@@ -101,63 +101,66 @@ const AllSubject = () => {
 
             <div className="card-body">
               <div className="table-responsive dataview">
-                <table className="table dashboard-expired-products">
-                  <thead>
-                    <tr>
-                      <th>S/N</th>
-                      <th>Subject Name</th>
-                      <th>Teacher</th>
-                      <th>Class</th>
-                      <th className="no-sort">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {loading ? (
+                <div style={{ overflowX: "auto" }}>
+                  <table className="table dashboard-expired-products">
+                    <thead>
                       <tr>
-                        <td colSpan="5" className="text-center">
-                          Loading...
-                        </td>
+                        <th>S/N</th>
+                        <th>Subject Name</th>
+                        <th>Teacher</th>
+                        <th>Class</th>
+                        <th className="no-sort">Action</th>
                       </tr>
-                    ) : filteredSubjects.length > 0 ? (
-                      filteredSubjects.map((subject, index) => (
-                        <tr key={subject._id}>
-                          <td>{index + 1}</td>
-                          <td>{subject.name}</td>
-                          <td>{subject.teacher?.fullname || "N/A"}</td>
-                          <td>{subject.classname?.replace("_", " ")}</td>
-                          <td className="action-table-data">
-                            <div className="edit-delete-action">
-                              <a
-                                className="me-2 p-2 cursor-pointer"
-                                onClick={() => {
-                                  setSelectedSubject(subject); // pass full subject object
-                                  setEditModalOpen(true);
-                                }}
-                              >
-                                <FiEdit size={18} />
-                              </a>
-                              <a
-                                className="confirm-text p-2 cursor-pointer"
-                                onClick={() => {
-                                  setSubjectToDelete(subject._id);
-                                  setConfirmDeleteModal(true);
-                                }}
-                              >
-                                <FiTrash2 size={18} />
-                              </a>
-                            </div>
+                    </thead>
+                    <tbody>
+                      {loading ? (
+                        <tr>
+                          <td colSpan="5" className="text-center">
+                            Loading...
                           </td>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="5" className="text-center">
-                          No subjects found in {activeTech.replace("_", " ")}
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+                      ) : filteredSubjects.length > 0 ? (
+                        filteredSubjects.map((subject, index) => (
+                          <tr key={subject._id}>
+                            <td>{index + 1}</td>
+                            <td>{subject.name}</td>
+                            <td>{subject.teacher?.fullname || "N/A"}</td>
+                            <td>{subject.classname?.replace("_", " ")}</td>
+                            <td className="action-table-data">
+                              <div className="edit-delete-action">
+                                <a
+                                  className="me-2 p-2 cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedSubject(subject); // pass full subject object
+                                    setEditModalOpen(true);
+                                  }}
+                                >
+                                  <FiEdit size={18} />
+                                </a>
+                                <a
+                                  className="confirm-text p-2 cursor-pointer"
+                                  onClick={() => {
+                                    setSubjectToDelete(subject._id);
+                                    setConfirmDeleteModal(true);
+                                  }}
+                                >
+                                  <FiTrash2 size={18} />
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="5" className="text-center">
+                            No subjects found in {activeTech.replace("_", " ")}
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
                 <AddSubjectModal
                   showModal={showModal}
                   setShowModal={setShowModal}

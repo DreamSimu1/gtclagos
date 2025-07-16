@@ -101,65 +101,56 @@ const AllStudent = () => {
 
               {/* Table */}
               <div className="table-responsive dataview">
-                <table className="table dashboard-expired-products">
-                  <thead>
-                    <tr>
-                      <th>S/N</th>
-                      <th>Fullname</th>
-                      <th>Email</th>
-                      <th>Phone</th>
-                      <th>Photo</th>
-                      <th className="no-sort">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredStudents.length > 0 ? (
-                      filteredStudents.map((student, index) => (
-                        <tr key={student._id}>
-                          <td>{index + 1}</td>
-                          <td>{student.fullname}</td>
-                          <td>{student.email}</td>
-                          <td>{student.phone}</td>
-                          <td>
-                            {student.photourl ? (
-                              <img
-                                src={student.photourl}
-                                alt="student"
-                                width="40"
-                                height="40"
-                                style={{ borderRadius: "50%" }}
-                              />
-                            ) : (
-                              "-"
-                            )}
-                          </td>
-                          <td className="action-table-data">
-                            <div className="edit-delete-action">
-                              <a className="me-2 p-2 cursor-pointer">
-                                <FiEdit size={18} />
-                              </a>
-                              <a
-                                className="confirm-text p-2 cursor-pointer"
-                                onClick={() => {
-                                  setStudentToDelete(student._id);
-                                  setConfirmDeleteModal(true);
-                                }}
-                              >
-                                <FiTrash2 size={18} />
-                              </a>
-                            </div>
-                            <button
-                              onClick={() => handleViewResult(student._id)}
-                              style={{
-                                border: "none",
-                                backgroundColor: "#e63e54",
-                                color: "#fff",
-                                padding: "5px",
-                                borderRadius: "12px",
-                              }}
-                            >
-                              <Link
-                                to={`/principal/dashboard/student_mark_sheet/${student._id}`}
+                <div style={{ overflowX: "auto" }}>
+                  <table className="table dashboard-expired-products">
+                    <thead>
+                      <tr>
+                        <th>S/N</th>
+                        <th>Fullname</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Photo</th>
+                        <th className="no-sort">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredStudents.length > 0 ? (
+                        filteredStudents.map((student, index) => (
+                          <tr key={student._id}>
+                            <td>{index + 1}</td>
+                            <td>{student.fullname}</td>
+                            <td>{student.email}</td>
+                            <td>{student.phone}</td>
+                            <td>
+                              {student.photourl ? (
+                                <img
+                                  src={student.photourl}
+                                  alt="student"
+                                  width="40"
+                                  height="40"
+                                  style={{ borderRadius: "50%" }}
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </td>
+                            <td className="action-table-data">
+                              <div className="edit-delete-action">
+                                <a className="me-2 p-2 cursor-pointer">
+                                  <FiEdit size={18} />
+                                </a>
+                                <a
+                                  className="confirm-text p-2 cursor-pointer"
+                                  onClick={() => {
+                                    setStudentToDelete(student._id);
+                                    setConfirmDeleteModal(true);
+                                  }}
+                                >
+                                  <FiTrash2 size={18} />
+                                </a>
+                              </div>
+                              <button
+                                onClick={() => handleViewResult(student._id)}
                                 style={{
                                   border: "none",
                                   backgroundColor: "#e63e54",
@@ -168,22 +159,33 @@ const AllStudent = () => {
                                   borderRadius: "12px",
                                 }}
                               >
-                                {" "}
-                                View Result
-                              </Link>
-                            </button>
+                                <Link
+                                  to={`/principal/dashboard/student_mark_sheet/${student._id}`}
+                                  style={{
+                                    border: "none",
+                                    backgroundColor: "#e63e54",
+                                    color: "#fff",
+                                    padding: "5px",
+                                    borderRadius: "12px",
+                                  }}
+                                >
+                                  {" "}
+                                  View Result
+                                </Link>
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="6" className="text-center">
+                            No students found in {activeTech.replace("_", " ")}
                           </td>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="6" className="text-center">
-                          No students found in {activeTech.replace("_", " ")}
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
               {/* Add Student Modal */}
 

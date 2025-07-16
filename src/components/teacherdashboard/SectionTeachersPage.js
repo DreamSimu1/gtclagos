@@ -73,54 +73,55 @@ const SectionTeachersPage = () => {
 
             <div className="card-body">
               <div className="table-responsive dataview">
-                <table className="table dashboard-expired-products">
-                  <thead>
-                    <tr>
-                      <th>S/N</th>
-                      <th>Fullname</th>
-                      <th>Email</th>
-                      <th>Phone</th>
-                      <th>Address</th>
-                      <th class="no-sort">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {teachers.length > 0 ? (
-                      teachers.map((teacher, index) => (
-                        <tr key={teacher._id}>
-                          <td>{index + 1}</td>
-                          <td>{teacher.fullname}</td>
-                          <td>{teacher.email}</td>
-                          <td>{teacher.phone}</td>
-                          <td>{teacher.address}</td>
-                          <td className="action-table-data">
-                            <div className="edit-delete-action">
-                              <a className="me-2 p-2 cursor-pointer">
-                                <FiEdit size={18} />
-                              </a>
-                              <a
-                                className="confirm-text p-2 cursor-pointer"
-                                onClick={() => {
-                                  setTeacherToDelete(teacher._id);
-                                  setConfirmDeleteModal(true);
-                                }}
-                              >
-                                <FiTrash2 size={18} />
-                              </a>
-                            </div>
+                <div style={{ overflowX: "auto" }}>
+                  <table className="table dashboard-expired-products">
+                    <thead>
+                      <tr>
+                        <th>S/N</th>
+                        <th>Fullname</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th class="no-sort">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {teachers.length > 0 ? (
+                        teachers.map((teacher, index) => (
+                          <tr key={teacher._id}>
+                            <td>{index + 1}</td>
+                            <td>{teacher.fullname}</td>
+                            <td>{teacher.email}</td>
+                            <td>{teacher.phone}</td>
+                            <td>{teacher.address}</td>
+                            <td className="action-table-data">
+                              <div className="edit-delete-action">
+                                <a className="me-2 p-2 cursor-pointer">
+                                  <FiEdit size={18} />
+                                </a>
+                                <a
+                                  className="confirm-text p-2 cursor-pointer"
+                                  onClick={() => {
+                                    setTeacherToDelete(teacher._id);
+                                    setConfirmDeleteModal(true);
+                                  }}
+                                >
+                                  <FiTrash2 size={18} />
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="5" className="text-center">
+                            No teachers found in this section
                           </td>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="5" className="text-center">
-                          No teachers found in this section
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-
+                      )}
+                    </tbody>
+                  </table>
+                </div>
                 {/* ✅ Pass down the callback to trigger re-fetch */}
               </div>
             </div>
